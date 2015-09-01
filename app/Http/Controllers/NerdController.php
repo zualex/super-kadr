@@ -14,7 +14,9 @@ use Redirect;
 use App\Nerd;
 
 class NerdController extends Controller {
-
+	
+	
+	
 	/**
 	 * Display a listing of the resource.
 	 *

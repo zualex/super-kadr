@@ -21,5 +21,9 @@ Route::controllers([
 ]);
 
 
+Route::group(['middleware' => 'auth'], function(){
+	Route::resource('admin', 'AdminController');
+});
 
-Route::resource('nerds', 'NerdController');
+//Route::resource('nerds/nerds', 'NerdController');
+//Route::resource('nerds/users', 'UserController');
