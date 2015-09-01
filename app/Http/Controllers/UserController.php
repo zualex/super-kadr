@@ -17,9 +17,8 @@ class UserController extends Controller {
 	 */
 	public function index()
 	{
-		$users = User::all();
-		
-		return view('nerds.users.index')->with('users', $users);
+		$users = User::latest('level')->get();
+		return view('admin.users.index')->with('users', $users);
 	}
 
 	/**

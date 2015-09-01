@@ -22,7 +22,11 @@ Route::controllers([
 
 
 Route::group(['middleware' => 'auth'], function(){
-	Route::resource('admin', 'AdminController');
+	Route::get('admin', [
+		'as' => 'admin', 
+		'uses' => 'AdminController@index'
+	]);
+	Route::resource('admin/users', 'UserController');
 });
 
 //Route::resource('nerds/nerds', 'NerdController');
