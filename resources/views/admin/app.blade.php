@@ -12,7 +12,7 @@
         <a class="navbar-brand" href="{{ URL::to('admin') }}">Рабочий стол</a>
     </div>
     <ul class="nav navbar-nav">
-        <li><a href="{{ URL::to('admin/users') }}">Администраторы</a>
+        <li><a href="{{ URL::to('admin/users') }}">Пользователи</a>
     </ul>
 </nav>
 
