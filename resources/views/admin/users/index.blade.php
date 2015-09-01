@@ -13,6 +13,9 @@
     <div class="alert alert-info">{{ Session::get('message') }}</div>
 @endif
 
+{!! HTML::ul($errors->all()) !!}
+
+
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
@@ -35,10 +38,10 @@
             <td>
 
                 <!-- edit this nerd (uses the edit method found at GET /nerds/{id}/edit -->
-                <a class="btn btn-small btn-info" href="{{ URL::to('nerds/' . $value->id . '/edit') }}">Изменить</a>
+                <a class="btn btn-small btn-info" href="{{ URL::to('admin/users/' . $value->id . '/edit') }}">Изменить</a>
 				
 				
-				{!! Form::open(array('url' => 'nerds/' . $value->id, 'class' => 'btn')) !!}
+				{!! Form::open(array('url' => 'admin/users/' . $value->id, 'class' => 'btn')) !!}
                     {!! Form::hidden('_method', 'DELETE') !!}
                     {!! Form::submit('Удалить', array('class' => 'btn btn-warning')) !!}
                 {!! Form::close() !!}

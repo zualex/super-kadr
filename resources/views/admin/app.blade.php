@@ -13,6 +13,7 @@
     </div>
     <ul class="nav navbar-nav">
         <li><a href="{{ URL::to('admin/users') }}">Пользователи</a>
+        <li><a href="{{ URL::to('auth/logout') }}">Выход</a>
     </ul>
 </nav>
 

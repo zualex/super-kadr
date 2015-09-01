@@ -10,6 +10,7 @@ use Input;
 use Session;
 use Redirect;
 use Hash;
+use Auth;
 
 use App\User;
 
@@ -101,7 +102,10 @@ class UserController extends Controller {
 	 */
 	public function edit($id)
 	{
-		//
+		// get the nerd
+        $user = User::find($id);
+
+		return view('admin.users.edit')->with('user', $user);
 	}
 
 	/**
@@ -112,7 +116,32 @@ class UserController extends Controller {
 	 */
 	public function update($id)
 	{
-		//
+		// validate
+        // read more on validation at http://laravel.com/docs/validation
+        $rules = array(
+            'name'       => 'required',
+            'email'      => 'required|email',
+            'level' => 'required',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+
+        // process the login
+        if ($validator->fails()) {
+            return Redirect::to('admin/users/' . $id . '/edit')
+                ->withErrors($validator)
+                ->withInput(Input::except('password'));
+        } else {
+            // store
+            $user = User::find($id);
+            $user->name = Input::get('name');
+            $user->email = Input::get('email');
+            $user->level = Input::get('level');
+            $user->save();
+
+            // redirect
+            Session::flash('message', 'Пользователь успешно отредактирован!');
+            return Redirect::to('admin/users');
+        }
 	}
 
 	/**
@@ -123,7 +152,28 @@ class UserController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		
+		$rules = array();
+        $validator = Validator::make(Input::all(), $rules);
+		if (Auth::check() and Auth::user()->id == $id){
+			$validator->after(function($validator){
+				$validator->errors()->add('field', 'Нельзя удалить себя');
+			});
+		}
+		
+
+        if ($validator->fails()) {
+            return Redirect::to('admin/users')->withErrors($validator);
+        } else {
+
+			// delete
+			$user = User::find($id);
+			$user->delete();
+
+			// redirect
+			Session::flash('message', 'Пользователь успешно удален!');
+			return Redirect::to('admin/users');
+		}
 	}
 
 }
