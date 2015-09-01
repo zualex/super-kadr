@@ -21,7 +21,7 @@ Route::controllers([
 ]);
 
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => 'authAdmin'], function(){
 	Route::get('admin', [
 		'as' => 'admin', 
 		'uses' => 'AdminController@index'
