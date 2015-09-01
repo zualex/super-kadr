@@ -7,7 +7,7 @@
 
 <div class="row">
 	<div class="col-md-8">
-{!! Form::open(array('url' => 'admin/users')) !!}
+{!! Form::open(array('url' => route('admin.users.index'))) !!}
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
     <div class="form-group">

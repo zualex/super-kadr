@@ -65,7 +65,7 @@ class UserController extends Controller {
 
         // process the login
         if ($validator->fails()) {
-            return Redirect::to('admin/users/create')
+            return redirect()->route('admin.users.create')
                 ->withErrors($validator)
                 ->withInput(Input::except('password'));
         } else {
@@ -79,7 +79,7 @@ class UserController extends Controller {
 
             // redirect
             Session::flash('message', 'Пользователь успешно добавлен');
-            return Redirect::to('admin/users');
+            return redirect()->route('admin.users.index');
         }
 	}
 
@@ -127,7 +127,7 @@ class UserController extends Controller {
 
         // process the login
         if ($validator->fails()) {
-            return Redirect::to('admin/users/' . $id . '/edit')
+            return redirect()->route('admin.users.edit', $id)
                 ->withErrors($validator)
                 ->withInput(Input::except('password'));
         } else {
@@ -140,7 +140,7 @@ class UserController extends Controller {
 
             // redirect
             Session::flash('message', 'Пользователь успешно отредактирован!');
-            return Redirect::to('admin/users');
+            return redirect()->route('admin.users.index');
         }
 	}
 
@@ -163,7 +163,7 @@ class UserController extends Controller {
 		
 
         if ($validator->fails()) {
-            return Redirect::to('admin/users')->withErrors($validator);
+            return redirect()->route('admin.users.index')->withErrors($validator);
         } else {
 
 			// delete
@@ -172,7 +172,7 @@ class UserController extends Controller {
 
 			// redirect
 			Session::flash('message', 'Пользователь успешно удален!');
-			return Redirect::to('admin/users');
+			return redirect()->route('admin.users.index');
 		}
 	}
 

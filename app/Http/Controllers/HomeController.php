@@ -1,5 +1,10 @@
 <?php namespace App\Http\Controllers;
 
+use Auth;
+
+use App\User;
+
+
 class HomeController extends Controller {
 
 	/*
@@ -18,17 +23,13 @@ class HomeController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function __construct()
-	{
-		$this->middleware('auth');
-	}
 
 	/**
 	 * Show the application dashboard to the user.
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(User $userModel)
 	{
 		return view('home');
 	}

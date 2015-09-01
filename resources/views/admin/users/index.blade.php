@@ -4,7 +4,7 @@
 
 
 <h1>Пользователи</h1>
-<a class="btn btn-small btn-success" href="{{ URL::to('admin/users/create') }}">Добавить пользователя</a>
+<a class="btn btn-small btn-success" href="{{ route('admin.users.create') }}">Добавить пользователя</a>
 <br>
 <br>
 
@@ -38,10 +38,10 @@
             <td>
 
                 <!-- edit this nerd (uses the edit method found at GET /nerds/{id}/edit -->
-                <a class="btn btn-small btn-info" href="{{ URL::to('admin/users/' . $value->id . '/edit') }}">Изменить</a>
+                <a class="btn btn-small btn-info" href="{{ route('admin.users.edit', $value->id) }}">Изменить</a>
 				
 				
-				{!! Form::open(array('url' => 'admin/users/' . $value->id, 'class' => 'btn')) !!}
+				{!! Form::open(array('route' => array('admin.users.destroy', $value->id), 'class' => 'btn')) !!}
                     {!! Form::hidden('_method', 'DELETE') !!}
                     {!! Form::submit('Удалить', array('class' => 'btn btn-warning')) !!}
                 {!! Form::close() !!}

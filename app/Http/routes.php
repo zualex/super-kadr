@@ -11,9 +11,8 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index');
 
-Route::get('home', 'HomeController@index');
+Route::get('/', ['as' => 'main', 'uses' => 'HomeController@index']);
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
@@ -21,13 +20,22 @@ Route::controllers([
 ]);
 
 
-Route::group(['middleware' => 'authAdmin'], function(){
-	Route::get('admin', [
-		'as' => 'admin', 
-		'uses' => 'AdminController@index'
-	]);
-	Route::resource('admin/users', 'UserController');
+
+/*
+* Admin panel
+*/
+Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
+
+	Route::get('/', ['as' => 'admin', 'uses' => 'AdminController@index']);
+	
+	Route::resource('/users', 'UserController', array('names' => array(
+		'index' => 'admin.users.index',
+		'create' => 'admin.users.create',
+		'store' => 'admin.users.store',
+		'show' => 'admin.users.show',
+		'edit' => 'admin.users.edit',
+		'update' => 'admin.users.update',
+		'destroy' => 'admin.users.destroy',
+	)));
 });
 
-//Route::resource('nerds/nerds', 'NerdController');
-//Route::resource('nerds/users', 'UserController');
