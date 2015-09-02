@@ -5,6 +5,10 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
+use Socialize;
+use Illuminate\Http\Request;
+use App\AuthenticateUser;
+
 class AuthController extends Controller {
 	
 	
@@ -38,4 +42,14 @@ class AuthController extends Controller {
 		$this->middleware('guest', ['except' => 'getLogout']);
 	}
 
+	
+	
+	public function login(AuthenticateUser $authenticateUser, Request $request){
+		return $authenticateUser->execute($request->has('code'));
+		//return Socialize::with('twitter')->redirect();
+	}
 }
+
+
+
+

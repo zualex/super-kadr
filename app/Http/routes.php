@@ -20,6 +20,9 @@ Route::controllers([
 ]);
 
 
+//Route::get('login/twitter', 'Auth\AuthController@login');
+//Route::get('login/github', 'Auth\AuthController@login');
+
 
 /*
 * Admin panel

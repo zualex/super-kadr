@@ -37,6 +37,9 @@
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
+				
+					<li><a href="/login/github">Login in with github</a></li>
+				
 					@if (Auth::guest())
 						<li><a href="{{ url('/auth/login') }}">Login</a></li>
 						<li><a href="{{ url('/auth/register') }}">Register</a></li>

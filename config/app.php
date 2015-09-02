@@ -149,6 +149,7 @@ return [
 		* Extra
 		*/
 		'Illuminate\Html\HtmlServiceProvider',
+		'Laravel\Socialite\SocialiteServiceProvider',
 
 	],
 
@@ -203,6 +204,7 @@ return [
 		*/
 		'Form'=> 'Illuminate\Html\FormFacade', 
 		'HTML'=> 'Illuminate\Html\HtmlFacade',
+		'Socialize' => 'Laravel\Socialite\Facades\Socialite',
 
 	],
 

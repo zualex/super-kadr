@@ -33,5 +33,19 @@ return [
 		'model'  => 'App\User',
 		'secret' => '',
 	],
+	
+	//Twitter https://apps.twitter.com/app/8740000
+	/*'twitter' => [
+		'client_id' => 't3O4iFG6Dr9EIl54Rld5POdHp',
+		'client_secret' => 'WNKnYcJMGmq5tB0Kqtj5YO4w3a6tfyjWAUo4pMZd7sUi1AXQUA',
+		'redirect' => 'http://banner-web.local/login/twitter',
+	],*/
+	
+	//github  https://github.com/settings/applications/239069
+	/*'github' => [
+		'client_id' => '0ea1e2e1fe2c9cc32ce3',
+		'client_secret' => 'e31323a58424e3493817e929154f1b261c0b624a',
+		'redirect' => 'http://banner-web.local/login/github',
+	],*/
 
 ];
