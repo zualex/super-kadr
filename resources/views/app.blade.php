@@ -62,6 +62,10 @@
 			</div>
 		</div>
 	</nav>
+	
+
+	{!! HTML::ul($errors->all()) !!}
+	
 
 	@yield('content')
 
