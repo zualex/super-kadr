@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Socialize;
 use Illuminate\Http\Request;
 use App\AuthenticateUser;
+ use Laravel\Socialite\Contracts\Factory as Socialite;
 
 class AuthController extends Controller {
 	
@@ -34,20 +35,41 @@ class AuthController extends Controller {
 	 * @param  \Illuminate\Contracts\Auth\Registrar  $registrar
 	 * @return void
 	 */
-	public function __construct(Guard $auth, Registrar $registrar)
+	public function __construct(Guard $auth, Registrar $registrar, Socialite $socialite)
 	{
 		$this->auth = $auth;
 		$this->registrar = $registrar;
+		
+		$this->socialite = $socialite;
 
 		$this->middleware('guest', ['except' => 'getLogout']);
 	}
 
 	
-	
+	 public function getSocialAuth($provider=null)
+	{
+	   if(!config("services.$provider")) abort('404'); //just to handle providers that doesn't exist
+
+	   return $this->socialite->with($provider)->redirect();
+	}
+
+
+	public function getSocialAuthCallback($provider=null)
+	{
+	  if($user = $this->socialite->with($provider)->user()){
+		 dd($user);
+	  }else{
+		 return 'something went wrong';
+	  }
+	}
+	   
+	   
 	public function login(AuthenticateUser $authenticateUser, Request $request){
 		return $authenticateUser->execute($request->has('code'));
 		//return Socialize::with('twitter')->redirect();
 	}
+	
+	
 }
 
 

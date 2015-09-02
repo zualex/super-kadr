@@ -20,8 +20,19 @@ Route::controllers([
 ]);
 
 
-//Route::get('login/twitter', 'Auth\AuthController@login');
-//Route::get('login/github', 'Auth\AuthController@login');
+
+//Social Login
+Route::get('/login/{provider?}',[
+    'uses' => 'Auth\AuthController@getSocialAuth',
+    'as'   => 'auth.getSocialAuth'
+]);
+Route::get('/login/callback/{provider?}',[
+    'uses' => 'Auth\AuthController@getSocialAuthCallback',
+    'as'   => 'auth.getSocialAuthCallback'
+]);
+
+
+
 
 
 /*
