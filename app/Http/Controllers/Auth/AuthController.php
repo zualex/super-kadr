@@ -56,18 +56,24 @@ class AuthController extends Controller {
 
 	public function getSocialAuthCallback($provider=null)
 	{
-	  if($user = $this->socialite->with($provider)->user()){
-		 dd($user);
-	  }else{
-		 return 'something went wrong';
-	  }
+		if($user = $this->socialite->with($provider)->user()){
+			
+			/*
+			$user->getId();
+			$user->getNickname();
+			$user->getName();
+			$user->getEmail();
+			$user->getAvatar();
+			*/
+			
+			
+			
+			dd($user->getNickname());
+		}else{
+			return 'something went wrong';
+		}
 	}
-	   
-	   
-	public function login(AuthenticateUser $authenticateUser, Request $request){
-		return $authenticateUser->execute($request->has('code'));
-		//return Socialize::with('twitter')->redirect();
-	}
+
 	
 	
 }
