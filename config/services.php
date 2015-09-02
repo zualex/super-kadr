@@ -56,5 +56,19 @@ return [
 	],
 	
 	
+	//vkontakte http://vk.com/editapp?id=5055126&section=options
+	'vkontakte' => [
+		'client_id' => '5055126',
+		'client_secret' => 'K26XMIpmnE0pVEk2WbnQ',
+		'redirect' => 'http://banner-web.local/login/callback/vkontakte',  
+	],
+	
+	'odnoklassniki' => [
+		'client_id' => '1111111111',
+		'client_secret' => '1111111111',
+		'redirect' => 'http://banner-web.local/login/callback/odnoklassniki',  
+	],
+	
+	
 
 ];

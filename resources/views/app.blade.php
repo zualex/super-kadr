@@ -38,8 +38,10 @@
 
 				<ul class="nav navbar-nav navbar-right">
 				
-					<li><a href="/login/twitter">Login in with twitter</a></li>
+					<li><a href="/login/vkontakte">Login in with vkontakte</a></li>
 					<li><a href="/login/facebook">Login in with facebook</a></li>
+					<li><a href="/login/twitter">Login in with twitter</a></li>
+					<li><a href="/login/odnoklassniki">Login in with odnoklassniki</a></li>
 				
 					@if (Auth::guest())
 						<li><a href="{{ url('/auth/login') }}">Login</a></li>

@@ -14,6 +14,11 @@ class EventServiceProvider extends ServiceProvider {
 		'event.name' => [
 			'EventListener',
 		],
+		'SocialiteProviders\Manager\SocialiteWasCalled' => [
+			'SocialiteProviders\VKontakte\VKontakteExtendSocialite@handle',
+			'JhaoDa\SocialiteProviders\Odnoklassniki\OdnoklassnikiExtendSocialite@handle',
+		],
+
 	];
 
 	/**

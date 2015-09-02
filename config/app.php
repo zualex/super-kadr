@@ -149,7 +149,8 @@ return [
 		* Extra
 		*/
 		'Illuminate\Html\HtmlServiceProvider',
-		'Laravel\Socialite\SocialiteServiceProvider',
+		//'Laravel\Socialite\SocialiteServiceProvider',
+		'SocialiteProviders\Manager\ServiceProvider',
 
 	],
 

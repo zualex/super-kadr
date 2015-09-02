@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5617fd7c6924ad1ff7a5c3cdeb88564e",
+    "hash": "cc38fc2ca5c53099cf896cd488a98a74",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -722,6 +722,43 @@
             "time": "2015-03-11 20:06:43"
         },
         {
+            "name": "jhaoda/socialite-odnoklassniki",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jhaoda/socialite-odnoklassniki.git",
+                "reference": "d558bed2f99893adfe1ae1f9f55d3301f2f772c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jhaoda/socialite-odnoklassniki/zipball/d558bed2f99893adfe1ae1f9f55d3301f2f772c1",
+                "reference": "d558bed2f99893adfe1ae1f9f55d3301f2f772c1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "socialiteproviders/manager": "~1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JhaoDa\\SocialiteProviders\\Odnoklassniki\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "JhaoDa",
+                    "email": "jhaoda@gmail.com"
+                }
+            ],
+            "description": "Odnoklassniki OAuth2 Provider for Laravel Socialite",
+            "time": "2015-07-02 12:54:52"
+        },
+        {
             "name": "laravel/framework",
             "version": "v5.0.33",
             "source": {
@@ -1414,6 +1451,86 @@
                 "shell"
             ],
             "time": "2015-03-26 18:43:54"
+        },
+        {
+            "name": "socialiteproviders/manager",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SocialiteProviders/Manager.git",
+                "reference": "560f9ae20b039beb9de3af21571d8e598d73e6d0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SocialiteProviders/Manager/zipball/560f9ae20b039beb9de3af21571d8e598d73e6d0",
+                "reference": "560f9ae20b039beb9de3af21571d8e598d73e6d0",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~6.0",
+                "laravel/framework": "~5.0|~5.1",
+                "laravel/socialite": "~2.0",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "0.9.*",
+                "phpunit/phpunit": "4.5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SocialiteProviders\\Manager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Wendt",
+                    "email": "andy@awendt.com"
+                }
+            ],
+            "description": "Easily add new or override built-in providers in Laravel Socialite.",
+            "time": "2015-06-27 08:24:58"
+        },
+        {
+            "name": "socialiteproviders/vkontakte",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SocialiteProviders/VKontakte.git",
+                "reference": "45a92e07871a56640ff296179466f8d0e781e4d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SocialiteProviders/VKontakte/zipball/45a92e07871a56640ff296179466f8d0e781e4d3",
+                "reference": "45a92e07871a56640ff296179466f8d0e781e4d3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0",
+                "socialiteproviders/manager": "~1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SocialiteProviders\\VKontakte\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "DraperStudio",
+                    "email": "hello@draperstud.io"
+                }
+            ],
+            "description": "VKontakte OAuth2 Provider for Laravel Socialite",
+            "time": "2015-06-18 14:24:23"
         },
         {
             "name": "swiftmailer/swiftmailer",
