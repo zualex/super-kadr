@@ -1,61 +1,50 @@
-@extends('app')
-
-@section('content')
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
-			<div class="panel panel-default">
-				<div class="panel-heading">Login</div>
-				<div class="panel-body">
-					@if (count($errors) > 0)
-						<div class="alert alert-danger">
-							<strong>Whoops!</strong> There were some problems with your input.<br><br>
-							<ul>
-								@foreach ($errors->all() as $error)
-									<li>{{ $error }}</li>
-								@endforeach
-							</ul>
-						</div>
-					@endif
-
-					<form class="form-horizontal" role="form" method="POST" action="{{ url('/auth/login') }}">
-						<input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-						<div class="form-group">
-							<label class="col-md-4 control-label">E-Mail Address</label>
-							<div class="col-md-6">
-								<input type="email" class="form-control" name="email" value="{{ old('email') }}">
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label class="col-md-4 control-label">Password</label>
-							<div class="col-md-6">
-								<input type="password" class="form-control" name="password">
-							</div>
-						</div>
-
-						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" name="remember"> Remember Me
-									</label>
-								</div>
-							</div>
-						</div>
-
-						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
-								<button type="submit" class="btn btn-primary">Login</button>
-
-								<a class="btn btn-link" href="{{ url('/password/email') }}">Forgot Your Password?</a>
-							</div>
-						</div>
-					</form>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Вход в панель управления</title>
+	<link rel="stylesheet" type="text/css" href="./blocks/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="./blocks/css/fonts.css">
+</head>
+<body class="auth">
+	<div id="auth" class="login-block">
+		<div>
+			<div class="logo"><span><b>Панель</b>Управления</span></div>
+			
+			@if (count($errors) > 0)
+				<div class="alert alert-danger">
+					Произошла ошибка<br><br>
+					<ul>
+						@foreach ($errors->all() as $error)
+							<li>{{ $error }}</li>
+						@endforeach
+					</ul>
 				</div>
+			@endif
+			
+			
+			<div class="body">
+			<form role="form" method="POST" action="{{ url('/auth/login') }}">
+					<input type="hidden" name="_token" value="{{ csrf_token() }}">
+					
+					<div class="inline-block">
+						<div class="field login">
+							<input type="email"  name="email" placeholder="E-Mail" value="{{ old('email') }}">
+							<i class="fa fa-at"></i>
+						</div>
+						<div class="field password">
+							<input type="password"  name="password">
+							<i class="fa fa-lock"></i>
+						</div>
+					</div>
+					<div class="inline-block">
+						<input class="auth-submit" type="submit" name="login" value="Войти">
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
-</div>
-@endsection
+	
+
+</body>
+</html>

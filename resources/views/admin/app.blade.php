@@ -1,31 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Административная панель</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Панель управления</title>
+	{!! HTML::style('/assets/admin/css/styles.css') !!}
+	{!! HTML::style('/assets/admin/css/fonts.css') !!}
+	
+	
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	{!! HTML::script('/assets/admin/js/script.js') !!}
+	<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
 </head>
-<body>
-<div class="container">
-
-<nav class="navbar navbar-inverse">
-    <div class="navbar-header">
-        <a class="navbar-brand" href="{{ URL::to('/') }}">Вернуться на сайт</a>
-    </div>
-    <ul class="nav navbar-nav">
-        <li><a href="{{ route('admin.users.index') }}">Пользователи</a>
-        <li><a href="{{ route('admin.users.index') }}">Настройки</a>
-        <li><a href="{{ route('admin.users.index') }}">Транзакции</a>
-        <li><a href="{{ route('admin.users.index') }}">Заказы</a>
-        <li><a href="{{ route('admin.users.index') }}">Плейлисты</a>
-        <li><a href="{{ URL::to('auth/logout') }}">Выход</a>
-    </ul>
-</nav>
-
-	
-	@yield('content')
-
-	
-	
+<header>
+	<div class="clear">
+		<div id="logo"><a href="{{ route('admin') }}" title="На главную"><span><b>Панель</b> управления</span></a></div>
+		<div class="profile">
+			<div class="name">
+			<span><i class="fa pull-left fa-user"></i>{{ Auth::user()->name }}</span>
+				<div class="controls">
+					<div>
+						<ul>
+							<li><a href="#">Изменить пароль</a></li>
+							<li><a href="{{ url('/auth/logout') }}">Выйти</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+<div id="wrapper" class="wrapper clear">
+	<div id="menu" class="menu-panel">
+		<ul>
+			<li class="active"><a href="#"><i class="fa pull-left fa-credit-card"></i>Заказы</a></li>
+			<li><a href="#"><i class="fa pull-left fa-rub"></i>Тарифы</a></li>
+			<li><a href="#"><i class="fa pull-left fa-exchange"></i>Транзакции</a></li>
+			<li><a href="#"><i class="fa pull-left fa-tasks"></i>Плейлисты</a></li>
+			<li><a href="#"><i class="fa pull-left fa-wrench"></i>Настройки</a></li>
+		</ul>
+	</div>
+	<div class="wrap">
+		<div class="content">
+			<div class="clear">
+			
+			
+				@yield('content')
+				
+				
+			</div>
+		</div>
+	</div>
 </div>
 </body>
 </html>

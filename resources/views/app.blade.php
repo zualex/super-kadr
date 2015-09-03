@@ -1,76 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Laravel</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+{!! HTML::script('/assets/superkadr/js/jquery.js') !!}
+<link rel="shortcut icon" href="images/favicon.ico" />
 
-	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
+{!! HTML::style('/assets/superkadr/css/style.css') !!}
+{!! HTML::style('/assets/superkadr/css/fonts.css') !!}
+{!! HTML::style('/assets/superkadr/css/croppic.css') !!}
+{!! HTML::style('/assets/superkadr/css/datetimepicker.css') !!}
 
-	<!-- Fonts -->
-	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+{!! HTML::script('/assets/superkadr/js/script.js') !!}
+{!! HTML::script('/assets/superkadr/js/jquery.datetimepicker.js') !!}
+{!! HTML::script('/assets/superkadr/js/croppic.js') !!}
+{!! HTML::script('/assets/superkadr/js/jquery.mousewheel.min.js') !!}
+{!! HTML::script('/assets/superkadr/js/bootstrap.min.js') !!}
 
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-	<![endif]-->
+
 </head>
-<body>
-	<nav class="navbar navbar-default">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle Navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#">Laravel</a>
+<body>	
+	<header>
+		<div class="clear">
+			<div class="description"><span>Моментальное размещение фото на светодиодных экранах!</span></div>
+			<div class="screen left">
+				<div class="image"></div>
+				<div class="info">
+					<div class="title"><span>Экран 1</span></div>
+					<div class="text"><span>Советский район, ул.Красноармейская (магазин М-ВИДЕО)</span></div>
+				</div>
 			</div>
-
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li><a href="{{ route('main') }}">Home</a></li>
-				</ul>
-
-				<ul class="nav navbar-nav navbar-right">
-				
-					<li><a href="/login/vkontakte">Login in with vkontakte</a></li>
-					<li><a href="/login/facebook">Login in with facebook</a></li>
-					<li><a href="/login/twitter">Login in with twitter</a></li>
-					<li><a href="/login/odnoklassniki">Login in with odnoklassniki</a></li>
-				
-					@if (Auth::guest())
-						<li><a href="{{ url('/auth/login') }}">Login</a></li>
-						<li><a href="{{ url('/auth/register') }}">Register</a></li>
-					@else
-						@if (Auth::user()->level == 'admin')
-							<li><a href="{{ route('admin') }}">Admin panel</a></li>
-						@endif
-					
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="{{ url('/auth/logout') }}">Logout</a></li>
-							</ul>
-						</li>
-					@endif
-				</ul>
+			<div class="screen right">
+				<div class="image"></div>
+				<div class="info">
+					<div class="title"><span>Экран 2</span></div>
+					<div class="text"><span>Бежицкий район, ул.Ульянова (ТЦ "Тимошковых")</span></div>
+				</div>
+			</div>
+			<div class="logo">
+				<a href="{{ route('main') }}" title="Супер Кадр"><img src="/img/logo.png" alt=""></a>
 			</div>
 		</div>
-	</nav>
+	</header>
+	<div id="menu">
+		<div class="clear">
+			<div class="menu">
+				<ul>
+					<li class="active"><a href="{{ route('main') }}">Главная</a></li>
+					<li><a href="{{ route('gallery') }}">Галерея</a></li>
+					<li><a href="#">Условия</a></li>
+					<li><a href="#">Контакты</a></li>
+				</ul>
+			</div>
+			<div id="search">
+				<form>
+					<input type="search" class="inputsearch" tabindex="1" maxlength="120" placeholder="Поиск">
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="wrapper">
 	
-
-	{!! HTML::ul($errors->all()) !!}
 	
-
-	@yield('content')
-
-	<!-- Scripts -->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+		@yield('content')
+		
+		
+	</div>
+	<footer>
+		<div class="sirene">
+			<a href="http://sirene.ru/" title="Интерне-агенство СИРЕНА"><span>Разработка сайта СИРЕНА AGENCY</span><img src="/img/sirene.svg" alt="Интерне-агенство СИРЕНА"></a>
+		</div>
+	</footer>
 </body>
 </html>

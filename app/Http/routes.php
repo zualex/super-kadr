@@ -12,8 +12,19 @@
 */
 
 
-Route::get('/', ['as' => 'main', 'uses' => 'HomeController@index']);
 
+/*
+* Pages
+*/
+Route::get('/', ['as' => 'main', 'uses' => 'HomeController@index']);
+Route::get('/gallery', ['as' => 'gallery', 'uses' => 'GalleryController@index']);
+Route::get('/gallery/{id}', ['as' => 'gallery.show', 'uses' => 'GalleryController@show']);
+
+
+
+/*
+* Auth admin
+*/
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
@@ -21,7 +32,9 @@ Route::controllers([
 
 
 
-//Social Login
+/*
+* Social Auth
+*/
 Route::get('/login/{provider?}',[
     'uses' => 'Auth\AuthController@getSocialAuth',
     'as'   => 'auth.getSocialAuth'
@@ -30,8 +43,6 @@ Route::get('/login/callback/{provider?}',[
     'uses' => 'Auth\AuthController@getSocialAuthCallback',
     'as'   => 'auth.getSocialAuthCallback'
 ]);
-
-
 
 
 
