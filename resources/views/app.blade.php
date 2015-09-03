@@ -20,7 +20,31 @@
 
 
 </head>
-<body>	
+<body>
+<ul>
+
+@if (Auth::guest())
+	<li><a href="{{ url('/auth/login') }}">Login</a></li>
+	<li><a href="/login/vkontakte">Login in with vkontakte</a></li>
+	<li><a href="/login/facebook">Login in with facebook</a></li>
+	<li><a href="/login/twitter">Login in with twitter</a></li>
+	<li><a href="/login/odnoklassniki">Login in with odnoklassniki</a></li>
+@else
+	@if (Auth::user()->level == 'admin')
+		<li><a href="{{ route('admin') }}">Admin panel</a></li>
+	@endif
+
+	<li class="dropdown">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
+		<ul class="dropdown-menu" role="menu">
+			<li><a href="{{ url('/auth/logout') }}">Logout</a></li>
+		</ul>
+	</li>
+@endif
+
+</ul>
+
+
 	<header>
 		<div class="clear">
 			<div class="description"><span>Моментальное размещение фото на светодиодных экранах!</span></div>

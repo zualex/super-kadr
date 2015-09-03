@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 use Auth;
+use Hash;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -14,7 +15,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 
 	protected $table = 'users';
-	protected $fillable = ['name', 'email', 'password', 'provider','social_id', 'nickname', 'avatar'];
+	protected $fillable = ['name', 'email', 'password', 'provider', 'social_id', 'avatar'];
 	protected $hidden = ['password', 'remember_token'];
 	
 	public $errors;
@@ -37,76 +38,51 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	* Fields:
 	*		'provider' 
 	*		'social_id' 
-	*		'nickname' 
 	*		'name' 
 	*		'email' 
 	*		'avatar' 
-	*		'level' 
 	*/
-	public function CreateOrGetUser($arrValues){
-		$userAuth = false;
+	public function socialAuth($arrValues){
+		$userId = false;
 		if(!array_key_exists('provider', $arrValues)){$arrValues['provider'] = '';}
 		if(!array_key_exists('social_id', $arrValues)){$arrValues['social_id'] = '';}
-		if(!array_key_exists('level', $arrValues)){$arrValues['level'] = 'user';}
-		
-		//if(!$arrValues['email']){$this->errors[] = 'email: ' . $arrValues['email'] . ' уже используется';}
-		
-		
-		
-		//Social Auth
+		if(!$arrValues['name']){$arrValues['name'] = $arrValues['email'];}
+				
 		if($arrValues['provider'] != ''){
-			//Проверка что email свободен
+		
 			$checkUser = $this
-				->where('provider', '<>', $arrValues['provider'])
-				->where('social_id', '<>', $arrValues['social_id'])
-				->where('email', '=', $arrValues['email'])
-				->get();
+				->where('provider', '=', $arrValues['provider'])
+				->where('social_id', '=', $arrValues['social_id'])
+				->first();
 				
 			if(count($checkUser) == 0){
-				$checkUserSocial = $this
-					->where('provider', '=', $arrValues['provider'])
-					->where('social_id', '=', $arrValues['social_id'])
-					->first();
-				if(count($checkUserSocial) == 0){
-					//Создаем пользователя
-					$userAuth = new User;
-					$userAuth->provider = $arrValues['provider'];
-					$userAuth->social_id = $arrValues['social_id'];
-					$userAuth->nickname = $arrValues['nickname'];
-					$userAuth->name = $arrValues['name'];
-					$userAuth->email = $arrValues['email'];
-					$userAuth->avatar = $arrValues['avatar'];
-					$userAuth->level = $arrValues['level'];
-					$userAuth->save();
-				}else{
-					//Обновляем пользователя
-					$userAuth = $checkUserSocial;
-					$userAuth->nickname = $arrValues['nickname'];
-					$userAuth->name = $arrValues['name'];
-					$userAuth->email = $arrValues['email'];
-					$userAuth->avatar = $arrValues['avatar'];
-					$userAuth->level = $arrValues['level'];
-					$userAuth->save();
-				}
+				//Создаем пользователя
+				$userAuth = new User;
+				$userAuth->provider = $arrValues['provider'];
+				$userAuth->social_id = $arrValues['social_id'];
+				$userAuth->name = $arrValues['name'];
+				$userAuth->email = $arrValues['social_id'].'@social.ru';
+				$userAuth->avatar = $arrValues['avatar'];
+				$userAuth->password = Hash::make('secret');
+				$userAuth->save();
 				
-				
-				/*$userAuth = $this->firstOrCreate([
-					'provider' => $arrValues['provider'],
-					'social_id' => $arrValues['social_id'],
-					'nickname' => $arrValues['nickname'],
-					'name' => $arrValues['name'],
-					'email' => $arrValues['email'],
-					'avatar' => $arrValues['avatar'],
-					'level' => $arrValues['level'],
-				]);*/
-
+				$userId  = $userAuth->id;
 			}else{
-				$this->errors[] = 'email: ' . $arrValues['email'] . ' уже используется';
+				//Обновляем пользователя
+				$userAuth = $checkUser;
+				$userAuth->name = $arrValues['name'];
+				$userAuth->avatar = $arrValues['avatar'];
+				$userAuth->save();
+				
+				$userId  = $userAuth->id;
 			}
 		}
 	
-		
-		return $userAuth;
+		return $userId;
 	}
+	
+	
+	
+	
 
 }

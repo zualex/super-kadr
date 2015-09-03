@@ -1,7 +1,10 @@
 <?php
+
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-class Users extends Migration {
+
+class SocialUserAddField extends Migration {
+
 	/**
 	 * Run the migrations.
 	 *
@@ -9,11 +12,12 @@ class Users extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('users', function($table)
+		Schema::table('user_socials', function($table)
 		{
-			$table->enum('level', ['user', 'admin'])->default('user');
+		  $table->integer('user_id')->index();
 		});
 	}
+
 	/**
 	 * Reverse the migrations.
 	 *
@@ -21,9 +25,10 @@ class Users extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('users', function($table)
+		Schema::table('user_socials', function($table)
 		{
-			$table->dropColumn('level');
+			$table->dropColumn('user_id');
 		});
 	}
+
 }
