@@ -83,9 +83,9 @@ class AuthController extends Controller {
 			if($userId){Auth::loginUsingId($userId);}
 			
 			if(count($postUser->errors) > 0){	
-				return redirect()->route('main')->withErrors($postUser->errors);
+				return redirect()->back()->withErrors($postUser->errors);
 			}else{
-				return redirect()->route('main');
+				return redirect()->back();
 			}
 
 			
