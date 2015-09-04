@@ -29,6 +29,25 @@ test
 Уточнить про группы в соц сетях (МЫ В СОЦИАЛЬНЫХ СЕТЯХ)
 Уточнить про авторизацию обычных людей (В версте нет)
 
+
+
+Для тест соц сетей
+TWITTER_ID = t3O4iFG6Dr9EIl54Rld5POdHp
+TWITTER_SECRET = WNKnYcJMGmq5tB0Kqtj5YO4w3a6tfyjWAUo4pMZd7sUi1AXQUA
+TWITTER_REDIRECT = http://super-kadr32.zualex.com/login/callback/twitter
+
+FACEBOOK_ID = 171355216531108
+FACEBOOK_SECRET = a4e393ea8c19de1cbcba85a4b764b06d
+FACEBOOK_REDIRECT = http://super-kadr32.zualex.com/login/callback/facebook
+
+VKONTAKTE_ID = 5057233
+VKONTAKTE_SECRET = AzAIrYvYkOPfLhWBoU8A
+VKONTAKTE_REDIRECT = http://super-kadr32.zualex.com/login/callback/vkontakte
+
+ODNIKLASSNIKI_ID = 1111
+ODNIKLASSNIKI_SECRET = 1111
+ODNIKLASSNIKI_REDIRECT = http://super-kadr32.zualex.com/login/callback/odnoklassniki
+
 ----------------------------------------------------------------------------------------------------------
 
 ТЗ:
