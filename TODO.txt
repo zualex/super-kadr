@@ -1,4 +1,4 @@
-Потраченное время: 23 часа (00:00) 1 сентября -
+Потраченное время: 23 часа (17:00) 1 сентября -
 ----------------------------------------------------------------------------------------------------------
 Сайт http://super-kadr32.ru/
 
@@ -34,23 +34,45 @@ test
 Для тест соц сетей
 TWITTER_ID = t3O4iFG6Dr9EIl54Rld5POdHp
 TWITTER_SECRET = WNKnYcJMGmq5tB0Kqtj5YO4w3a6tfyjWAUo4pMZd7sUi1AXQUA
-TWITTER_REDIRECT = http://super-kadr32.zualex.com/login/callback/twitter
+TWITTER_REDIRECT = http://super-kadr32.local/login/callback/twitter
 
 FACEBOOK_ID = 171355216531108
 FACEBOOK_SECRET = a4e393ea8c19de1cbcba85a4b764b06d
-FACEBOOK_REDIRECT = http://super-kadr32.zualex.com/login/callback/facebook
+FACEBOOK_REDIRECT = http://super-kadr32.local/login/callback/facebook
 
 VKONTAKTE_ID = 5057233
 VKONTAKTE_SECRET = AzAIrYvYkOPfLhWBoU8A
-VKONTAKTE_REDIRECT = http://super-kadr32.zualex.com/login/callback/vkontakte
+VKONTAKTE_REDIRECT = http://super-kadr32.local/login/callback/vkontakte
 
 ODNIKLASSNIKI_ID = 1111
 ODNIKLASSNIKI_SECRET = 1111
-ODNIKLASSNIKI_REDIRECT = http://super-kadr32.zualex.com/login/callback/odnoklassniki
+ODNIKLASSNIKI_REDIRECT = http://super-kadr32.local/login/callback/odnoklassniki
+
+
+Статусы:
+statys_pay
+- Оплачено
+- Ожидание оплаты
+- Ошибка
+- Отклонено пользователем
+- Отклонено администратором
+
+status_main
+- Одобрено
+- На модерации
+- Отклонено
+
+status_order
+- Выполнена
+- В исполнении
+- В очереди на исполнение
 
 ----------------------------------------------------------------------------------------------------------
 
+
 ТЗ:
+- При выборе экрана менять экран, один из них квадратный
+- вместо поиска соц сети
 - Авторизация через соц. сети: Вконтакте, facebook, twitter, одноклассники.
 - лайки
 - Комментарии
