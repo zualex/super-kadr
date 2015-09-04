@@ -34,39 +34,36 @@ return [
 		'secret' => '',
 	],
 	
-	//Twitter https://apps.twitter.com/app/8740000
+	//Test Twitter https://apps.twitter.com/app/8740000
+	//Twitter https://apps.twitter.com/app/8749222
 	'twitter' => [
-		'client_id' => 't3O4iFG6Dr9EIl54Rld5POdHp',
-		'client_secret' => 'WNKnYcJMGmq5tB0Kqtj5YO4w3a6tfyjWAUo4pMZd7sUi1AXQUA',
-		'redirect' => 'http://super-kadr32.local/login/callback/twitter',
+		'client_id' => env('TWITTER_ID'),
+		'client_secret' => env('TWITTER_SECRET'),
+		'redirect' => env('TWITTER_REDIRECT'),
 	],
 	
-	//github  https://github.com/settings/applications/239069
-	/*'github' => [
-		'client_id' => '0ea1e2e1fe2c9cc32ce3',
-		'client_secret' => 'e31323a58424e3493817e929154f1b261c0b624a',
-		'redirect' => 'http://super-kadr32.local/login/callback/github',
-	],*/
 	
-	//facebook  https://developers.facebook.com/apps/1690710344477613/dashboard/
+	//Test facebook  https://developers.facebook.com/apps/1690710344477613/dashboard/
+	//facebook  https://developers.facebook.com/apps/171355216531108/
 	'facebook' => [
-		'client_id' => '1690710344477613',
-		'client_secret' => '7d0922387e821f652e3283902d1a0c0c',
-		'redirect' => 'http://super-kadr32.local/login/callback/facebook',
+		'client_id' => env('FACEBOOK_ID'),
+		'client_secret' => env('FACEBOOK_SECRET'),
+		'redirect' => env('FACEBOOK_REDIRECT'),
 	],
 	
 	
-	//vkontakte http://vk.com/editapp?id=5055126&section=options
+	//Test vkontakte http://vk.com/editapp?id=5055126&section=options
+	//vkontakte http://vk.com/editapp?id=5057233&section=options
 	'vkontakte' => [
-		'client_id' => '5055126',
-		'client_secret' => 'K26XMIpmnE0pVEk2WbnQ',
-		'redirect' => 'http://super-kadr32.local/login/callback/vkontakte',  
+		'client_id' => env('VKONTAKTE_ID'),
+		'client_secret' => env('VKONTAKTE_SECRET'),
+		'redirect' => env('VKONTAKTE_REDIRECT'),
 	],
 	
 	'odnoklassniki' => [
-		'client_id' => '1111111111',
-		'client_secret' => '1111111111',
-		'redirect' => 'http://super-kadr32.local/login/callback/odnoklassniki',  
+		'client_id' => env('ODNIKLASSNIKI_ID'),
+		'client_secret' => env('ODNIKLASSNIKI_SECRET'),
+		'redirect' => env('ODNIKLASSNIKI_REDIRECT'),
 	],
 	
 	
