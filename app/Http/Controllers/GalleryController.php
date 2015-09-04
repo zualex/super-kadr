@@ -7,24 +7,17 @@ use Illuminate\Http\Request;
 
 class GalleryController extends Controller {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
+
 	public function index()
 	{
 		return view('pages.gallery.index');
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
+		
 	public function create()
 	{
-		//
+		//session нужен для того чтобы определить картинку
+		return $value = session('uploadImg');
 	}
 
 	/**
@@ -81,4 +74,5 @@ class GalleryController extends Controller {
 		//
 	}
 
+	
 }

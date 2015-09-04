@@ -103,7 +103,7 @@
 				<div class="stand"></div>
 				<script type="text/javascript">
 					var croppicHeaderOptions = {
-							cropUrl:'/file.php',
+							cropUrl:'/croppic/img_crop_to_file.php?dataInfo={{ $data['sessionUpload'] }}',
 							customUploadButtonId:'upload-btn',
 							modal:false,
 							processInline:true,
@@ -154,7 +154,7 @@
 								<span class="item" ></span>
 							</div>
 							<div class="times tab-block">
-								{!! $content !!}
+								{!! $data['dateContent'] !!}
 							</div>
 						</div>
 					</div>
