@@ -37,15 +37,10 @@ $cropW = $cropW*$ratioW;
 $cropH = $cropH*$ratioH;
 
 
-/*$imgW = $_POST['cropOrigW_'.$monitor];
-$imgH = $_POST['cropOrigH_'.$monitor];
-$cropW = $_POST['cropOrigW_'.$monitor];
-$cropH = $_POST['cropOrigH_'.$monitor];
-*/
 
 
 
-
+if($imgW <= 10000 and $imgH <= 10000 and $imgInitW <= 10000 and $imgInitH <= 10000){
 
 
 //$output_filename = "temp/croppedImg_".$dataInfo;
@@ -79,7 +74,7 @@ switch(strtolower($what['mime']))
 if(!is_writable(dirname($output_filename))){
 	$response = Array(
 	    "status" => 'error',
-	    "message" => 'Can`t write cropped File'
+	    "message" => 'Файл не может быть сохранен'
     );	
 }else{
     // resize the original image to size of editor
@@ -109,4 +104,11 @@ if(!is_writable(dirname($output_filename))){
 	    "url" => '/croppic/'.$output_filename.$type
     );
 }
+
+}else{
+	$response = Array(
+	    "status" => 'error',
+	    "message" => 'Размер изображения больше 10000x10000'
+    );	
+}	
 print json_encode($response);

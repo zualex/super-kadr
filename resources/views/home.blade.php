@@ -135,7 +135,7 @@
 							onImgZoom: function(){ console.log('onImgZoom') },
 							onBeforeImgCrop: function(){ console.log('onBeforeImgCrop') },
 							onAfterImgCrop:function(){ console.log('onAfterImgCrop') },
-							onError:function(errormessage){ console.log('onError:'+errormessage) }
+							onError:function(errormessage){ alert(errormessage) }
 					}	
 					var croppic = new Croppic('croppic', croppicHeaderOptions);
 				</script>
