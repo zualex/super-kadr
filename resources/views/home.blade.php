@@ -122,7 +122,28 @@
 		</div>
 		<div id="schedule" class="block color-1">
 			<div class="body clear">
-				<div class="tariff">
+				<div class="tariff" data-tarif = "">
+					<div class="header"><span>тариф</span></div>
+					<div class="switch">
+					
+						@foreach($data['tarifs'] as $key => $value)
+							<input type="hidden" name="tarif_id" value="{{ $value->name }}">
+							<div class="label item_{{ $value->id }} hidden" data-tarif = "{{ $value->id }}"><span>{{ $value->name }}</span></div>
+						@endforeach
+						
+							<div class="controls">
+								<div class="nav-left"><i class="fa fa-chevron-left"></i></div>
+								<div class="nav-right"><i class="fa fa-chevron-right"></i></div>
+							</div>
+					</div>
+					@foreach($data['tarifs'] as $key => $value)
+						<div class="info info_{{ $value->id }} hidden">
+							<div class="views-num"><span>{{ $value->desc_main }}</span></div>
+							<div class="duration"><span>{{ $value->desc_dop }}</span></div>
+							<div class="price"><span>{{ $value->price }}<i class="fa pull-right fa-rub"></i></span></div>
+						</div>
+					@endforeach
+					<!--
 					<div class="header"><span>тариф</span></div>
 					<div class="switch">
 						<div class="label"><span>Просто</span></div>
@@ -136,6 +157,8 @@
 						<div class="duration"><span>в течение <num>1</num> часа</span></div>
 						<div class="price"><span>150<i class="fa pull-right fa-rub"></i></span></div>
 					</div>
+					-->
+					
 					<div class="monitor">
 						<select>
 						  <option>Экран 1</option>
@@ -143,7 +166,7 @@
 						</select>
 					</div>
 					<div class="pay">
-						<a href="/" title="Оплатить заказ"><i class="fa pull-left fa-credit-card"></i><span>Оплатить</a>
+						<a href="{{ route('gallery.create') }}" title="Оплатить заказ"><i class="fa pull-left fa-credit-card"></i><span>Оплатить</a>
 					</div>
 				</div>
 				<div class="schedule-block">

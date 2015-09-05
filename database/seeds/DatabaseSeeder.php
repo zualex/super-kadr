@@ -38,7 +38,7 @@ class TarifTableSeeder extends Seeder {
 		'desc_dop' => 'в течение 1 часа',
 		'hours' => '1',
 		'interval_sec' => '300',
-		'price' => '200',
+		'price' => '150',
 	]);
 	
 	Tarif::create([
@@ -47,7 +47,7 @@ class TarifTableSeeder extends Seeder {
 		'desc_dop' => 'в течение 5 часов',
 		'hours' => '4',
 		'interval_sec' => '900',
-		'price' => '150',
+		'price' => '200',
 	]);
 	
 	Tarif::create([

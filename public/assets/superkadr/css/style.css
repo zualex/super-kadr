@@ -117,7 +117,7 @@ header>div .logo img{display:block;width:100%;}
 .wrapper #schedule>.body .tariff .header span{color:#fff;font-size:1.3em;}
 .wrapper #schedule>.body .tariff .switch{background-color:#3E50B4;padding: 10px 0 20px;position:relative;}
 .wrapper #schedule>.body .tariff .switch .label{padding: 0 40px;text-align:center;}
-.wrapper #schedule>.body .tariff .switch .controls>div{position:absolute;color:#fff;top: 10px;bottom: 20px;padding: 13px 0;width: 40px;text-align: center;}
+.wrapper #schedule>.body .tariff .switch .controls>div{cursor:pointer;position:absolute;color:#fff;top: 10px;bottom: 20px;padding: 13px 0;width: 40px;text-align: center;}
 .wrapper #schedule>.body .tariff .switch .controls .nav-left{
     left: 0;
 }
@@ -258,3 +258,13 @@ footer .sirene>a{color:#333;}
 
 .tab-block section{display:none;padding: 0 10px 10px 0;background-color: #fff;margin-bottom: 20px;}
 .tab-block section:after{content:'';display:table;clear:both;}
+
+
+
+
+
+
+.tariff .switch .label.hidden{display:none;}
+.tariff .info.hidden{display:none;}
+
+

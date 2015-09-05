@@ -250,4 +250,58 @@ $(document).ready( function () {
 		  .parents('.tab-block').find('section').eq($(this).index()).slideToggle(1000).siblings('section').hide();
 	  })
 	});
+	
+	
+	
+	
+	
+	
+	
+
+	$('.tariff').on('click', '.controls .nav-left', function() {changeTarif(-1)});
+	$('.tariff').on('click', '.controls .nav-right', function() {changeTarif(1)});
+	function changeTarif(cnt){
+		var arrTarif = [];
+		var nowTarif = $('.tariff').attr('data-tarif');
+		var nextTarif = 0;
+		
+		$('.tariff').find('.label').each(function(i){
+			arrTarif.push($(this).attr('data-tarif'));
+		});
+		var arrLen = arrTarif.length;
+		for(i = 0; arrLen > i; i++){
+			if(arrTarif[i] == nowTarif){
+				nextIndex = i+cnt;
+				console.log('nextIndex: '+nextIndex);
+				if(nextIndex >= arrLen){nextIndex = 0;}
+				if(nextIndex < 0){nextIndex = arrLen-1;}
+				nextTarif = arrTarif[nextIndex]
+			}
+		}
+		
+		console.log('Текущий тариф: '+nowTarif);
+		console.log('Следующий тариф: '+nextTarif);
+		
+		
+		$('.tariff').attr('data-tarif', nextTarif);
+		$('.tariff').find('.item_'+nowTarif).addClass('hidden');
+		$('.tariff').find('.info_'+nowTarif).addClass('hidden');
+		$('.tariff').find('.item_'+nextTarif).removeClass('hidden');
+		$('.tariff').find('.info_'+nextTarif).removeClass('hidden');
+
+		
+	}
+	
+	
+	$('.tariff').find('.label').each(function(i){
+		//Показываем первый тариф
+		if(i == 0){
+			tarif = $(this).attr('data-tarif');
+			$(this).removeClass('hidden');
+			$('.tariff').attr('data-tarif', tarif);
+			$('.tariff').find('.info_'+tarif).removeClass('hidden');
+		}
+	});
+	
+	
 });
