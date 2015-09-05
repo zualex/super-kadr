@@ -109,8 +109,6 @@
 					@endforeach	
 				</style>
 				
-			
-			
 				<div id="monitor-change-class" class="monitor activeMonitor_1">
 					<div id="croppic"></div>
 					<div id="upload-btn"><div><i class="fa pull-left fa-camera"></i><span>Загрузи фото</span></div></div>
@@ -137,7 +135,7 @@
 		</div>
 		<div id="schedule" class="block color-1">
 			<div class="body clear">
-				<div class="tariff" data-tarif = "" data-monitor = "">
+				<div class="tariff" data-tarif = "" data-monitor = "" data-dateShow = "">
 					<div class="header"><span>тариф</span></div>
 					<div class="switch">
 					

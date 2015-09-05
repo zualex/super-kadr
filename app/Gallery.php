@@ -111,7 +111,7 @@ class Gallery extends Model {
 				$stime = strtotime($time);
 				if ($stime < time() + 60 * 60)$status = ' deny';
 				else $status = ' active';
-				$times .= '<span class="time-item'.$status.'" time="'.$time.'" time2="'.strtotime($time).'">'.$t.'</span>';
+				$times .= '<span class="time-item'.$status.'" data-time="'.$time.'" data-time2="'.strtotime($time).'">'.$t.'</span>';
 			}
 			$content_time .= '<section>'.$times.'</section>';
 		}

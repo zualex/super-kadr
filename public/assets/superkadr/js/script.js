@@ -307,7 +307,7 @@ $(document).ready( function () {
 	
 	
 	/*
-	*	Иициализируем первый монитор
+	*	Инициализируем первый монитор
 	*/
 	var nowMonitor = $('.monitor select').val();
 	$('.tariff').attr('data-monitor', nowMonitor);
@@ -328,6 +328,18 @@ $(document).ready( function () {
 			$('#monitor-change-class').removeClass('activeMonitor_'+oldMonitor);
 			$('#monitor-change-class').addClass('activeMonitor_'+newMonitor);
 		}, 300);
+	});
+	
+	
+	/*
+	*	Выбор даты
+	*/
+	$('.box-content').on('click', '.time-item.active', function() {
+		$('.box-content').find('.time-item.active').removeClass('select');
+		$(this).addClass('select');
+		
+		dateShow = $(this).attr('data-time');
+		$('.tariff').attr('data-dateShow', dateShow);
 	});
 	
 	

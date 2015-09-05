@@ -273,4 +273,9 @@ footer .sirene>a{color:#333;}
 	transition-duration:.3s;
 }
 
+.tab-block .box-content .time-item.active.select{
+	background-color: #3E50B4;
+    color: #fff;
+}
+
 
