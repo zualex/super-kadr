@@ -256,8 +256,21 @@ $(document).ready( function () {
 	
 	
 	
+	/*
+	*	Показываем первый тариф
+	*/
+	$('.tariff').find('.label').each(function(i){
+		if(i == 0){
+			tarif = $(this).attr('data-tarif');
+			$(this).removeClass('hidden');
+			$('.tariff').attr('data-tarif', tarif);
+			$('.tariff').find('.info_'+tarif).removeClass('hidden');
+		}
+	});
 	
-
+	/*
+	*	Переключение тарифов
+	*/
 	$('.tariff').on('click', '.controls .nav-left', function() {changeTarif(-1)});
 	$('.tariff').on('click', '.controls .nav-right', function() {changeTarif(1)});
 	function changeTarif(cnt){
@@ -272,15 +285,15 @@ $(document).ready( function () {
 		for(i = 0; arrLen > i; i++){
 			if(arrTarif[i] == nowTarif){
 				nextIndex = i+cnt;
-				console.log('nextIndex: '+nextIndex);
+				//console.log('nextIndex: '+nextIndex);
 				if(nextIndex >= arrLen){nextIndex = 0;}
 				if(nextIndex < 0){nextIndex = arrLen-1;}
 				nextTarif = arrTarif[nextIndex]
 			}
 		}
 		
-		console.log('Текущий тариф: '+nowTarif);
-		console.log('Следующий тариф: '+nextTarif);
+		//console.log('Текущий тариф: '+nowTarif);
+		//console.log('Следующий тариф: '+nextTarif);
 		
 		
 		$('.tariff').attr('data-tarif', nextTarif);
@@ -293,14 +306,28 @@ $(document).ready( function () {
 	}
 	
 	
-	$('.tariff').find('.label').each(function(i){
-		//Показываем первый тариф
-		if(i == 0){
-			tarif = $(this).attr('data-tarif');
-			$(this).removeClass('hidden');
-			$('.tariff').attr('data-tarif', tarif);
-			$('.tariff').find('.info_'+tarif).removeClass('hidden');
-		}
+	/*
+	*	Иициализируем первый монитор
+	*/
+	var nowMonitor = $('.monitor select').val();
+	$('.tariff').attr('data-monitor', nowMonitor);
+	
+	/*
+	*	Переключение экранов
+	*/
+	$('.monitor select').change(function() {
+		oldMonitor = $('.tariff').attr('data-monitor');
+		newMonitor = $(this).val();
+		$('.tariff').attr('data-monitor', newMonitor);
+		
+
+		$('html, body').animate({
+			scrollTop: $("#monitor-change-class").offset().top - 100
+		}, 500);
+		setTimeout(function() {
+			$('#monitor-change-class').removeClass('activeMonitor_'+oldMonitor);
+			$('#monitor-change-class').addClass('activeMonitor_'+newMonitor);
+		}, 300);
 	});
 	
 	

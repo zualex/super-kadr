@@ -21,7 +21,10 @@ $jpeg_quality = 100;
 
 $dataInfo = $_GET['dataInfo'];
 
-$output_filename = "temp/croppedImg_".$dataInfo;
+//$output_filename = "temp/croppedImg_".$dataInfo;
+$output_filename = "temp/croppedImg_".$cropW."_".$cropH;
+
+
 // uncomment line below to save the cropped image in the same location as the original image.
 //$output_filename = dirname($imgUrl). "/croppedImg_".rand();
 $what = getimagesize($imgUrl);

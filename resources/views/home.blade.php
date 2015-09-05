@@ -96,7 +96,22 @@
 		</div>
 		<div id="upload" class="block">
 			<div class="body clear">
-				<div class="monitor">
+				<style>
+					@foreach($data['paramMonitor'] as $key => $value)
+						.activeMonitor_{{ $key }}{
+							width:  {{ $value['siteWidth'] }}px;
+							height: {{ $value['siteHeight'] }}px;	
+						}
+						.activeMonitor_{{ $key }} #croppic{
+							width:  {{ $value['siteWidth']-40 }}px;
+							height: {{ $value['siteHeight']-40 }}px;	
+						}
+					@endforeach	
+				</style>
+				
+			
+			
+				<div id="monitor-change-class" class="monitor activeMonitor_1">
 					<div id="croppic"></div>
 					<div id="upload-btn"><div><i class="fa pull-left fa-camera"></i><span>Загрузи фото</span></div></div>
 				</div>
@@ -122,7 +137,7 @@
 		</div>
 		<div id="schedule" class="block color-1">
 			<div class="body clear">
-				<div class="tariff" data-tarif = "">
+				<div class="tariff" data-tarif = "" data-monitor = "">
 					<div class="header"><span>тариф</span></div>
 					<div class="switch">
 					
@@ -143,26 +158,12 @@
 							<div class="price"><span>{{ $value->price }}<i class="fa pull-right fa-rub"></i></span></div>
 						</div>
 					@endforeach
-					<!--
-					<div class="header"><span>тариф</span></div>
-					<div class="switch">
-						<div class="label"><span>Просто</span></div>
-						<div class="controls">
-							<div class="nav-left"><i class="fa fa-chevron-left"></i></div>
-							<div class="nav-right"><i class="fa fa-chevron-right"></i></div>
-						</div>
-					</div>
-					<div class="info">
-						<div class="views-num"><span><num>12</num> показов</span></div>
-						<div class="duration"><span>в течение <num>1</num> часа</span></div>
-						<div class="price"><span>150<i class="fa pull-right fa-rub"></i></span></div>
-					</div>
-					-->
 					
 					<div class="monitor">
-						<select>
-						  <option>Экран 1</option>
-						  <option>Экран 2</option>
+						<select name="monitor">
+							@foreach($data['paramMonitor'] as $key => $value)
+								 <option value="{{ $key }}">Экран {{ $key }}</option>
+							@endforeach	
 						</select>
 					</div>
 					<div class="pay">

@@ -38,6 +38,7 @@ class HomeController extends Controller {
 			'dateContent' => $galleryModel->dateContent(),
 			'sessionUpload' => $galleryModel->sessionUpload(),
 			'tarifs' => Tarif::all(),
+			'paramMonitor' => $tarifModel->getParamMonitor(),
 		);
 		
 		return view('home')->with('data', $data);

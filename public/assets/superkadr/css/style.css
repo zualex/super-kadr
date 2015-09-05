@@ -101,8 +101,8 @@ header>div .logo img{display:block;width:100%;}
 
 .wrapper #upload{background-image:url(/img/citybg.png);background-size:cover;background-position:center center;background-repeat:no-repeat;}
 .wrapper #upload .body{padding: 40px 0 20px;}
-.wrapper #upload .body .monitor {width: 760px;height: 520px;margin: 0 auto;border-radius: 10px;border: 20px solid #fff;background-color: #364DCA;position: relative;}
-.wrapper #upload .body .monitor #croppic {width: 720px;height: 480px;position:relative;overflow: hidden;}
+.wrapper #upload .body .monitor {/*width: 760px;height: 520px;*/margin: 0 auto;border-radius: 10px;border: 20px solid #fff;background-color: #364DCA;position: relative;}
+.wrapper #upload .body .monitor #croppic {/*width: 720px;height: 480px;*/position:relative;overflow: hidden;}
 .wrapper #upload .body .monitor #upload-btn {position: absolute;top: 43%;left:0;right:0;}
 .wrapper #upload .body .monitor #upload-btn>div{display:table;margin:0 auto;cursor:pointer;}
 .wrapper #upload .body .monitor #upload-btn>div *{color:#fff;font-size:3em;}
@@ -263,8 +263,14 @@ footer .sirene>a{color:#333;}
 
 
 
-
+/*
+*	Extra styles
+*/
 .tariff .switch .label.hidden{display:none;}
 .tariff .info.hidden{display:none;}
+.wrapper #upload .body .monitor {
+	transition-property:width, height;
+	transition-duration:.3s;
+}
 
 
