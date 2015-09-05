@@ -322,6 +322,8 @@ $(document).ready( function () {
 		newMonitor = $(this).val();
 		$('.tariff').attr('data-monitor', newMonitor);
 		croppic.options.cropData.monitor = newMonitor;
+
+		
 		
 
 		$('html, body').animate({

@@ -166,6 +166,10 @@
 					@endforeach
 					
 					<div class="monitor">
+						@foreach($data['paramMonitor'] as $key => $value)
+							<input type="hidden" id="monitorWidth_{{ $key }}" name="monitorWidth_{{ $key }}" value="{{ $value['siteWidth'] }}">
+							<input type="hidden" id="monitorHeight_{{ $key }}" name="monitorHeight_{{ $key }}" value="{{ $value['siteHeight'] }}">
+						@endforeach	
 						<select name="monitor">
 							@foreach($data['paramMonitor'] as $key => $value)
 								 <option value="{{ $key }}">Экран {{ $key }}</option>

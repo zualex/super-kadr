@@ -43,8 +43,9 @@ $cropH = $cropH*$ratioH;
 if($imgW <= 10000 and $imgH <= 10000 and $imgInitW <= 10000 and $imgInitH <= 10000){
 
 
-//$output_filename = "temp/croppedImg_".$dataInfo;
-$output_filename = "temp/croppedImg_".$cropW."_".$cropH.rand();
+$dirFile = "temp/".$dataInfo;
+if (!file_exists($dirFile)) {mkdir($dirFile, 0755, true);}
+$output_filename = $dirFile."/croppedImg_".rand();
 
 
 // uncomment line below to save the cropped image in the same location as the original image.

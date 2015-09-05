@@ -15,7 +15,7 @@ class Gallery extends Model {
 	public function sessionUpload(){
 		$value = '';
 		if (Auth::check()){
-			$value = str_random(30);
+			$value = Auth::user()->id."_".str_random(30);
 			Session::flash('uploadImg', $value);
 		}
 		return $value;
