@@ -19,7 +19,7 @@
 Route::get('/', ['as' => 'main', 'uses' => 'HomeController@index']);
 Route::get('/gallery', ['as' => 'gallery', 'uses' => 'GalleryController@index']);
 Route::get('/gallery/{id}', ['as' => 'gallery.show', 'uses' => 'GalleryController@show']);
-Route::get('/gallery_create', ['as' => 'gallery.create', 'uses' => 'GalleryController@create']);
+Route::post('/croppic_upload', ['as' => 'gallery.create', 'uses' => 'GalleryController@create']);
 
 
 

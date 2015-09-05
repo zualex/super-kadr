@@ -4,6 +4,9 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Response;
+use Session;
+use Input;
 
 class GalleryController extends Controller {
 
@@ -17,7 +20,18 @@ class GalleryController extends Controller {
 	public function create()
 	{
 		//session нужен для того чтобы определить картинку
-		return $value = session('uploadImg');
+		//check if its our form
+        if ( Session::token() !== Input::get( '_token' ) ) {
+            return Response::json( array(
+				"status" => 'error',
+				"message" => 'Проверка 1'
+            ));
+        }
+
+		return Response::json( array(
+			"status" => 'error',
+			"message" => 'Проверка 2'
+		));
 	}
 
 	/**

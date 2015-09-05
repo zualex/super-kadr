@@ -114,10 +114,13 @@
 					<div id="upload-btn"><div><i class="fa pull-left fa-camera"></i><span>Загрузи фото</span></div></div>
 				</div>
 				<div class="stand"></div>
+				
 				<script type="text/javascript">
 					var croppicHeaderOptions = {
-							cropUrl:'/croppic/img_crop_to_file.php',
+							//cropUrl:'/croppic/img_crop_to_file.php',
+							cropUrl:'/croppic_upload',
 							cropData:{
+								//'csrftoken' : '{{ csrf_token() }}',
 								'dataInfo' : '{{ $data['sessionUpload'] }}',
 								'monitor' : 0,	//change in script.js
 								@foreach($data['paramMonitor'] as $key => $value)

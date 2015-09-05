@@ -9,6 +9,13 @@ function is_json(str) {
 
 $(function(){
 
+	$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+	});
+	
+
 	//var win_h = $(window).height();
 	//var content_h = $("#first").height();
 	
