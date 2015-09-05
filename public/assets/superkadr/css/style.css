@@ -277,5 +277,13 @@ footer .sirene>a{color:#333;}
 	background-color: #3E50B4;
     color: #fff;
 }
+#croppic .img img{
+	max-width: 100%;
+    height: auto;
+}
+.cropControls i.cropControlRemoveCroppedImage:before{
+	color: #c0392b;
+	content: "\f00d";
+}
 
 

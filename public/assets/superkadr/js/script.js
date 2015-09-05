@@ -311,6 +311,8 @@ $(document).ready( function () {
 	*/
 	var nowMonitor = $('.monitor select').val();
 	$('.tariff').attr('data-monitor', nowMonitor);
+	croppic.options.cropData.monitor = nowMonitor;
+
 	
 	/*
 	*	Переключение экранов
@@ -319,6 +321,7 @@ $(document).ready( function () {
 		oldMonitor = $('.tariff').attr('data-monitor');
 		newMonitor = $(this).val();
 		$('.tariff').attr('data-monitor', newMonitor);
+		croppic.options.cropData.monitor = newMonitor;
 		
 
 		$('html, body').animate({

@@ -19,10 +19,37 @@ $cropH = $_POST['cropH'];
 $angle = $_POST['rotation'];
 $jpeg_quality = 100;
 
-$dataInfo = $_GET['dataInfo'];
+
+
+
+$dataInfo = $_POST['dataInfo'];
+$monitor = $_POST['monitor'];
+$origW = $_POST['cropOrigW_'.$monitor];
+$origH = $_POST['cropOrigH_'.$monitor];
+$ratioW = $origW/$cropW;
+$ratioH = $origH/$cropH;
+
+$imgW = $imgW*$ratioW;
+$imgH = $imgH*$ratioH;
+$imgY1 = $imgY1*$ratioW;
+$imgX1 = $imgX1*$ratioH;
+$cropW = $cropW*$ratioW;
+$cropH = $cropH*$ratioH;
+
+
+/*$imgW = $_POST['cropOrigW_'.$monitor];
+$imgH = $_POST['cropOrigH_'.$monitor];
+$cropW = $_POST['cropOrigW_'.$monitor];
+$cropH = $_POST['cropOrigH_'.$monitor];
+*/
+
+
+
+
+
 
 //$output_filename = "temp/croppedImg_".$dataInfo;
-$output_filename = "temp/croppedImg_".$cropW."_".$cropH;
+$output_filename = "temp/croppedImg_".$cropW."_".$cropH.rand();
 
 
 // uncomment line below to save the cropped image in the same location as the original image.
