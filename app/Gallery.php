@@ -7,8 +7,47 @@ use Session;
 use Auth;
 
 class Gallery extends Model {
+	
+	public $error;
+	
+	public function __construct(){
+		$this->error = array();
+	}
 
-
+	/*
+	* Создание галереи
+	*	'tarif' 
+	*	'monitor'
+	*	'dateShow' 
+	*	'image'
+	*	'pathImages'
+	*/
+	public function createGallery($param){
+		if($param['tarif'] == ''){$this->error[] = 'Не выбран тариф';}
+		if($param['monitor'] == ''){$this->error[] = 'Не выбран экран';}
+		if($param['dateShow'] == ''){$this->error[] = 'Не выбрана дата и начало паказа';}
+		if($param['image'] == ''){$this->error[] = 'Не загружено фото';}
+		if($param['pathImages'] == ''){$this->error[] = 'Не задан путь к фотографиям';}
+		if(!Auth::check()){$this->error[] = 'Необходимо авторизоваться';}
+		
+		//Проверка наличия файла	
+		if(count($this->error) == 0){
+			$dir = $param['pathImages'] . "/temp/".Auth::user()->id;
+			$uploadImage = array_diff(scandir(base_path().$dir), array('..', '.'));
+			$uploadImage = array_shift($uploadImage);
+			if(!$uploadImage){$this->error[] = 'Не загружено фото';}
+		}
+		
+		if(count($this->error) == 0){
+			//$gallery = new Gallery;
+			//$gallery->provider = $arrValues['provider'];
+			//$gallery->save();
+		}
+		
+		
+		return false;
+	}
+	
 	
 	public function dateContent(){
 		$day_of_week = date('N');

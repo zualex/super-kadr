@@ -3,12 +3,15 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Illuminate\Http\Request;
+
 use Response;
+use Request;
 use Session;
 use Input;
 use App\Monitor;
+use App\Gallery;
 use Auth;
+
 
 class GalleryController extends Controller {
 
@@ -40,7 +43,7 @@ class GalleryController extends Controller {
 			$jpeg_quality = 100;
 			
 			$monitor = $_POST['monitor'];
-			$modelMonitor = Monitor::where('id_monitor', '=', $monitor)->first();
+			$modelMonitor = Monitor::find($monitor);
 			if(count($modelMonitor) > 0){
 				$origW = $modelMonitor->origWidth;
 				$origH = $modelMonitor->origHeight;
@@ -135,9 +138,27 @@ class GalleryController extends Controller {
 	}
 
 	
-	public function create()
+	public function create(Gallery $galleryModel)
 	{
-		return view('pages.gallery.index');
+		$param = array(
+			'tarif' => Request::input('tarif'),
+			'monitor' => Request::input('monitor'),
+			'dateShow' => Request::input('dateShow'),
+			'image' => Request::input('image'),
+			'pathImages' => $this->pathImages,
+		);
+		//Формирование заказа
+		
+		//Создание галереи
+		$gallery = $galleryModel->createGallery($param);
+		
+
+		
+
+		return Response::json( array(
+			"result" => $gallery,
+			"error" => $galleryModel->error,
+		));
 	}
 	
 	/**

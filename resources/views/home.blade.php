@@ -98,18 +98,18 @@
 			<div class="body clear">
 				<style>
 					@foreach($data['paramMonitor'] as $key => $value)
-						.activeMonitor_{{ $value['id_monitor'] }}{
+						.activeMonitor_{{ $value['id'] }}{
 							width:  {{ $value['siteWidth']+40 }}px;
 							height: {{ $value['siteHeight']+40 }}px;	
 						}
-						.activeMonitor_{{ $value['id_monitor'] }} #croppic{
+						.activeMonitor_{{ $value['id'] }} #croppic{
 							width:  {{ $value['siteWidth'] }}px;
 							height: {{ $value['siteHeight'] }}px;	
 						}
 					@endforeach	
 				</style>
 				
-				<div id="monitor-change-class" class="monitor activeMonitor_1">
+				<div id="monitor-change-class" class="monitor">
 					<div id="croppic"></div>
 					<div id="upload-btn"><div><i class="fa pull-left fa-camera"></i><span>Загрузи фото</span></div></div>
 				</div>
@@ -130,7 +130,9 @@
 							onImgDrag: function(){  },
 							onImgZoom: function(){  },
 							onBeforeImgCrop: function(){  },
-							onAfterImgCrop:function(){  },
+							onAfterImgCrop:function(){
+								$('.tariff').attr('data-image', response.url);
+							},
 							onError:function(errormessage){ alert(errormessage) }
 					}	
 					var croppic = new Croppic('croppic', croppicHeaderOptions);
@@ -139,7 +141,7 @@
 		</div>
 		<div id="schedule" class="block color-1">
 			<div class="body clear">
-				<div class="tariff" data-tarif = "" data-monitor = "" data-dateShow = "">
+				<div class="tariff" data-url = "{{ route('gallery.create') }}" data-tarif = "" data-monitor = "" data-dateShow = "" data-image = "">
 					<div class="header"><span>тариф</span></div>
 					<div class="switch">
 					
@@ -164,12 +166,12 @@
 					<div class="monitor">
 						<select name="monitor">
 							@foreach($data['paramMonitor'] as $key => $value)
-								 <option value="{{ $value['id_monitor'] }}">Экран {{ $value['id_monitor'] }}</option>
+								 <option value="{{ $value['id'] }}">Экран {{ $value['number'] }}</option>
 							@endforeach	
 						</select>
 					</div>
 					<div class="pay">
-						<a href="{{ route('gallery.create') }}" title="Оплатить заказ"><i class="fa pull-left fa-credit-card"></i><span>Оплатить</a>
+						<a href="#" title="Оплатить заказ" onclick="paySite();return false;"><i class="fa pull-left fa-credit-card"></i><span>Оплатить</a>
 					</div>
 				</div>
 				<div class="schedule-block">
