@@ -18,7 +18,19 @@
 {!! HTML::script('/assets/superkadr/js/jquery.mousewheel.min.js') !!}
 {!! HTML::script('/assets/superkadr/js/bootstrap.min.js') !!}
 
+
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<script>
+$(function(){
+	$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+	});
+});
+</script>
+
+
 </head>
 <body>
 <ul>

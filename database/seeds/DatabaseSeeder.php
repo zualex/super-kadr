@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Tarif;
 use App\Status;
+use App\Monitor;
 
 class DatabaseSeeder extends Seeder {
 
@@ -16,16 +17,59 @@ class DatabaseSeeder extends Seeder {
 	public function run()
 	{
 		Model::unguard();
-
-		 $this->call('TarifTableSeeder');
-		 $this->call('StatusTableSeeder');
+		
+		$this->call('MonitorTableSeeder');
+		$this->call('TarifTableSeeder');
+		$this->call('StatusTableSeeder');
+		
 	}
 
 }
 
 
+/*
+* Monitor
+*/
+class MonitorTableSeeder extends Seeder {
+
+  public function run()
+  {
+    DB::table('monitors')->delete();
+
+    Monitor::create([
+		'id_monitor' => '1',
+		'siteWidth' => '480',
+		'siteWidth' => '480',
+		'siteHeight' => '480',
+		'origWidth' => '1280',
+		'origHeight' => '1280',
+		'mediumWidth' => '240',
+		'mediumHeight' => '240',
+		'smallWidth' => '140',
+		'smallHeight' => '140',
+	]);
+	
+	Monitor::create([
+		'id_monitor' => '2',
+		'siteWidth' => '740',
+		'siteHeight' => '480',
+		'origWidth' => '2240',
+		'origHeight' => '1453',
+		'mediumWidth' => '370',
+		'mediumHeight' => '240',
+		'smallWidth' => '216',
+		'smallHeight' => '140',
+	]);
+	
+  }
+
+}
 
 
+
+/*
+*	 Tarif
+*/
 class TarifTableSeeder extends Seeder {
 
   public function run()
@@ -64,7 +108,9 @@ class TarifTableSeeder extends Seeder {
 }
 
 
-
+/*
+* Status
+*/
 class StatusTableSeeder extends Seeder {
 
   public function run()

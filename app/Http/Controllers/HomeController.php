@@ -5,6 +5,7 @@ use Auth;
 use App\User;
 use App\Gallery;
 use App\Tarif;
+use App\Monitor;
 
 
 
@@ -32,14 +33,14 @@ class HomeController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index(User $userModel, Gallery $galleryModel, Tarif $tarifModel)
+	public function index(User $userModel, Gallery $galleryModel)
 	{
 		$data = array(
 			'dateContent' => $galleryModel->dateContent(),
-			'sessionUpload' => $galleryModel->sessionUpload(),
 			'tarifs' => Tarif::all(),
-			'paramMonitor' => $tarifModel->getParamMonitor(),
+			'paramMonitor' => Monitor::all(),
 		);
+
 		
 		return view('home')->with('data', $data);
 

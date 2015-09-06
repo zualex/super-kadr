@@ -8,21 +8,7 @@ use Auth;
 
 class Gallery extends Model {
 
-	/*
-	*	Значение для загрузки картинки
-	* Одноразовые сессии
-	*/
-	public function sessionUpload(){
-		$value = '';
-		if (Auth::check()){
-			$value = Auth::user()->id."_".str_random(30);
-			Session::flash('uploadImg', $value);
-		}
-		return $value;
-	}
-	
-	
-	
+
 	
 	public function dateContent(){
 		$day_of_week = date('N');
