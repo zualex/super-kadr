@@ -15,7 +15,7 @@ class CreateMonitorsTable extends Migration {
 		Schema::create('monitors', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('count_monitor');
+			$table->integer('id_monitor');
 			$table->integer('siteWidth');
 			$table->integer('siteHeight');
 			$table->integer('origWidth');
