@@ -40,7 +40,7 @@ class HomeController extends Controller {
 			'tarifs' => Tarif::all(),
 			'paramMonitor' => Monitor::all(),
 		);
-
+		
 		
 		return view('home')->with('data', $data);
 

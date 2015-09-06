@@ -58,8 +58,11 @@ class GalleryController extends Controller {
 			if($imgW <= 10000 and $imgH <= 10000 and $imgInitW <= 10000 and $imgInitH <= 10000){
 				
 				$dirFile = $this->pathImages . "/temp/".Auth::user()->id;
-				if (!file_exists(base_path().$dirFile)) {mkdir(base_path().$dirFile, 0755, true);}
+				if (!file_exists(base_path().$dirFile)) {mkdir(base_path().$dirFile, 0755, true);}		//Создание папки если нет
+				array_map('unlink', glob(base_path().$dirFile."/*"));																//Удаление всех файлов для определенного пользователя
+				
 				$output_filename = $dirFile."/croppedImg_".rand();
+				
 				$what = getimagesize($imgUrl);
 				switch(strtolower($what['mime']))
 				{

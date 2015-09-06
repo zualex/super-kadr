@@ -125,12 +125,12 @@
 							modal:false,
 							processInline:true,
 							loaderHtml:'<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div> ',
-							onBeforeImgUpload: function(){ console.log('onBeforeImgUpload') },
-							onAfterImgUpload: function(){ console.log('onAfterImgUpload') },
-							onImgDrag: function(){ console.log('onImgDrag') },
-							onImgZoom: function(){ console.log('onImgZoom') },
-							onBeforeImgCrop: function(){ console.log('onBeforeImgCrop') },
-							onAfterImgCrop:function(){ console.log('onAfterImgCrop') },
+							onBeforeImgUpload: function(){  },
+							onAfterImgUpload: function(){  },
+							onImgDrag: function(){  },
+							onImgZoom: function(){  },
+							onBeforeImgCrop: function(){  },
+							onAfterImgCrop:function(){  },
 							onError:function(errormessage){ alert(errormessage) }
 					}	
 					var croppic = new Croppic('croppic', croppicHeaderOptions);

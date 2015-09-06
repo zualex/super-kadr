@@ -348,4 +348,50 @@ $(document).ready( function () {
 	});
 	
 	
+	
+	/*
+	*	Оплата
+	*/
+	function paySite(){
+		/*$.ajax({
+			url: "index.php?do=ajax&op=get_option", 
+			dataType: "html",
+			type: 'POST',
+			data: "act=new_trans&iid=" + iid + "&m=" + monitor + "&method=" + method,
+			beforeSend: function(){
+				$("#"+formid+" .buy-item").prop('disabled', true);
+				$("#"+formid+" .buy-item").html('<img src="../../../uploads/ajax-loader.gif" alt="loading..." />');
+			},
+
+			success: function(data){
+				if(!is_json(data)){
+					$("#"+formid+" .buy-item").prop('disabled', false);
+					$("#"+formid+" .buy-item").text('Купить за '+old_price+' руб.');
+					console.log(data);
+					return false;
+				}
+
+				var jsondata	= JSON.parse(data);
+
+				var i_form		= jsondata.i_form;
+				var i_inputs	= jsondata.i_inputs;
+				var i_charset	= jsondata.i_charset;
+
+				var invdesc		= $('#'+formid+' input[name="desc"]').val();
+
+				$("#"+formid+" .buy-item").prop('disabled', false);
+				$("#"+formid+" .buy-item").text('Подтвердить');
+
+				$("#"+formid+" .buy-login, #"+formid+" .buy-promo").prop('disabled', true);
+				$('#'+formid+' > form').attr("accept-charset", i_charset);
+				$('#'+formid+' > form').attr("action", i_form);
+				$('#'+formid+' .method-inputs').html(i_inputs);
+
+				$('#'+formid+' .buy-item').removeClass('buy-item');
+
+				$("#"+formid+" .modal_content")[0].submit();
+
+			}
+		});*/
+	}
 });
