@@ -8,26 +8,23 @@ use Response;
 use Request;
 use Session;
 use Input;
+use Auth;
+
 use App\Monitor;
 use App\Gallery;
-use Auth;
+use App\Pay;
 
 
 class GalleryController extends Controller {
 
-	public $pathImages;
 	
-	public function __construct(){
-		$this->pathImages = "/public/images";
-	}
-
 	public function index()
 	{
 		return view('pages.gallery.index');
 	}
 
 		
-	public function upload()
+	public function upload(Gallery $galleryModel)
 	{
 		if(Auth::check()){
 			$imgUrl = $_POST['imgUrl'];
@@ -60,7 +57,7 @@ class GalleryController extends Controller {
 			
 			if($imgW <= 10000 and $imgH <= 10000 and $imgInitW <= 10000 and $imgInitH <= 10000){
 				
-				$dirFile = $this->pathImages . "/temp/".Auth::user()->id;
+				$dirFile = $galleryModel->pathImages . "/temp/".Auth::user()->id;
 				if (!file_exists(base_path().$dirFile)) {mkdir(base_path().$dirFile, 0755, true);}		//Создание папки если нет
 				array_map('unlink', glob(base_path().$dirFile."/*"));																//Удаление всех файлов для определенного пользователя
 				
@@ -138,26 +135,36 @@ class GalleryController extends Controller {
 	}
 
 	
-	public function create(Gallery $galleryModel)
+	public function create(Gallery $galleryModel, Pay $payModel)
 	{
-		$param = array(
-			'tarif' => Request::input('tarif'),
+		$error = array();
+		$paramGallery = array(
 			'monitor' => Request::input('monitor'),
-			'dateShow' => Request::input('dateShow'),
 			'image' => Request::input('image'),
-			'pathImages' => $this->pathImages,
-		);
-		//Формирование заказа
-		
+		);		
 		//Создание галереи
-		$gallery = $galleryModel->createGallery($param);
+		$gallery = $galleryModel->createGallery($paramGallery);
+		if($gallery){
+			//Создание заказа
+			$param = array(
+				'gallery_id' => $gallery->id,
+				'tarif' => Request::input('tarif'),
+				'monitor' => Request::input('monitor'),
+				'dateShow' => Request::input('dateShow'),
+			);	
+			$pay = $payModel->createPay($param);
+		}
+		
+		if(count($galleryModel->error) > 0){$error[] = $galleryModel->error;}
+		if(count($payModel->error) > 0){$error[] = $payModel->error;}
+
+
 		
 
 		
 
 		return Response::json( array(
-			"result" => $gallery,
-			"error" => $galleryModel->error,
+			"error" => $error,
 		));
 	}
 	

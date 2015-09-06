@@ -5,47 +5,83 @@ use Illuminate\Database\Eloquent\Model;
 use Hash;
 use Session;
 use Auth;
+use Image;
+
+
+use App\Status;
+use App\Monitor;
+use App\Tarif;
 
 class Gallery extends Model {
 	
 	public $error;
+	public $pathImages;
 	
 	public function __construct(){
 		$this->error = array();
+		$this->pathImages = "/public/images";
 	}
 
 	/*
 	* Создание галереи
-	*	'tarif' 
 	*	'monitor'
-	*	'dateShow' 
 	*	'image'
-	*	'pathImages'
 	*/
 	public function createGallery($param){
-		if($param['tarif'] == ''){$this->error[] = 'Не выбран тариф';}
+		$gallery = false;
+		if(!array_key_exists('monitor', $param)){$param['monitor'] = '';}
+		if(!array_key_exists('image', $param)){$param['image'] = '';}
+		
 		if($param['monitor'] == ''){$this->error[] = 'Не выбран экран';}
-		if($param['dateShow'] == ''){$this->error[] = 'Не выбрана дата и начало паказа';}
 		if($param['image'] == ''){$this->error[] = 'Не загружено фото';}
-		if($param['pathImages'] == ''){$this->error[] = 'Не задан путь к фотографиям';}
 		if(!Auth::check()){$this->error[] = 'Необходимо авторизоваться';}
 		
 		//Проверка наличия файла	
 		if(count($this->error) == 0){
-			$dir = $param['pathImages'] . "/temp/".Auth::user()->id;
+			$dir = $this->pathImages . "/temp/".Auth::user()->id;
 			$uploadImage = array_diff(scandir(base_path().$dir), array('..', '.'));
 			$uploadImage = array_shift($uploadImage);
 			if(!$uploadImage){$this->error[] = 'Не загружено фото';}
 		}
 		
 		if(count($this->error) == 0){
-			//$gallery = new Gallery;
-			//$gallery->provider = $arrValues['provider'];
-			//$gallery->save();
+			$sizeImg = Monitor::find($param['monitor']);
+			$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'moderation')->first();
+			$status_order = Status::where('type_status', '=', 'order')->where('caption', '=', 'process')->first();
+			$path_parts = pathinfo(base_path().$dir.'/'.$uploadImage);
+			$ext = '.'.$path_parts['extension'];
+			
+			if(count($sizeImg) == 0){$this->error[] = 'Не найден экран';}
+			
+			if(count($status_main) == 0){$this->error[] = 'Не найден статус Main';}
+			if(count($status_order) == 0){$this->error[] = 'Не найден статус Order';}
 		}
 		
 		
-		return false;
+		if(count($this->error) == 0){
+			$gallery = new Gallery;
+			$gallery->user_id = Auth::user()->id;
+			$gallery->status_main = $status_main->id;
+			$gallery->status_order = $status_order->id;
+			$gallery->status_order = $status_order->id;
+			$gallery->save();
+			
+			$galleryId = $gallery->id;
+			$src = $galleryId.$ext;
+			
+			//Update Gallery (update src)
+			$gallery->src = $src;
+			$gallery->save();
+			
+			
+			
+			Image::make(base_path().$dir.'/'.$uploadImage)->save(base_path().$this->pathImages.'/o_'.$src);
+			Image::make(base_path().$dir.'/'.$uploadImage)->resize($sizeImg['mediumWidth'], $sizeImg['mediumHeight'])->save(base_path().$this->pathImages.'/m_'.$src);
+			Image::make(base_path().$dir.'/'.$uploadImage)->resize($sizeImg['smallWidth'], $sizeImg['smallHeight'])->save(base_path().$this->pathImages.'/s_'.$src);
+			
+		}
+		
+		return $gallery;
 	}
 	
 	

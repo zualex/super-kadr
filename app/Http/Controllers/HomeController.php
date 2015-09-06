@@ -6,6 +6,7 @@ use App\User;
 use App\Gallery;
 use App\Tarif;
 use App\Monitor;
+use Carbon\Carbon;
 
 
 
@@ -40,7 +41,6 @@ class HomeController extends Controller {
 			'tarifs' => Tarif::all(),
 			'paramMonitor' => Monitor::all(),
 		);
-		
 		
 		return view('home')->with('data', $data);
 
