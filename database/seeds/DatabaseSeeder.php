@@ -37,6 +37,7 @@ class MonitorTableSeeder extends Seeder {
     DB::table('monitors')->delete();
 
     Monitor::create([
+		'id' => '1',
 		'number' => '1',
 		'siteWidth' => '480',
 		'siteWidth' => '480',
@@ -50,6 +51,7 @@ class MonitorTableSeeder extends Seeder {
 	]);
 	
 	Monitor::create([
+		'id' => '2',
 		'number' => '2',
 		'siteWidth' => '740',
 		'siteHeight' => '480',
@@ -77,6 +79,7 @@ class TarifTableSeeder extends Seeder {
     DB::table('tarifs')->delete();
 
     Tarif::create([
+		'id' => '1',
 		'name' => 'Просто',
 		'desc_main' => '12 показов',
 		'desc_dop' => 'в течение 1 часа',
@@ -86,6 +89,7 @@ class TarifTableSeeder extends Seeder {
 	]);
 	
 	Tarif::create([
+		'id' => '2',
 		'name' => 'Забавно',
 		'desc_main' => '4 показа',
 		'desc_dop' => 'в течение 5 часов',
@@ -95,6 +99,7 @@ class TarifTableSeeder extends Seeder {
 	]);
 	
 	Tarif::create([
+		'id' => '3',
 		'name' => 'Весело',
 		'desc_main' => '2 показа',
 		'desc_dop' => 'в течение суток',
@@ -118,26 +123,31 @@ class StatusTableSeeder extends Seeder {
     DB::table('statuses')->delete();
 	
 	Status::create([
+		'id' => '1',
 		'type_status' => 'pay',
 		'name' => 'Оплачено',
 		'caption' => 'paid',
 	]);
 	Status::create([
+		'id' => '2',
 		'type_status' => 'pay',
 		'name' => 'Ожидание оплаты',
 		'caption' => 'wait',
 	]);
 	Status::create([
+		'id' => '3',
 		'type_status' => 'pay',
 		'name' => 'Ошибка',
 		'caption' => 'Error',
 	]);
 	Status::create([
+		'id' => '4',
 		'type_status' => 'pay',
 		'name' => 'Отклонено пользователем',
 		'caption' => 'cancelUser',
 	]);
 	Status::create([
+		'id' => '5',
 		'type_status' => 'pay',
 		'name' => 'Отклонено администратором',
 		'caption' => 'cancelAdmin',
@@ -145,16 +155,19 @@ class StatusTableSeeder extends Seeder {
 	
 	
 	Status::create([
+		'id' => '6',
 		'type_status' => 'main',
 		'name' => 'Одобрено',
 		'caption' => 'success',
 	]);
 	Status::create([
+		'id' => '7',
 		'type_status' => 'main',
 		'name' => 'На модерации',
 		'caption' => 'moderation',
 	]);
 	Status::create([
+		'id' => '8',
 		'type_status' => 'main',
 		'name' => 'Отклонено',
 		'caption' => 'cancel',
@@ -162,16 +175,19 @@ class StatusTableSeeder extends Seeder {
 	
 	
     Status::create([
+		'id' => '9',
 		'type_status' => 'order',
 		'name' => 'Выполнена',
 		'caption' => 'success',
 	]);
 	Status::create([
+		'id' => '10',
 		'type_status' => 'order',
 		'name' => 'В исполнении',
 		'caption' => 'process',
 	]);
 	Status::create([
+		'id' => '11',
 		'type_status' => 'order',
 		'name' => 'В очереди на исполнение',
 		'caption' => 'queue',
