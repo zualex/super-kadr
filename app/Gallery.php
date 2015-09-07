@@ -8,10 +8,14 @@ use Auth;
 use Image;
 
 
+use DB;
+use Carbon\Carbon;
+
 use App\Status;
 use App\Monitor;
 use App\Tarif;
 use App\Like;
+
 class Gallery extends Model {
 	
 	public $error;
@@ -20,6 +24,7 @@ class Gallery extends Model {
 	public function __construct(){
 		$this->error = array();
 		$this->pathImages = "/public/images";
+		$this->limitMain = 15; //Кол-во галереи на главной
 	}
 
 	
@@ -37,20 +42,67 @@ class Gallery extends Model {
 	* mainGallery - вывод на главной
 	*/
 	public function mainGallery(){
-		$gallery = false;
+		$gallery = array();
 		
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 		if(count($status_main) == 0){$this->error[] = 'Не найден статус Main';}
 		
 		if(count($this->error) == 0){
-			$gallery = $this
-				->with('likes')
-				->with('comments')
-				->where('status_main', '=', $status_main->id)
-				->take(15)
-				->get();
 
-			$gallery->pathImages = $this->pathImages;			
+			/* Находим 15 самых популярных за месяц */
+			$arrIdGallery = array();
+			$nowDate = Carbon::now();
+			$dateEnd = $nowDate->toDateString();
+			$dateStart = $nowDate->subMonth()->toDateString();
+			
+			/*
+			* like_count считается отдельно так как есть ограничения что лайки считаются за месяц а нужно за весь период
+			*/
+			$galleryTop = DB::select('
+				SELECT 
+					g.*,  
+					(SELECT COUNT(likes.id) FROM likes WHERE likes.gallery_id = g.id) as like_count,  
+					COUNT(c.id) AS comment_count
+				FROM galleries as g
+				LEFT JOIN likes as l ON l.gallery_id = g.id
+				LEFT JOIN comments as c ON c.gallery_id = g.id
+				WHERE 
+					status_main = ?
+					AND date(l.created_at) BETWEEN "'.$dateStart.'" AND "'.$dateEnd.'"
+				GROUP BY g.id
+				ORDER BY like_count DESC
+				LIMIT ?', [$status_main->id, $this->limitMain]
+			);
+			/* 
+			*	Сохраняем список id и узнаем реальное кол-во  лайков так как запрос был
+			*/
+			foreach($galleryTop as $key => $value){
+				$arrIdGallery[$value->id] = $value->id;
+			}
+			
+			
+			/* Если 15 нет то добираем из всех */
+			if(count($galleryTop) < $this->limitMain){
+				$limit = $this->limitMain - count($galleryTop);
+				$galleryDop = DB::select('
+					SELECT g.*,  COUNT(l.id) AS like_count,  COUNT(c.id) AS comment_count
+					FROM galleries as g
+					LEFT JOIN likes as l ON l.gallery_id = g.id
+					LEFT JOIN comments as c ON c.gallery_id = g.id
+					WHERE 
+						status_main = ?
+						AND g.id NOT IN ('.implode(",", $arrIdGallery).')
+					GROUP BY g.id
+					ORDER BY like_count DESC
+					LIMIT ?', [$status_main->id, $limit]
+				);
+				foreach($galleryDop as $key => $value){
+					$arrIdGallery[$value->id] = $value->id;
+					$galleryTop[] = $value;
+				}
+			}
+			$gallery['galleries'] = $galleryTop;
+			$gallery['pathImages'] = $this->pathImages;
 		}
 		
 		return $gallery;
@@ -139,6 +191,7 @@ class Gallery extends Model {
 			Image::make(base_path().$dir.'/'.$uploadImage)->save(base_path().$this->pathImages.'/o_'.$src);
 			Image::make(base_path().$dir.'/'.$uploadImage)->resize($sizeImg['mediumWidth'], $sizeImg['mediumHeight'])->save(base_path().$this->pathImages.'/m_'.$src);
 			Image::make(base_path().$dir.'/'.$uploadImage)->resize($sizeImg['smallWidth'], $sizeImg['smallHeight'])->save(base_path().$this->pathImages.'/s_'.$src);
+			array_map('unlink', glob(base_path().$dir."/*"));	//Очистка temp
 			
 		}
 		

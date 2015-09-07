@@ -13,6 +13,7 @@ use Auth;
 use App\Monitor;
 use App\Gallery;
 use App\Pay;
+use App\Like;
 
 
 class GalleryController extends Controller {
@@ -177,14 +178,48 @@ class GalleryController extends Controller {
 		if(count($payModel->error) > 0){$error[] = $payModel->error;}
 
 
-		
-
-		
-
 		return Response::json( array(
 			"error" => $error,
 		));
 	}
+	
+	
+	
+	public function like(Gallery $galleryModel)
+	{
+		if(Auth::check()){
+			$inc = 0;
+			$gallery_id = Request::input('gallery');
+			
+			$like = Like::where('user_id', '=', Auth::user()->id)
+				->where('gallery_id', '=', $gallery_id)
+				->first();
+			
+			if(count($like) == 0){
+				$inc = 1;
+				$like = new Like;
+				$like->user_id = Auth::user()->id;
+				$like->gallery_id = $gallery_id;
+				$like->save();
+			}else{
+				$inc = -1;
+				$like->delete();
+			}
+			return Response::json( array(
+				"status" => 'success',
+				"message" => $inc
+			));
+			
+		}else{
+			return Response::json( array(
+				"status" => 'error',
+				"message" => 'Необходимо авторизоваться'
+			));
+		}
+		
+	}
+	
+	
 	
 	/**
 	 * Store a newly created resource in storage.

@@ -222,28 +222,7 @@ $(document).ready( function () {
 			});
 		}
 	});
-	$('.likes').click(function (event) {
-		event.preventDefault();
-		if ($('.likes').hasClass('active')){
-			var id = $('.likes').attr('id');
-			alert("like="+ id);
-			$.ajax({
-				url: "comments.php",
-				type: "POST",
-				data: "like=" + id,
-				success: function (data) {
-					var data = $.parseJSON(data);
-					if (data.error == '0'){
-						alert('Указана неверная запись');
-					}else{
-						location.reload();
-					}
-				}
-			});
-		}else{
-			alert('Сначала нужно авторизоваться!');
-		}
-	});
+
 	$(function() {
 	  $('.tabs').on('click', '.tab-head:not(.active)', function() {
 		$(this).addClass('active').siblings().removeClass('active')
@@ -355,14 +334,17 @@ $(document).ready( function () {
 /*
 *	Оплата
 */
-function paySite(){
-	var el = $('.tariff');
-	var url = el.attr('data-url');
-	var tarif = el.attr('data-tarif');
-	var monitor = el.attr('data-monitor');
-	var dateShow = el.attr('data-dateShow');
-	var image = el.attr('data-image');
+function paySite(el){
+	var selector = $('.tariff');
+	var url = selector.attr('data-url');
+	var tarif = selector.attr('data-tarif');
+	var monitor = selector.attr('data-monitor');
+	var dateShow = selector.attr('data-dateShow');
+	var image = selector.attr('data-image');
 	if(url != '' && tarif != '' && monitor != '' && dateShow != '' && image != ''){
+		var htmlOld = $(el).html();
+		$(el).html('<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div>');
+		
 		$.ajax({
 			url: url, 
 			dataType: "html",
@@ -374,7 +356,12 @@ function paySite(){
 				'image' : image
 			},
 			success: function(msg){
+				$(el).html(htmlOld);
 				console.log(msg);
+			},
+			error: function(){
+				$(el).html(htmlOld);
+				alert('Произошла ошибка');
 			}
 		});
 	}else{
@@ -389,3 +376,32 @@ function paySite(){
 	}
 	return false;
 }
+
+
+
+/*
+*	Лайк
+*/
+function likeGallery(el, gallery, url){
+	$.ajax({
+		url: url, 
+		dataType: "html",
+		type: 'POST',
+		data: {
+			'gallery': gallery
+		},
+		success: function(data){
+			var data = $.parseJSON(data);
+			if(data.status == 'error'){alert(data.message);}
+			if(data.status == 'success'){
+				var countLikes = $(el).find('span').html()/1;
+				countLikes += data.message;
+				$(el).find('span').html(countLikes);
+			}			
+		},
+		error: function(){
+			alert('Произошла ошибка');
+		}
+	});
+}
+

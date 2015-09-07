@@ -7,12 +7,12 @@
 				<div class="slider" id="slider1">
 					<div class="content">
 						<div class="slide-list clear">
-							@foreach($data['mainGallery'] as $key => $value)
-								<div class="slide"  >
-									<a href="{{ route('gallery.show', $value['id']) }}"><div class="image" style="background-image:url('{{ $data['mainGallery']->pathImages.'/s_'.$value['src'] }}');"></div></a>
+							@foreach($data['mainGallery']['galleries'] as $key => $value)
+								<div class="slide">
+									<a href="{{ route('gallery.show', $value->id) }}"><div class="image" style="background-image:url('{{ $data['mainGallery']['pathImages'].'/s_'.$value->src }}');"></div></a>
 									<div class="info">
-										<div class="likes"><i class="fa pull-left fa-heart"></i><span>{{ count($value['likes']) }}</span></div>
-										<div class="comments"><i class="fa pull-left fa-comment"></i><span>{{ count($value['comments']) }}</span></div>
+										<div class="likes" onclick="likeGallery(this, {{ $value->id }}, '{{ route('gallery.like') }}')"><i class="fa pull-left fa-heart"></i><span>{{ $value->like_count }}</span></div>
+										<div class="comments"><i class="fa pull-left fa-comment"></i><span>{{ $value->comment_count }}</span></div>
 									</div>
 								</div>
 							@endforeach	
@@ -131,7 +131,7 @@
 						</select>
 					</div>
 					<div class="pay">
-						<a href="#" title="Оплатить заказ" onclick="paySite();return false;"><i class="fa pull-left fa-credit-card"></i><span>Оплатить</a>
+						<a href="#" title="Оплатить заказ" onclick="paySite(this);return false;"><i class="fa pull-left fa-credit-card"></i><span>Оплатить</a>
 					</div>
 				</div>
 				<div class="schedule-block">
