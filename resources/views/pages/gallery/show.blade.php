@@ -11,7 +11,7 @@
 			<div class="details">
 				<div class="description"><span>Оцените и прокомментируйте:</span></div>
 				<div class="buttons">
-					<div class="likes"><i class="fa pull-left fa-heart"></i><span>{{ count($gallery->likes) }}</span></div>
+					<div class="likes" onclick="likeGallery(this, {{ $gallery->id }}, '{{ route('gallery.like') }}')"><i class="fa pull-left fa-heart"></i><span>{{ count($gallery->likes) }}</span></div>
 					<div class="comments"><i class="fa pull-left fa-comment"></i><span>{{ count($gallery->comments) }}</span></div>
 				</div>
 			</div>

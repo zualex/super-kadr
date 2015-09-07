@@ -388,6 +388,7 @@ function likeGallery(el, gallery, url){
 		dataType: "html",
 		type: 'POST',
 		data: {
+			'_token' : $('meta[name="csrf-token"]').attr('content'),
 			'gallery': gallery
 		},
 		success: function(data){

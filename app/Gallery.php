@@ -8,6 +8,7 @@ use Auth;
 use Image;
 
 
+use Illuminate\Pagination\Paginator;
 use Cache;
 use DB;
 use Carbon\Carbon;
@@ -46,7 +47,7 @@ class Gallery extends Model {
 	*/
 	public function galleryAll(){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
-		$galleries = DB::select('
+		/*$galleries = DB::select('
 			SELECT g.*,  COUNT(l.id) AS like_count,  COUNT(c.id) AS comment_count
 				FROM galleries as g
 				LEFT JOIN likes as l ON l.gallery_id = g.id
@@ -55,7 +56,17 @@ class Gallery extends Model {
 			GROUP BY g.id
 			ORDER BY like_count DESC
 			', [$status_main->id]
-		);
+		);*/
+		
+		$galleries =$this
+				->select(DB::raw('galleries.*, COUNT(likes.id) AS like_count,  COUNT(comments.id) AS comment_count'))
+				->leftJoin('likes', 'galleries.id', '=', 'likes.gallery_id')
+				->leftJoin('comments', 'galleries.id', '=', 'comments.gallery_id')
+				->groupBy('galleries.id')
+				->orderBy('like_count', 'desc')
+				->paginate($this->limitMain);
+		
+
 		return $galleries;
 	}
 	
