@@ -23,6 +23,20 @@ class GalleryController extends Controller {
 		return view('pages.gallery.index');
 	}
 	
+	
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function show(Gallery $galleryModel, $id)
+	{
+		$gallery = $galleryModel->getGallery($id);
+		return view('pages.gallery.show')->with('gallery', $gallery);
+	}
+	
+	
 		
 	public function upload(Gallery $galleryModel)
 	{
@@ -182,16 +196,7 @@ class GalleryController extends Controller {
 		//
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		return view('pages.gallery.show');
-	}
+	
 
 	/**
 	 * Show the form for editing the specified resource.

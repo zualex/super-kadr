@@ -50,15 +50,38 @@ class Gallery extends Model {
 				->take(15)
 				->get();
 
-			
-			$gallery->pathImages = $this->pathImages;
-			
+			$gallery->pathImages = $this->pathImages;			
 		}
-		
-		
 		
 		return $gallery;
 	}
+	
+	
+	/*
+	* getGallery - вывод одной галереи
+	*/
+	public function getGallery($id){
+		$gallery = false;
+		
+		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
+		if(count($status_main) == 0){$this->error[] = 'Не найден статус Main';}
+		
+		if(count($this->error) == 0){
+			$gallery =$this
+				->where('id', '=', $id)
+				->with('likes')
+				->with('comments')
+				->first();
+			$gallery->pathImages = $this->pathImages;
+		}
+		
+		return $gallery;
+	}
+			
+	
+
+	
+	
 	
 	/*
 	* Создание галереи

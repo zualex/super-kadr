@@ -1,17 +1,18 @@
 @extends('app')
 
 @section('content')
+
 <div id="Container-Gallery" class="block-page">
 	<div class="image">
-		<img src="/img/example/image50.jpg" alt="Описание изображения">
+		<img src="{{ $gallery->pathImages.'/o_'.$gallery->src  }}" alt="Описание изображения">
 	</div>
 	<div class="social">
 		<div class="clear">
 			<div class="details">
 				<div class="description"><span>Оцените и прокомментируйте:</span></div>
 				<div class="buttons">
-					<div class="likes"><i class="fa pull-left fa-heart"></i><span>11261</span></div>
-					<div class="comments"><i class="fa pull-left fa-comment"></i><span>961</span></div>
+					<div class="likes"><i class="fa pull-left fa-heart"></i><span>{{ count($gallery->likes) }}</span></div>
+					<div class="comments"><i class="fa pull-left fa-comment"></i><span>{{ count($gallery->comments) }}</span></div>
 				</div>
 			</div>
 			<div class="share">

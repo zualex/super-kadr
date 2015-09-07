@@ -9,7 +9,7 @@
 						<div class="slide-list clear">
 							@foreach($data['mainGallery'] as $key => $value)
 								<div class="slide"  >
-									<a href="{{ route('gallery.show', $value['id']) }}"><div class="image" style="background-image:url('{{ $data['mainGallery']->pathImages.'/m_'.$value['src'] }}');"></div></a>
+									<a href="{{ route('gallery.show', $value['id']) }}"><div class="image" style="background-image:url('{{ $data['mainGallery']->pathImages.'/s_'.$value['src'] }}');"></div></a>
 									<div class="info">
 										<div class="likes"><i class="fa pull-left fa-heart"></i><span>{{ count($value['likes']) }}</span></div>
 										<div class="comments"><i class="fa pull-left fa-comment"></i><span>{{ count($value['comments']) }}</span></div>
