@@ -22,7 +22,7 @@ class GalleryController extends Controller {
 	{
 		return view('pages.gallery.index');
 	}
-
+	
 		
 	public function upload(Gallery $galleryModel)
 	{
@@ -98,6 +98,8 @@ class GalleryController extends Controller {
 					$dx = $rotated_width - $imgW;
 					$dy = $rotated_height - $imgH;
 					// crop rotated image to fit into original rezized rectangle
+					
+					//ini_set('memory_limit', '1024M'); 
 					$cropped_rotated_image = imagecreatetruecolor($imgW, $imgH);
 					imagecolortransparent($cropped_rotated_image, imagecolorallocate($cropped_rotated_image, 0, 0, 0));
 					imagecopyresampled($cropped_rotated_image, $rotated_image, 0, 0, $dx / 2, $dy / 2, $imgW, $imgH, $imgW, $imgH);
@@ -112,6 +114,8 @@ class GalleryController extends Controller {
 						"status" => 'success',
 						"url" => $output_filename.$type
 					));
+
+
 				
 				
 				}else{

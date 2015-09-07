@@ -37,11 +37,13 @@ class HomeController extends Controller {
 	public function index(User $userModel, Gallery $galleryModel)
 	{
 		$data = array(
+			'mainGallery' => $galleryModel->mainGallery(),
 			'dateContent' => $galleryModel->dateContent(),
 			'tarifs' => Tarif::all(),
 			'paramMonitor' => Monitor::all(),
 		);
 		
+		//dd($galleryModel->mainGallery());
 		return view('home')->with('data', $data);
 
 	}

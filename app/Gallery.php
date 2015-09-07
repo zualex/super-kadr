@@ -11,7 +11,7 @@ use Image;
 use App\Status;
 use App\Monitor;
 use App\Tarif;
-
+use App\Like;
 class Gallery extends Model {
 	
 	public $error;
@@ -22,6 +22,44 @@ class Gallery extends Model {
 		$this->pathImages = "/public/images";
 	}
 
+	
+	public function likes()
+    {
+        return $this->hasMany('App\Like');
+    }
+	
+	public function comments()
+    {
+        return $this->hasMany('App\Comment');
+    }
+	
+	/*
+	* mainGallery - вывод на главной
+	*/
+	public function mainGallery(){
+		$gallery = false;
+		
+		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
+		if(count($status_main) == 0){$this->error[] = 'Не найден статус Main';}
+		
+		if(count($this->error) == 0){
+			$gallery = $this
+				->with('likes')
+				->with('comments')
+				->where('status_main', '=', $status_main->id)
+				->take(15)
+				->get();
+
+			
+			$gallery->pathImages = $this->pathImages;
+			
+		}
+		
+		
+		
+		return $gallery;
+	}
+	
 	/*
 	* Создание галереи
 	*	'monitor'

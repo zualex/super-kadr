@@ -7,55 +7,15 @@
 				<div class="slider" id="slider1">
 					<div class="content">
 						<div class="slide-list clear">
-							<div class="slide" id="slide1">
-								<a href="{{ route('gallery.show', 1) }}"><div class="image" style="background-image:url(/img/example/image501.jpg);"></div></a>
-								<div class="info">
-									<div class="likes"><i class="fa pull-left fa-heart"></i><span>11261</span></div>
-									<div class="comments"><i class="fa pull-left fa-comment"></i><span>961</span></div>
+							@foreach($data['mainGallery'] as $key => $value)
+								<div class="slide"  >
+									<a href="{{ route('gallery.show', $value['id']) }}"><div class="image" style="background-image:url('{{ $data['mainGallery']->pathImages.'/m_'.$value['src'] }}');"></div></a>
+									<div class="info">
+										<div class="likes"><i class="fa pull-left fa-heart"></i><span>{{ count($value['likes']) }}</span></div>
+										<div class="comments"><i class="fa pull-left fa-comment"></i><span>{{ count($value['comments']) }}</span></div>
+									</div>
 								</div>
-							</div>
-							<div class="slide" id="slide2">
-								<a href="{{ route('gallery.show', 1) }}"><div class="image" style="background-image:url(/img/example/image501.jpg);"></div></a>
-								<div class="info">
-									<div class="likes"><i class="fa pull-left fa-heart"></i><span>5960</span></div>
-									<div class="comments"><i class="fa pull-left fa-comment"></i><span>110</span></div>
-								</div>
-							</div>
-							<div class="slide" id="slide3">
-								<a href="{{ route('gallery.show', 1) }}"><div class="image" style="background-image:url(/img/example/image501.jpg);"></div></a>
-								<div class="info">
-									<div class="likes"><i class="fa pull-left fa-heart"></i><span>1150</span></div>
-									<div class="comments"><i class="fa pull-left fa-comment"></i><span>29</span></div>
-								</div>
-							</div>
-							<div class="slide" id="slide4">
-								<a href="{{ route('gallery.show', 1) }}"><div class="image" style="background-image:url(/img/example/image501.jpg);"></div></a>
-								<div class="info">
-									<div class="likes"><i class="fa pull-left fa-heart"></i><span>1150</span></div>
-									<div class="comments"><i class="fa pull-left fa-comment"></i><span>29</span></div>
-								</div>
-							</div>
-							<div class="slide" id="slide5">
-								<a href="{{ route('gallery.show', 1) }}"><div class="image" style="background-image:url(/img/example/image501.jpg);"></div></a>
-								<div class="info">
-									<div class="likes"><i class="fa pull-left fa-heart"></i><span>1150</span></div>
-									<div class="comments"><i class="fa pull-left fa-comment"></i><span>29</span></div>
-								</div>
-							</div>
-							<div class="slide" id="slide6">
-								<a href="{{ route('gallery.show', 1) }}"><div class="image" style="background-image:url(/img/example/image501.jpg);"></div></a>
-								<div class="info">
-									<div class="likes"><i class="fa pull-left fa-heart"></i><span>1150</span></div>
-									<div class="comments"><i class="fa pull-left fa-comment"></i><span>29</span></div>
-								</div>
-							</div>
-							<div class="slide" id="slide7">
-								<a href="{{ route('gallery.show', 1) }}"><div class="image" style="background-image:url(/img/example/image501.jpg);"></div></a>
-								<div class="info">
-									<div class="likes"><i class="fa pull-left fa-heart"></i><span>1150</span></div>
-									<div class="comments"><i class="fa pull-left fa-comment"></i><span>29</span></div>
-								</div>
-							</div>
+							@endforeach	
 						</div>
 					</div>
 					<div class="controls">
