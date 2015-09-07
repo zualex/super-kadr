@@ -8,6 +8,7 @@ use Auth;
 use Image;
 
 
+use Cache;
 use DB;
 use Carbon\Carbon;
 
@@ -38,17 +39,38 @@ class Gallery extends Model {
         return $this->hasMany('App\Comment');
     }
 	
+	
+	
+	/*
+	* galleryAll - вывод всех галерей
+	*/
+	public function galleryAll(){
+		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
+		$galleries = DB::select('
+			SELECT g.*,  COUNT(l.id) AS like_count,  COUNT(c.id) AS comment_count
+				FROM galleries as g
+				LEFT JOIN likes as l ON l.gallery_id = g.id
+				LEFT JOIN comments as c ON c.gallery_id = g.id
+			WHERE status_main = ?
+			GROUP BY g.id
+			ORDER BY like_count DESC
+			', [$status_main->id]
+		);
+		return $galleries;
+	}
+	
+	
 	/*
 	* mainGallery - вывод на главной
 	*/
 	public function mainGallery(){
 		$gallery = array();
-		
-		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
-		if(count($status_main) == 0){$this->error[] = 'Не найден статус Main';}
-		
-		if(count($this->error) == 0){
 
+		/* Кэшируем на 30 минут */
+		//$expiresAt = Carbon::now()->addMinutes(30);
+		//$gallery = Cache::remember('galleryHome', $expiresAt, function()
+		//{
+			$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 			/* Находим 15 самых популярных за месяц */
 			$arrIdGallery = array();
 			$nowDate = Carbon::now();
@@ -103,7 +125,9 @@ class Gallery extends Model {
 			}
 			$gallery['galleries'] = $galleryTop;
 			$gallery['pathImages'] = $this->pathImages;
-		}
+		//	return $gallery;
+		//});
+
 		
 		return $gallery;
 	}

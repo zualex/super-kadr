@@ -19,9 +19,13 @@ use App\Like;
 class GalleryController extends Controller {
 
 	
-	public function index()
+	public function index(Gallery $galleryModel)
 	{
-		return view('pages.gallery.index');
+		$data = array(
+			'gallery' => $galleryModel->galleryAll(),
+			'pathImages' => $galleryModel->pathImages,
+		);
+		return view('pages.gallery.index')->with('data', $data);
 	}
 	
 	
