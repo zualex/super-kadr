@@ -16,6 +16,54 @@ use App\User;
 
 class UserController extends Controller {
 
+	public function change_password()
+	{
+		return view('auth.change_password');
+	}
+	
+	public function change_password_save()
+	{
+		$rules = array(
+            'password_old'       => 'required',
+            'password_new' => 'required',
+            'password_repeat' => 'required',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+		if(Input::get('password_new') != Input::get('password_repeat')){
+			$validator->after(function($validator){
+				$validator->errors()->add('field', 'Новый пароль не правильно повторен');
+			});
+		}
+		
+		$hashed = Hash::make(Input::get('password_old'));
+		
+		if (!Hash::check(Input::get('password_old'), Auth::user()->password)) {
+			$validator->after(function($validator){
+				$validator->errors()->add('field', 'Неправильно введен старый пароль');
+			});
+		}
+		
+		// process the login
+        if ($validator->fails()) {
+            return redirect()->route('change_password')
+                ->withErrors($validator);
+        } else {
+            $user = Auth::user();
+			$user->password = Hash::make(Input::get('password_new'));
+			$user->save();
+			Auth::loginUsingId($user->id);
+			
+			// redirect
+            Session::flash('message', 'Пароль успешно изменен');
+            return redirect()->route('admin');
+        }
+		
+
+		
+	}
+	
+
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -60,9 +108,7 @@ class UserController extends Controller {
 			});
 		}
 		
-
-		
-
+	
         // process the login
         if ($validator->fails()) {
             return redirect()->route('admin.users.create')

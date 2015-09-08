@@ -22,7 +22,7 @@
 				<div class="controls">
 					<div>
 						<ul>
-							<li><a href="#">Изменить пароль</a></li>
+							<li><a href="{{ route('change_password') }}">Изменить пароль</a></li>
 							<li><a href="{{ url('/auth/logout') }}">Выйти</a></li>
 						</ul>
 					</div>
