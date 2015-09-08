@@ -29,32 +29,12 @@
 	</div>
 	<div class="comments">
 		<div class="header"><span>Комментарии:</span></div>
-		<div class="comments-list clear">
-			@foreach($comments as $key => $value)
-				<div class="comment-unit clear">
-					<div class="avatar">
-						@if($value->user->avatar)
-								<a href=""><img src="{{ $value->user->avatar }}" alt=""></a>
-						@else
-								<a href=""><img src="{{ $defaultAvatar }}" alt=""></a>
-						@endif
-					</div>
-					<div class="body">
-						<div>
-							<div class="info">
-								<div class="author"><a href=""><span>{{ $value->user->name }}</span></a></div>
-								<div class="time"><span>{{ $value->created_at }}</span></div>
-							</div>
-							<div class="message">
-								<span>
-								{!! $value->comment !!}
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			@endforeach
-		</div>
+		
+		
+		<div class="wrap_comment"></div>
+		<script>showComment('{{ route('comment.index', $gallery->id) }}')</script>
+		
+		
 		<div class="add-comments">
 			<div class="clear">
 				<div class="avatar">
@@ -67,11 +47,10 @@
 				<div class="body">
 					<div class="textarea" id="1" contenteditable></div>
 				</div>
-				<div class="submit" onclick="setComment(this, {{ $gallery->id }}, '{{ route('gallery.comment') }}')">
+				<div class="submit" onclick="setComment(this, {{ $gallery->id }}, '{{ route('comment.save') }}', '{{ route('comment.index', $gallery->id) }}')">
 					<i class="fa fa-paper-plane"></i>
 				</div>
 			</div>
-			
 		</div>
 	</div>
 </div>

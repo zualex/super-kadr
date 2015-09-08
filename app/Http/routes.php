@@ -22,7 +22,9 @@ Route::get('/gallery/{id}', ['as' => 'gallery.show', 'uses' => 'GalleryControlle
 Route::post('/croppic_upload', ['as' => 'gallery.upload', 'uses' => 'GalleryController@upload']);		//Загрузка изображения croppic
 Route::post('/gallery_create', ['as' => 'gallery.create', 'uses' => 'GalleryController@create']);		//Создание галереи
 Route::post('/gallery_like', ['as' => 'gallery.like', 'uses' => 'GalleryController@like']);					//Лайк
-Route::post('/gallery_comment', ['as' => 'gallery.comment', 'uses' => 'GalleryController@comment']);					//Сохранение комментария
+
+Route::get('/comment/{gallery_id}', ['as' => 'comment.index', 'uses' => 'CommentController@index']);				//Вывод комментариев
+Route::post('/comment/save', ['as' => 'comment.save', 'uses' => 'CommentController@save']);					//Сохранение комментария
 
 
 

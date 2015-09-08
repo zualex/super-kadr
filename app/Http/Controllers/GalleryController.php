@@ -202,15 +202,6 @@ class GalleryController extends Controller {
 		return $like;		
 	}
 	
-	/*
-	* Комментарий
-	*/
-	public function comment(Comment $commentModel)
-	{
-		$comment = $commentModel->addComment(Request::input('gallery'), Request::input('text'));
-		return $comment;		
-	}
-	
 	
 	
 	/**

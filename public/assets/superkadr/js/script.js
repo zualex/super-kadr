@@ -408,9 +408,9 @@ function likeGallery(el, gallery, url){
 
 
 /*
-*	Комментарий
+*	Вставка комментария
 */
-function setComment(el, gallery, url){
+function setComment(el, gallery, url, url_show){
 	var text = $(el).parent().find('.textarea').html();
 
 	$.ajax({
@@ -424,7 +424,11 @@ function setComment(el, gallery, url){
 		},
 		success: function(data){
 			var data = $.parseJSON(data);
-			alert(data.message);
+			if(data.status == 'error'){alert(data.message);}
+			if(data.status == 'success'){
+				$(el).parent().find('.textarea').html('');
+				showComment(url_show);
+			}
 			
 		},
 		error: function(){
@@ -433,3 +437,23 @@ function setComment(el, gallery, url){
 	});
 }
 
+
+/*
+*	вывод комментариев
+*/
+function showComment(url){
+	$.ajax({
+		url: url, 
+		dataType: "html",
+		type: 'GET',
+		data: {
+			'_token' : $('meta[name="csrf-token"]').attr('content')
+		},
+		success: function(data){
+			$('.wrap_comment').html(data);
+		},
+		error: function(){
+			alert('Произошла ошибка');
+		}
+	});
+}
