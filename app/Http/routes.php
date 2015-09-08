@@ -16,22 +16,22 @@
 /*
 * Pages
 */
-Route::get('/', ['as' => 'main', 'uses' => 'HomeController@index']);
-Route::get('/gallery', ['as' => 'gallery', 'uses' => 'GalleryController@index']);
-Route::get('/gallery/{id}', ['as' => 'gallery.show', 'uses' => 'GalleryController@show']);
+Route::get('/', ['as' => 'main', 'uses' => 'HomeController@index']);									//Главная страница
+Route::get('/gallery', ['as' => 'gallery', 'uses' => 'GalleryController@index']);					//Страница галереи
+Route::get('/gallery/{id}', ['as' => 'gallery.show', 'uses' => 'GalleryController@show']);	//Детальная страница галереи
+Route::get('/conditions', ['as' => 'conditions', function(){ return view('pages.conditions.index'); }]);	//Страница Услуги
+Route::get('/contacts', ['as' => 'contacts', function(){ return view('pages.contacts.index'); }]);			//Страница Контакты
+
+
+/*
+* Actions
+*/
 Route::post('/croppic_upload', ['as' => 'gallery.upload', 'uses' => 'GalleryController@upload']);		//Загрузка изображения croppic
 Route::post('/gallery_create', ['as' => 'gallery.create', 'uses' => 'GalleryController@create']);		//Создание галереи
 Route::post('/gallery_like', ['as' => 'gallery.like', 'uses' => 'GalleryController@like']);					//Лайк
 
 Route::get('/comment/{gallery_id}', ['as' => 'comment.index', 'uses' => 'CommentController@index']);				//Вывод комментариев
 Route::post('/comment/save', ['as' => 'comment.save', 'uses' => 'CommentController@save']);					//Сохранение комментария
-
-
-Route::get('/conditions', ['as' => 'conditions', function(){ return view('pages.conditions.index'); }]);
-Route::get('/contacts', ['as' => 'contacts', function(){ return view('pages.contacts.index'); }]);
-
-
-
 
 
 
