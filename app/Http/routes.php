@@ -27,6 +27,11 @@ Route::get('/comment/{gallery_id}', ['as' => 'comment.index', 'uses' => 'Comment
 Route::post('/comment/save', ['as' => 'comment.save', 'uses' => 'CommentController@save']);					//Сохранение комментария
 
 
+Route::get('/conditions', ['as' => 'conditions', function(){ return view('pages.conditions.index'); }]);
+Route::get('/contacts', ['as' => 'contacts', function(){ return view('pages.contacts.index'); }]);
+
+
+
 
 
 
