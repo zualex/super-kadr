@@ -47,23 +47,13 @@ class Gallery extends Model {
 	*/
 	public function galleryAll(){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
-		/*$galleries = DB::select('
-			SELECT g.*,  COUNT(l.id) AS like_count,  COUNT(c.id) AS comment_count
-				FROM galleries as g
-				LEFT JOIN likes as l ON l.gallery_id = g.id
-				LEFT JOIN comments as c ON c.gallery_id = g.id
-			WHERE status_main = ?
-			GROUP BY g.id
-			ORDER BY like_count DESC
-			', [$status_main->id]
-		);*/
 		
 		$galleries =$this
-				->select(DB::raw('galleries.*, COUNT(likes.id) AS like_count,  COUNT(comments.id) AS comment_count'))
+				->select(DB::raw('galleries.*, COUNT(likes.id) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
 				->leftJoin('likes', 'galleries.id', '=', 'likes.gallery_id')
-				->leftJoin('comments', 'galleries.id', '=', 'comments.gallery_id')
 				->groupBy('galleries.id')
 				->orderBy('like_count', 'desc')
+				->orderBy('comment_count', 'desc')
 				->paginate($this->limitMain);
 		
 
@@ -95,15 +85,14 @@ class Gallery extends Model {
 				SELECT 
 					g.*,  
 					(SELECT COUNT(likes.id) FROM likes WHERE likes.gallery_id = g.id) as like_count,  
-					COUNT(c.id) AS comment_count
+					(SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = g.id) as comment_count
 				FROM galleries as g
 				LEFT JOIN likes as l ON l.gallery_id = g.id
-				LEFT JOIN comments as c ON c.gallery_id = g.id
 				WHERE 
 					status_main = ?
 					AND date(l.created_at) BETWEEN "'.$dateStart.'" AND "'.$dateEnd.'"
 				GROUP BY g.id
-				ORDER BY like_count DESC
+				ORDER BY like_count DESC, comment_count DESC
 				LIMIT ?', [$status_main->id, $this->limitMain]
 			);
 			/* 
@@ -118,15 +107,14 @@ class Gallery extends Model {
 			if(count($galleryTop) < $this->limitMain){
 				$limit = $this->limitMain - count($galleryTop);
 				$galleryDop = DB::select('
-					SELECT g.*,  COUNT(l.id) AS like_count,  COUNT(c.id) AS comment_count
+					SELECT g.*,  COUNT(l.id) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = g.id) as comment_count
 					FROM galleries as g
 					LEFT JOIN likes as l ON l.gallery_id = g.id
-					LEFT JOIN comments as c ON c.gallery_id = g.id
 					WHERE 
 						status_main = ?
 						AND g.id NOT IN ('.implode(",", $arrIdGallery).')
 					GROUP BY g.id
-					ORDER BY like_count DESC
+					ORDER BY like_count DESC, comment_count DESC
 					LIMIT ?', [$status_main->id, $limit]
 				);
 				foreach($galleryDop as $key => $value){
