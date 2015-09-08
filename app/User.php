@@ -19,9 +19,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	protected $hidden = ['password', 'remember_token'];
 	
 	public $errors;
+	public $defaultAvatar;
 	
 	public function __construct(){
 		$this->errors = array();
+		$this->defaultAvatar = '/public/img/default-user.jpg';
 	}
 	
 	

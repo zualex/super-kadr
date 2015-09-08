@@ -30,77 +30,48 @@
 	<div class="comments">
 		<div class="header"><span>Комментарии:</span></div>
 		<div class="comments-list clear">
-			<div class="comment-unit clear">
-				<div class="avatar">
-					<a href=""><img src="/img/example/user3.jpg" alt=""></a>
-				</div>
-				<div class="body">
-					<div>
-						<div class="info">
-							<div class="author"><a href=""><span>Иван Иванов</span></a></div>
-							<div class="time"><span>отправил 2 часа назад</span></div>
-						</div>
-						<div class="message">
-							<span>
-								Текст комментария<br>
-								в несколько<br>
-								строк.
-							</span>
+			@foreach($comments as $key => $value)
+				<div class="comment-unit clear">
+					<div class="avatar">
+						@if($value->user->avatar)
+								<a href=""><img src="{{ $value->user->avatar }}" alt=""></a>
+						@else
+								<a href=""><img src="{{ $defaultAvatar }}" alt=""></a>
+						@endif
+					</div>
+					<div class="body">
+						<div>
+							<div class="info">
+								<div class="author"><a href=""><span>{{ $value->user->name }}</span></a></div>
+								<div class="time"><span>{{ $value->created_at }}</span></div>
+							</div>
+							<div class="message">
+								<span>
+								{!! $value->comment !!}
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="comment-unit clear">
-				<div class="avatar">
-					<a href=""><img src="/img/example/user3.jpg" alt=""></a>
-				</div>
-				<div class="body">
-					<div>
-						<div class="info">
-							<div class="author"><a href=""><span>Иван Иванов</span></a></div>
-							<div class="time"><span>отправил 2 часа назад</span></div>
-						</div>
-						<div class="message">
-							<span>
-								Текст комментария в одну строку.
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="comment-unit clear">
-				<div class="avatar">
-					<a href=""><img src="/img/example/user3.jpg" alt=""></a>
-				</div>
-				<div class="body">
-					<div>
-						<div class="info">
-							<div class="author"><a href=""><span>Иван Иванов</span></a></div>
-							<div class="time"><span>отправил 2 часа назад</span></div>
-						</div>
-						<div class="message">
-							<span>
-								Текст комментария<br>
-								в несколько<br>
-								строк.
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
+			@endforeach
 		</div>
 		<div class="add-comments">
 			<div class="clear">
 				<div class="avatar">
-					<a href=""><img src="/img/example/user3.jpg" alt=""></a>
+					@if(Auth::check() AND Auth::user()->avatar)
+						<img src="{{ Auth::user()->avatar }}" alt="">
+					@else
+							<img src="{{ $defaultAvatar }}" alt="">
+					@endif
 				</div>
 				<div class="body">
 					<div class="textarea" id="1" contenteditable></div>
 				</div>
-				<div class="submit">
+				<div class="submit" onclick="setComment(this, {{ $gallery->id }}, '{{ route('gallery.comment') }}')">
 					<i class="fa fa-paper-plane"></i>
 				</div>
 			</div>
+			
 		</div>
 	</div>
 </div>

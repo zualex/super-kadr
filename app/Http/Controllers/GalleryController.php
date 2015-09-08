@@ -14,6 +14,8 @@ use App\Monitor;
 use App\Gallery;
 use App\Pay;
 use App\Like;
+use App\Comment;
+use App\User;
 
 
 class GalleryController extends Controller {
@@ -35,10 +37,13 @@ class GalleryController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Gallery $galleryModel, $id)
+	public function show(Gallery $galleryModel, Comment $commentModel, User $userModel,  $id)
 	{
-		$gallery = $galleryModel->getGallery($id);
-		return view('pages.gallery.show')->with('gallery', $gallery);
+		
+		return view('pages.gallery.show')
+			->with('gallery', $galleryModel->getGallery($id))
+			->with('comments', $commentModel->showComment($id))
+			->with('defaultAvatar', $userModel->defaultAvatar);
 	}
 	
 	
@@ -195,6 +200,15 @@ class GalleryController extends Controller {
 	{
 		$like = $likeModel->likeClick(Request::input('gallery'));
 		return $like;		
+	}
+	
+	/*
+	* Комментарий
+	*/
+	public function comment(Comment $commentModel)
+	{
+		$comment = $commentModel->addComment(Request::input('gallery'), Request::input('text'));
+		return $comment;		
 	}
 	
 	

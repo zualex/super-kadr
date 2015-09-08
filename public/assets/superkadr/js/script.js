@@ -199,7 +199,7 @@ $(document).ready( function () {
 			$('.add-comments .submit').addClass('active');
 		}
 	});
-	$('.add-comments .submit').click(function (event) {
+	/*$('.add-comments .submit').click(function (event) {
 		event.preventDefault();
 		if ($('.add-comments .textarea').is(':empty')){
 			alert('Введите текст комментария!');
@@ -221,7 +221,7 @@ $(document).ready( function () {
 				}
 			});
 		}
-	});
+	});*/
 
 	$(function() {
 	  $('.tabs').on('click', '.tab-head:not(.active)', function() {
@@ -399,6 +399,33 @@ function likeGallery(el, gallery, url){
 				countLikes += data.message;
 				$(el).find('span').html(countLikes);
 			}			
+		},
+		error: function(){
+			alert('Произошла ошибка');
+		}
+	});
+}
+
+
+/*
+*	Комментарий
+*/
+function setComment(el, gallery, url){
+	var text = $(el).parent().find('.textarea').html();
+
+	$.ajax({
+		url: url, 
+		dataType: "html",
+		type: 'POST',
+		data: {
+			'_token' : $('meta[name="csrf-token"]').attr('content'),
+			'gallery': gallery,
+			'text': text
+		},
+		success: function(data){
+			var data = $.parseJSON(data);
+			alert(data.message);
+			
 		},
 		error: function(){
 			alert('Произошла ошибка');
