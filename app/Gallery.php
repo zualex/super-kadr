@@ -83,7 +83,7 @@ class Gallery extends Model {
 		//{
 			$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 			/* Находим 15 самых популярных за месяц */
-			$arrIdGallery = array();
+			$arrIdGallery = array(0);
 			$nowDate = Carbon::now();
 			$dateEnd = $nowDate->toDateString();
 			$dateStart = $nowDate->subMonth()->toDateString();

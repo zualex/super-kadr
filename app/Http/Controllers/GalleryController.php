@@ -188,39 +188,13 @@ class GalleryController extends Controller {
 	}
 	
 	
-	
-	public function like(Gallery $galleryModel)
+	/*
+	* Лайк
+	*/
+	public function like(Like $likeModel)
 	{
-		if(Auth::check()){
-			$inc = 0;
-			$gallery_id = Request::input('gallery');
-			
-			$like = Like::where('user_id', '=', Auth::user()->id)
-				->where('gallery_id', '=', $gallery_id)
-				->first();
-			
-			if(count($like) == 0){
-				$inc = 1;
-				$like = new Like;
-				$like->user_id = Auth::user()->id;
-				$like->gallery_id = $gallery_id;
-				$like->save();
-			}else{
-				$inc = -1;
-				$like->delete();
-			}
-			return Response::json( array(
-				"status" => 'success',
-				"message" => $inc
-			));
-			
-		}else{
-			return Response::json( array(
-				"status" => 'error',
-				"message" => 'Необходимо авторизоваться'
-			));
-		}
-		
+		$like = $likeModel->likeClick(Request::input('gallery'));
+		return $like;		
 	}
 	
 	
