@@ -4,13 +4,21 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use App\Gallery;
 
 class AdminGalleryController extends Controller {
 
 
-	public function index()
+	public function index(Gallery $galleryModel)
 	{
-		return view('admin.gallery.index');
+		
+		$data = array(
+			"galleryModeration" => $galleryModel->getGalleryModeration(),
+			"gallerySuccess" => $galleryModel->getGallerySuccess(),
+			"galleryCancel" => $galleryModel->getGalleryCancel(),
+			"pathImages" => $galleryModel->pathImages,
+		);
+		return view('admin.gallery.index')->with('data', $data);
 	}
 
 	/**
