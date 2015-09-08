@@ -22,6 +22,7 @@ class Gallery extends Model {
 	
 	public $error;
 	public $pathImages;
+	public $limitMain;
 	
 	public function __construct(){
 		$this->error = array();

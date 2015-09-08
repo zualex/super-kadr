@@ -165,7 +165,7 @@ class GalleryController extends Controller {
 	
 	public function create(Gallery $galleryModel, Pay $payModel)
 	{
-		$error = array();
+		$error = "";
 		$paramGallery = array(
 			'monitor' => Request::input('monitor'),
 			'image' => Request::input('image'),
@@ -183,13 +183,20 @@ class GalleryController extends Controller {
 			$pay = $payModel->createPay($param);
 		}
 		
-		if(count($galleryModel->error) > 0){$error[] = $galleryModel->error;}
-		if(count($payModel->error) > 0){$error[] = $payModel->error;}
+		if(count($galleryModel->error) > 0){$error .= implode(', ', $galleryModel->error);}
+		if(count($payModel->error) > 0){$error .= implode(', ', $payModel->error);}
+		if($error == ''){
+			return Response::json( array(
+				"status" => 'success',
+			));
+		}else{
+			return Response::json( array(
+				"status" => 'error',
+				"message" => $error,
+			));
+		}
 
-
-		return Response::json( array(
-			"error" => $error,
-		));
+		
 	}
 	
 	
