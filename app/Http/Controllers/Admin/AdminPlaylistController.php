@@ -7,14 +7,10 @@ use Illuminate\Http\Request;
 
 class AdminPlaylistController extends Controller {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
+
 	public function index()
 	{
-		//
+		return view('admin.playlist.index');
 	}
 
 	/**

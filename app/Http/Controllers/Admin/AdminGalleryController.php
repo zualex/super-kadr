@@ -7,14 +7,10 @@ use Illuminate\Http\Request;
 
 class AdminGalleryController extends Controller {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
+
 	public function index()
 	{
-		//
+		return view('admin.gallery.index');
 	}
 
 	/**
