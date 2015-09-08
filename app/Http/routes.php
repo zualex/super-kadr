@@ -64,15 +64,14 @@ Route::get('/login/callback/{provider?}',[
 */
 Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 
-	Route::get('/', ['as' => 'admin', 'uses' => 'AdminController@index']);
+	Route::get('/', ['as' => 'admin', 'uses' => 'Admin\AdminController@index']);
 	
 	/* Смена пароля */
-	Route::get('/change_password', ['as' => 'change_password', 'uses' => 'UserController@change_password']);
-	Route::post('/change_password/save', ['as' => 'change_password.save', 'uses' => 'UserController@change_password_save']);
+	Route::get('/change_password', ['as' => 'change_password', 'uses' => 'Admin\UserController@change_password']);
+	Route::post('/change_password/save', ['as' => 'change_password.save', 'uses' => 'Admin\UserController@change_password_save']);
 	
 	/* Пользователи */
-	
-	Route::resource('/users', 'UserController', array('names' => array(
+	/*Route::resource('/users', 'Admin\UserController', array('names' => array(
 		'index' => 'admin.users.index',
 		'create' => 'admin.users.create',
 		'store' => 'admin.users.store',
@@ -80,6 +79,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 		'edit' => 'admin.users.edit',
 		'update' => 'admin.users.update',
 		'destroy' => 'admin.users.destroy',
-	)));
+	)));*/
 });
 
