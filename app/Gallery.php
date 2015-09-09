@@ -191,7 +191,7 @@ class Gallery extends Model {
 		if(count($this->error) == 0){
 			$sizeImg = Monitor::find($param['monitor']);
 			$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'moderation')->first();
-			$status_order = Status::where('type_status', '=', 'order')->where('caption', '=', 'process')->first();
+			$status_order = Status::where('type_status', '=', 'order')->where('caption', '=', 'queue')->first();
 			$path_parts = pathinfo(base_path().$dir.'/'.$uploadImage);
 			$ext = '.'.$path_parts['extension'];
 			
