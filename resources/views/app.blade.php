@@ -33,29 +33,6 @@ $(function(){
 
 </head>
 <body>
-<ul>
-
-@if (Auth::guest())
-	<li><a href="{{ url('/auth/login') }}">Login</a></li>
-	<li><a href="/login/vkontakte">Login in with vkontakte</a></li>
-	<li><a href="/login/facebook">Login in with facebook</a></li>
-	<li><a href="/login/twitter">Login in with twitter</a></li>
-	<li><a href="/login/odnoklassniki">Login in with odnoklassniki</a></li>
-@else
-	@if (Auth::user()->level == 'admin')
-		<li><a href="{{ route('admin') }}">Admin panel</a></li>
-	@endif
-
-	<li class="dropdown">
-		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
-		<ul class="dropdown-menu" role="menu">
-			<li><a href="{{ url('/auth/logout') }}">Logout</a></li>
-		</ul>
-	</li>
-@endif
-
-</ul>
-
 
 	<header>
 		<div class="clear">
@@ -89,10 +66,29 @@ $(function(){
 					<li><a href="#">Контакты</a></li>
 				</ul>
 			</div>
-			<div id="search">
-				<form>
-					<input type="search" class="inputsearch" tabindex="1" maxlength="120" placeholder="Поиск">
-				</form>
+			<div id="login">
+				@if (Auth::guest())
+					<div class="auth">
+						<a href="{{ url('/auth/login') }}" rel="nofollow" class="sbutton login"><span><i class="fa pull-left fa-sign-in"></i>Войти</span></a>
+						<a href="/login/vkontakte" rel="nofollow" class="sbutton social vk"><span><i class="fa fa-vk"></i></span></a>
+						<a href="/login/facebook" rel="nofollow" class="sbutton social fb"><span><i class="fa fa-facebook"></i></span></a>
+						<a href="/login/twitter" rel="nofollow" class="sbutton social tw"><span><i class="fa fa-twitter"></i></span></a>
+						<a href="/login/odnoklassniki" rel="nofollow" class="sbutton social ok"><span><i class="fa fa-odnoklassniki"></i></span></a>
+					</div>
+				@else
+
+					<div class="profile">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+							<span class="username">{{ Auth::user()->name }}<i class="fa pull-right fa-caret-down"></i></span>
+						</a>
+						<div class="dropdown" role="menu">
+							@if (Auth::user()->level == 'admin')
+								<a href="{{ route('admin') }}"><i class="fa pull-left fa-cogs"></i>Панель управления</a>
+							@endif
+							<a href="{{ url('/auth/logout') }}"><i class="fa pull-left fa-sign-out"></i>Выйти</a>
+						</div>
+					</div>
+				@endif
 			</div>
 		</div>
 	</div>

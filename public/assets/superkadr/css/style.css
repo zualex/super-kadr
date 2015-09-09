@@ -47,14 +47,36 @@ header>div .logo img{display:block;width:100%;}
 .menu{float:left;}
 .menu>ul{display:table;list-style:none;}
 .menu>ul>li{display:table-cell;font-size: 2em;background-image:linear-gradient(to bottom, rgba(0,0,0,0.2) 50%, transparent 50%);background-size: 100% 200%;-webkit-transition: background-position 0.1s;-moz-transition: background-position 0.1s;transition: background-position 0.1s;background-position: 0 -100%;}
-.menu>ul>li>a{display:block;padding:0 10px;color:#fff;line-height:50px;}
+.menu>ul>li>a{display:block;padding:0 10px;color:#fff;line-height:60px;}
 .menu>ul>li.active{background-position: 0 -90%;}
 .menu>ul>li:hover{background-position: 0 0;}
 
-#search {float: right;padding: 10px 0;}
-#search .inputsearch {height: 30px;border: 0;outline: none;border-radius: 0;padding: 5 10px;padding-left: 40px;width: 200px;background-color:#fff;background-image:url(/img/icons/search.svg);background-position: 10px center;background-size: 17px 17px;background-repeat:no-repeat;}
-#search .inputsearch {-webkit-transition: width 0.1s 0.1s;-moz-transition: width 0.1s 0.1s;transition: width 0.1s 0.1s;}
-#search .inputsearch:focus{width:250px;}
+#login {float: right;padding: 10px 0;}
+#login .auth{}
+#login .auth:after{content:'';display:table;clear:both;}
+#login .auth .sbutton{height: 40px;border-radius:50px;display:block;float:left; margin-left: 10px;padding: 0 15px;line-height: 40px;background-color:rgba(0,0,0,0.4);color:#fff;-webkit-transition: all 0.2s ease-in-out;-moz-transition: all 0.2s ease-in-out;transition: all 0.2s ease-in-out;}
+#login .auth .sbutton:first-child{margin:0;}
+#login .auth .sbutton:hover{border-radius:5px;color:#fff;}
+#login .auth .sbutton.social{padding: 0; text-align:center;width:40px;}
+#login .auth .sbutton.login{font-family: 'SegoeUIBold';}
+#login .auth .sbutton.login:hover{background-color:#3E50B4;}
+#login .auth .sbutton.social.vk{}
+#login .auth .sbutton.social.vk:hover{background-color:#45668e;}
+#login .auth .sbutton.social.fb{}
+#login .auth .sbutton.social.fb:hover{background-color:#3b5998;}
+#login .auth .sbutton.social.tw{}
+#login .auth .sbutton.social.tw:hover{background-color:#1dcaff;}
+#login .auth .sbutton.social.ok{}
+#login .auth .sbutton.social.ok:hover{background-color:#FD8202;}
+
+#login .profile{position:relative;}
+#login .profile .username{line-height: 40px;font-size: 1.2em;text-transform:uppercase;color:#fff;padding: 0 15px;border-radius:50px;display:block;-webkit-transition: border-radius 0.1s ease-in-out;-moz-transition: border-radius 0.1s ease-in-out;transition: border-radius 0.1s ease-in-out;}
+#login .profile .username:hover{background-color:rgba(0,0,0,0.4);}
+#login .profile .dropdown{position:absolute;top: 40px;right:0;display:none;z-index:1;padding: 5px 0;background-color:rgba(0,0,0,0.4);min-width:100%;}
+#login .profile.open .username{border-radius: 5px 5px 0 0;line-height: 39px;background-color:rgba(0,0,0,0.4);border-bottom: 1px solid #333;}
+#login .profile.open .dropdown{display:block;}
+#login .profile .dropdown a{display:block;line-height: 30px; color:#fff;white-space: nowrap;padding: 0 15px;}
+#login .profile .dropdown a:hover{background-color:rgba(0,0,0,0.4);}
 
 .wrapper .block.color-1{background-color:#fff;}
 .wrapper .block.color-1>.header{color:#141415;}

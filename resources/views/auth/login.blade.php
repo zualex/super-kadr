@@ -3,8 +3,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Вход в панель управления</title>
-	<link rel="stylesheet" type="text/css" href="./blocks/css/styles.css">
-	<link rel="stylesheet" type="text/css" href="./blocks/css/fonts.css">
+	{!! HTML::style('/assets/admin/css/styles.css') !!}
+	{!! HTML::style('/assets/admin/css/fonts.css') !!}
+	{!! HTML::style('/assets/admin/css/datetimepicker.css') !!}
 </head>
 <body class="auth">
 	<div id="auth" class="login-block">
