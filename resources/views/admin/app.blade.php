@@ -6,10 +6,15 @@
 	{!! HTML::style('/assets/admin/css/styles.css') !!}
 	{!! HTML::style('/assets/admin/css/fonts.css') !!}
 	
-	
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	
+	{!! HTML::style('/assets/admin/lib/fancybox/jquery.fancybox.css') !!}
+	{!! HTML::style('/assets/admin/lib/fancybox/helpers/jquery.fancybox-thumbs.css') !!}
+	{!! HTML::script('/assets/admin/lib/fancybox/jquery.fancybox.pack.js') !!}
+	{!! HTML::script('/assets/admin/lib/fancybox/helpers/jquery.fancybox-thumbs.min.js') !!}
+	
 	{!! HTML::script('/assets/admin/js/script.js') !!}
 	<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
 </head>

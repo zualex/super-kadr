@@ -56,7 +56,11 @@
 									<input type="checkbox" name="checkelement[]" value="">
 								</td>
 								<td class="center col-2">{{ $value->id }}</td>
-								<td class="center col-3"><img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt=""></td>
+								<td class="center col-3">
+									<a href="{{ $data['pathImages'].'/o_'.$value->src }}" rel="group1" class="modalbox">
+										<img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt="">
+									</a>
+								</td>
 								<td>Изображение будет показано {{ $value->hours*60*60/$value->interval_sec }} раз в течение {{ $value->hours }} часа<br>Начало показа {{ $value->date_show }}</td>
 								<td class="col-4">AA{{ $value->pay_id }}</td>
 								<td class="col-4">{{ $value->tarif_name }}</td>
@@ -106,7 +110,11 @@
 									<input type="checkbox" name="checkelement[]" value="">
 								</td>
 								<td class="center col-2">{{ $value->id }}</td>
-								<td class="center col-3"><img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt=""></td>
+								<td class="center col-3">
+									<a href="{{ $data['pathImages'].'/o_'.$value->src }}" rel="group2" class="modalbox">
+										<img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt="">
+									</a>
+								</td>
 								<td>Изображение будет показано {{ $value->hours*60*60/$value->interval_sec }} раз в течение {{ $value->hours }} часа<br>Начало показа {{ $value->date_show }}</td>
 								<td class="col-4">AA{{ $value->pay_id }}</td>
 								<td class="col-4">{{ $value->tarif_name }}</td>
@@ -160,7 +168,11 @@
 									<input type="checkbox" name="checkelement[]" value="">
 								</td>
 								<td class="center col-2">{{ $value->id }}</td>
-								<td class="center col-3"><img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt=""></td>
+								<td class="center col-3">
+									<a href="{{ $data['pathImages'].'/o_'.$value->src }}" rel="group3" class="modalbox">
+										<img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt="">
+									</a>
+								</td>
 								<td>Изображение будет показано {{ $value->hours*60*60/$value->interval_sec }} раз в течение {{ $value->hours }} часа<br>Начало показа {{ $value->date_show }}</td>
 								<td class="col-4">AA{{ $value->pay_id }}</td>
 								<td class="col-4">{{ $value->tarif_name }}</td>

@@ -5,11 +5,14 @@ $(document).ready( function () {
 		else $(this).find(".droplist").hide();
 	});
 	
-
-	  $('.tabs').on('click', 'li:not(.active)', function() {
-		$(this).addClass('active').siblings().removeClass('active')
-		  .parents('.tab-block').find('section').eq($(this).index()).fadeIn(150).siblings('section').hide();
-	  })
-
+	/* Tabs */
+	$('.tabs').on('click', 'li:not(.active)', function() {
+	$(this).addClass('active').siblings().removeClass('active')
+	  .parents('.tab-block').find('section').eq($(this).index()).fadeIn(150).siblings('section').hide();
+	})
+	
+	
+	/* Fancybox */
+	$(".modalbox").fancybox();
 	
 });
