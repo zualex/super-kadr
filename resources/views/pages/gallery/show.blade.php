@@ -11,7 +11,7 @@
 			<div class="details">
 				<div class="description"><span>Оцените и прокомментируйте:</span></div>
 				<div class="buttons">
-					<div class="likes"><i class="fa pull-left fa-heart"></i><span>{{ count($gallery->likes) }}</span></div>
+					<div class="likes" onclick="likeGallery(this, {{ $gallery->id }}, '{{ route('gallery.like') }}')"><i class="fa pull-left fa-heart"></i><span>{{ count($gallery->likes) }}</span></div>
 					<div class="comments"><i class="fa pull-left fa-comment"></i><span>{{ count($gallery->comments) }}</span></div>
 				</div>
 			</div>
@@ -29,75 +29,25 @@
 	</div>
 	<div class="comments">
 		<div class="header"><span>Комментарии:</span></div>
-		<div class="comments-list clear">
-			<div class="comment-unit clear">
-				<div class="avatar">
-					<a href=""><img src="/img/example/user3.jpg" alt=""></a>
-				</div>
-				<div class="body">
-					<div>
-						<div class="info">
-							<div class="author"><a href=""><span>Иван Иванов</span></a></div>
-							<div class="time"><span>отправил 2 часа назад</span></div>
-						</div>
-						<div class="message">
-							<span>
-								Текст комментария<br>
-								в несколько<br>
-								строк.
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="comment-unit clear">
-				<div class="avatar">
-					<a href=""><img src="/img/example/user3.jpg" alt=""></a>
-				</div>
-				<div class="body">
-					<div>
-						<div class="info">
-							<div class="author"><a href=""><span>Иван Иванов</span></a></div>
-							<div class="time"><span>отправил 2 часа назад</span></div>
-						</div>
-						<div class="message">
-							<span>
-								Текст комментария в одну строку.
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="comment-unit clear">
-				<div class="avatar">
-					<a href=""><img src="/img/example/user3.jpg" alt=""></a>
-				</div>
-				<div class="body">
-					<div>
-						<div class="info">
-							<div class="author"><a href=""><span>Иван Иванов</span></a></div>
-							<div class="time"><span>отправил 2 часа назад</span></div>
-						</div>
-						<div class="message">
-							<span>
-								Текст комментария<br>
-								в несколько<br>
-								строк.
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		
+		
+		<div class="wrap_comment"></div>
+		<script>showComment('{{ route('comment.index', $gallery->id) }}')</script>
+		
+		<a name="comment"></a>
 		<div class="add-comments">
 			<div class="clear">
 				<div class="avatar">
-					<a href=""><img src="/img/example/user3.jpg" alt=""></a>
+					@if(Auth::check() AND Auth::user()->avatar)
+						<img src="{{ Auth::user()->avatar }}" alt="">
+					@else
+							<img src="{{ $defaultAvatar }}" alt="">
+					@endif
 				</div>
 				<div class="body">
 					<div class="textarea" id="1" contenteditable></div>
 				</div>
-				<div class="submit">
+				<div class="submit" onclick="setComment(this, {{ $gallery->id }}, '{{ route('comment.save') }}', '{{ route('comment.index', $gallery->id) }}')">
 					<i class="fa fa-paper-plane"></i>
 				</div>
 			</div>

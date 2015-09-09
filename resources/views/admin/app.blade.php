@@ -22,7 +22,7 @@
 				<div class="controls">
 					<div>
 						<ul>
-							<li><a href="#">Изменить пароль</a></li>
+							<li><a href="{{ route('change_password') }}">Изменить пароль</a></li>
 							<li><a href="{{ url('/auth/logout') }}">Выйти</a></li>
 						</ul>
 					</div>
@@ -34,18 +34,18 @@
 <div id="wrapper" class="wrapper clear">
 	<div id="menu" class="menu-panel">
 		<ul>
-			<li class="active"><a href="#"><i class="fa pull-left fa-credit-card"></i>Заказы</a></li>
-			<li><a href="#"><i class="fa pull-left fa-rub"></i>Тарифы</a></li>
-			<li><a href="#"><i class="fa pull-left fa-exchange"></i>Транзакции</a></li>
-			<li><a href="#"><i class="fa pull-left fa-tasks"></i>Плейлисты</a></li>
-			<li><a href="#"><i class="fa pull-left fa-wrench"></i>Настройки</a></li>
+			<li class="{{ Route::is('admin.gallery.index') ? 'active' : '' }}"><a href="{{ route('admin.gallery.index') }}"><i class="fa pull-left fa-credit-card"></i>Заказы</a></li>
+			<li class="{{ Route::is('admin.tarif.index') ? 'active' : '' }}"><a href="{{ route('admin.tarif.index') }}"><i class="fa pull-left fa-rub"></i>Тарифы</a></li>
+			<li class="{{ Route::is('admin.pay.index') ? 'active' : '' }}"><a href="{{ route('admin.pay.index') }}"><i class="fa pull-left fa-exchange"></i>Транзакции</a></li>
+			<li class="{{ Route::is('admin.playlist.index') ? 'active' : '' }}"><a href="{{ route('admin.playlist.index') }}"><i class="fa pull-left fa-tasks"></i>Плейлисты</a></li>
+			<li class="{{ Route::is('admin.setting.index') ? 'active' : '' }}"><a href="{{ route('admin.setting.index') }}"><i class="fa pull-left fa-wrench"></i>Настройки</a></li>
 		</ul>
 	</div>
 	<div class="wrap">
 		<div class="content">
 			<div class="clear">
 			
-			
+				
 				@yield('content')
 				
 				

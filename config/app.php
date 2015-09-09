@@ -209,6 +209,7 @@ return [
 		'Socialize' => 'Laravel\Socialite\Facades\Socialite',
 		'Image' => 'Intervention\Image\Facades\Image',
 
+
 	],
 
 ];

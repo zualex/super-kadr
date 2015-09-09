@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Слой_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -27,3 +28,34 @@
 <circle id="XMLID_20_" class="st3" cx="1296.8" cy="1457" r="226.8"/>
 <circle id="XMLID_21_" class="st5" cx="942.5" cy="843.3" r="226.8"/>
 </svg>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Слой_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1885 1686.6" style="enable-background:new 0 0 1885 1686.6;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#D45749;stroke-width:15;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#4792CA;stroke-width:15;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#53AD6E;stroke-width:15;stroke-miterlimit:10;}
+	.st3{fill:#4792CA;}
+	.st4{fill:#D45749;}
+	.st5{fill:#53AD6E;}
+</style>
+<line id="XMLID_1_" class="st0" x1="583.9" y1="229.6" x2="233.9" y2="843.3"/>
+<line id="XMLID_74_" class="st1" x1="233.9" y1="843.3" x2="942.5" y2="843.3"/>
+<line id="XMLID_75_" class="st1" x1="942.5" y1="843.3" x2="583.9" y2="1457"/>
+<line id="XMLID_76_" class="st1" x1="233.9" y1="843.3" x2="583.9" y2="1457"/>
+<line id="XMLID_77_" class="st1" x1="942.5" y1="843.3" x2="1296.8" y2="1457"/>
+<line id="XMLID_78_" class="st2" x1="1296.8" y1="1457" x2="1651.2" y2="843.3"/>
+<line id="XMLID_79_" class="st2" x1="942.5" y1="843.3" x2="1296.8" y2="229.6"/>
+<line id="XMLID_80_" class="st1" x1="583.9" y1="1457" x2="1296.8" y2="1457"/>
+<line id="XMLID_81_" class="st2" x1="942.5" y1="843.3" x2="1651.2" y2="843.3"/>
+<circle id="XMLID_15_" class="st3" cx="233.9" cy="843.3" r="226.8"/>
+<circle id="XMLID_17_" class="st4" cx="583.9" cy="229.6" r="226.8"/>
+<circle id="XMLID_16_" class="st5" cx="1296.8" cy="229.6" r="226.8"/>
+<circle id="XMLID_18_" class="st5" cx="1651.2" cy="843.3" r="226.8"/>
+<circle id="XMLID_19_" class="st3" cx="583.9" cy="1457" r="226.8"/>
+<circle id="XMLID_20_" class="st3" cx="1296.8" cy="1457" r="226.8"/>
+<circle id="XMLID_21_" class="st5" cx="942.5" cy="843.3" r="226.8"/>
+</svg>
+>>>>>>> 012ed53d4fde5ac105dcb47db62f1ead8b377d9f

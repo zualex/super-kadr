@@ -19,9 +19,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	protected $hidden = ['password', 'remember_token'];
 	
 	public $errors;
+	public $defaultAvatar;
 	
 	public function __construct(){
 		$this->errors = array();
+		$this->defaultAvatar = '/public/img/default-user.jpg';
 	}
 	
 	
@@ -46,7 +48,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		$userId = false;
 		if(!array_key_exists('provider', $arrValues)){$arrValues['provider'] = '';}
 		if(!array_key_exists('social_id', $arrValues)){$arrValues['social_id'] = '';}
-		if(!$arrValues['name']){$arrValues['name'] = $arrValues['email'];}
+		if(!$arrValues['name']){
+			if($arrValues['email']){
+				$split = explode("@", $arrValues['email']);
+				$arrValues['name'] = $split[0];
+			}else{
+				$arrValues['name'] = str_random(9);
+			}
+		}
 				
 		if($arrValues['provider'] != ''){
 		
@@ -61,7 +70,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 				$userAuth->provider = $arrValues['provider'];
 				$userAuth->social_id = $arrValues['social_id'];
 				$userAuth->name = $arrValues['name'];
-				$userAuth->email = $arrValues['social_id'].'@social.ru';
+				$userAuth->email = $arrValues['social_id'].'@'.$arrValues['provider'].'.ru';
 				$userAuth->avatar = $arrValues['avatar'];
 				$userAuth->password = Hash::make('secret');
 				$userAuth->save();
