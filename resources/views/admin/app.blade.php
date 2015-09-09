@@ -45,7 +45,7 @@
 		<div class="content">
 			<div class="clear">
 			
-			
+				
 				@yield('content')
 				
 				

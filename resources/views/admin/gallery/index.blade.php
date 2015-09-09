@@ -24,6 +24,15 @@
 				<li>Отменённые</li>
 			</ul>
 		</div>
+		
+		@if (Session::has('message'))
+			<br>
+			<div class="alert alert-info">{{ Session::get('message') }}</div>
+		@endif
+		
+		<form id="form-admin" role="form" method="POST" action="{{ route('admin.gallery.update') }}">
+		<input type="hidden" name="_token" value="{{ csrf_token() }}">
+		
 		<div class="box-content">
 			<section id="offer" class="visible">
 				@if(count($data['galleryModeration']) > 0)
@@ -60,8 +69,8 @@
 										<div class="droplist" style="display: none">
 											<div>
 												<ul>
-													<li><a><i class="fa pull-left fa-chevron-down"></i>Принять</a></li>
-													<li><a><i class="fa pull-left fa-ban"></i>Отклонить</a></li>
+													<li><a href="{{ route('admin.gallery.success', $value->id) }}"><i class="fa pull-left fa-chevron-down"></i>Принять</a></li>
+													<li><a href="{{ route('admin.gallery.cancel', $value->id) }}"><i class="fa pull-left fa-ban"></i>Отклонить</a></li>
 												</ul>
 											</div>
 										</div>
@@ -116,8 +125,8 @@
 										<div class="droplist" style="display: none">
 											<div>
 												<ul>
-													<li><a><i class="fa pull-left fa-chevron-down"></i>Принять</a></li>
-													<li><a><i class="fa pull-left fa-ban"></i>Отклонить</a></li>
+													<li><a href="{{ route('admin.gallery.cancel', $value->id) }}"><i class="fa pull-left fa-ban"></i>Отклонить</a></li>
+													<li><a href="{{ route('admin.gallery.delete', $value->id) }}" onclick="return confirm('Вы действительно хотите удалить заказ?')"><i class="fa pull-left fa-times"></i>Удалить</a></li>
 												</ul>
 											</div>
 										</div>
@@ -164,8 +173,8 @@
 										<div class="droplist" style="display: none">
 											<div>
 												<ul>
-													<li><a><i class="fa pull-left fa-chevron-down"></i>Принять</a></li>
-													<li><a><i class="fa pull-left fa-ban"></i>Отклонить</a></li>
+													<li><a href="{{ route('admin.gallery.success', $value->id) }}"><i class="fa pull-left fa-chevron-down"></i>Принять</a></li>
+													<li><a href="{{ route('admin.gallery.delete', $value->id) }}" onclick="return confirm('Вы действительно хотите удалить заказ?')"><i class="fa pull-left fa-times"></i>Удалить</a></li>
 												</ul>
 											</div>
 										</div>
@@ -178,6 +187,7 @@
 				@endif
 			</section>
 		</div>
+		</form>
 	</div>
 </div>
 @endsection
