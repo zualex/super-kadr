@@ -15,4 +15,33 @@ $(document).ready( function () {
 	/* Fancybox */
 	$(".modalbox").fancybox();
 	
+	/* Click checkbox all */
+	$("input:checkbox[name='checkall']").click(function(){
+		$(this).closest(".table-list").find("input:checkbox").prop('checked', this.checked);
+	});
+	
 });
+
+
+/* Одобрить заказы */
+function setSuccessGallery(url){
+	var data = $("#form-admin").serialize();
+	$.ajax({
+		url: url, 
+		dataType: "html",
+		type: 'POST',
+		data: data,
+		success: function(data){
+			var data = $.parseJSON(data);
+			if(data.status == 'error'){alert(data.message);}
+			if(data.status == 'success'){
+				alert(data.message);
+				window.location.reload();
+			}
+		},
+		error: function(){
+			alert('Произошла ошибка');
+		}
+	});
+	
+}

@@ -72,12 +72,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	
 	
 	/* Заказы */
-	Route::resource('/gallery', 'Admin\AdminGalleryController', array('names' => array(
-		'index' => 'admin.gallery.index'
-	)));
+	Route::get('/gallery/', ['as' => 'admin.gallery.index', 'uses' => 'Admin\AdminGalleryController@index']);
 	Route::get('/gallery/success/{id}', ['as' => 'admin.gallery.success', 'uses' => 'Admin\AdminGalleryController@success']);
+	Route::post('/gallery/success/all/', ['as' => 'admin.gallery.success_all', 'uses' => 'Admin\AdminGalleryController@successAll']);
 	Route::get('/gallery/cancel/{id}', ['as' => 'admin.gallery.cancel', 'uses' => 'Admin\AdminGalleryController@cancel']);
 	Route::get('/gallery/delete/{id}', ['as' => 'admin.gallery.delete', 'uses' => 'Admin\AdminGalleryController@delete']);
+
 	
 	
 	/* Тарифы */
