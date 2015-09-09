@@ -5,6 +5,8 @@ use Auth;
 
 use Carbon\Carbon;
 use App\Pay;
+use App\Gallery;
+use App\Tarif;
 
 
 class Pay extends Model {
@@ -14,6 +16,19 @@ class Pay extends Model {
 	public function __construct(){
 		$this->error = array();
 	}
+	
+	
+	public function gallery()
+    {
+        return $this->belongsTo('App\Gallery');
+    }
+	
+	public function tarif()
+    {
+        return $this->hasOne('App\tarif');
+    }
+	
+	
 	
 	/*
 	* Создание заказа

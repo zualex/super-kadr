@@ -357,7 +357,13 @@ function paySite(el){
 			},
 			success: function(msg){
 				$(el).html(htmlOld);
-				console.log(msg);
+				var data = $.parseJSON(msg);
+				if(data.status == 'error'){alert(data.message);}
+				if(data.status == 'success'){
+					alert('Фотография успешно добавилась');
+					window.location.reload();
+				}	
+				//console.log(msg);
 			},
 			error: function(){
 				$(el).html(htmlOld);

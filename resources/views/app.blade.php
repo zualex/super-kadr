@@ -60,10 +60,11 @@ $(function(){
 		<div class="clear">
 			<div class="menu">
 				<ul>
-					<li class="active"><a href="{{ route('main') }}">Главная</a></li>
-					<li><a href="{{ route('gallery') }}">Галерея</a></li>
-					<li><a href="#">Условия</a></li>
-					<li><a href="#">Контакты</a></li>
+				
+					<li class="{{ Route::is('main') ? 'active' : '' }}"><a href="{{ route('main') }}">Главная</a></li>
+					<li class="{{ Route::is('gallery') ? 'active' : '' }} {{ Route::is('gallery.show') ? 'active' : '' }}"><a href="{{ route('gallery') }}">Галерея</a></li>
+					<li class="{{ Route::is('conditions') ? 'active' : '' }}"><a href="{{ route('conditions') }}">Условия</a></li>
+					<li class="{{ Route::is('contacts') ? 'active' : '' }}"><a href="{{ route('contacts') }}">Контакты</a></li>
 				</ul>
 			</div>
 			<div id="login">

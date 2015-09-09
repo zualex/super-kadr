@@ -34,7 +34,7 @@
 		<div class="wrap_comment"></div>
 		<script>showComment('{{ route('comment.index', $gallery->id) }}')</script>
 		
-		
+		<a name="comment"></a>
 		<div class="add-comments">
 			<div class="clear">
 				<div class="avatar">
