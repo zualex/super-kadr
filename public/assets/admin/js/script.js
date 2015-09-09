@@ -24,7 +24,7 @@ $(document).ready( function () {
 
 
 /* Одобрить заказы */
-function setSuccessGallery(url){
+function actionAll(url){
 	var data = $("#form-admin").serialize();
 	$.ajax({
 		url: url, 
@@ -43,5 +43,4 @@ function setSuccessGallery(url){
 			alert('Произошла ошибка');
 		}
 	});
-	
 }

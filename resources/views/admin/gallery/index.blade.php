@@ -7,13 +7,14 @@
 			<div class="title"><span>Заказы</span></div>
 			<div class="controls">
 				<div class="btn-group">
-					<a href="#" class="btn add" onclick="setSuccessGallery('{{ route('admin.gallery.success_all') }}')"><i class="fa pull-left fa-floppy-o"></i>Одобрить</a>
-					<a href="#" class="btn info" ><i class="fa pull-left fa-floppy-o"></i>На модерацию</a>
-					<a href="#" class="btn del" ><i class="fa pull-left fa-trash"></i>Удалить</a>
+					<a href="#" class="btn add" onclick="actionAll('{{ route('admin.gallery.success_all') }}')"><i class="fa pull-left fa-floppy-o"></i>Одобрить</a>
+					<a href="#" class="btn info" onclick="actionAll('{{ route('admin.gallery.moderation_all') }}')"><i class="fa pull-left fa-floppy-o"></i>На модерацию</a>
+					<a href="#" class="btn del" onclick="if(confirm('Вы действительно хотите удалить заказ?')){actionAll('{{ route('admin.gallery.delete_all') }}')}"><i class="fa pull-left fa-trash"></i>Удалить</a>
 				</div>
 			</div>
 		</div>
 	</div>
+
 	
 	
 	<div class="content-orders tab-block">

@@ -130,5 +130,60 @@ class AdminGalleryController extends Controller {
 		
 		return Response::json($res);
 	}
+	
+	/*
+	* Выставление статуса на модерацию для выбранных записей
+	*/
+	public function moderationAll()
+	{
+		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'moderation')->first();
+		$checkelement = Request::input('checkelement');
+		if(count($checkelement) > 0){
+			foreach($checkelement as $key => $value){
+				$this->changeStatus($value, $status_main->id);			//вызов функции которая по одной выставляет статус
+			}
+			
+			Session::flash('message', 'Заказы успешно отправлены на модерацию');
+			$res = array(
+				"status" => 'success',
+				"message" => 'Заказы успешно отправлены на модерацию'
+			);
+		}else{
+			$res = array(
+				"status" => 'error',
+				"message" => 'Не выбрано ни одного элемента'
+			);
+			
+		}
+		
+		return Response::json($res);
+	}
+	
+	/*
+	* Удаление заказов
+	*/
+	public function deleteAll(Gallery $modelGallery)
+	{
+		$checkelement = Request::input('checkelement');
+		if(count($checkelement) > 0){
+			foreach($checkelement as $key => $value){
+				$this->delete($modelGallery, $value);			//удаление одного заказа
+			}
+			
+			Session::flash('message', 'Заказы успешно удалены');
+			$res = array(
+				"status" => 'success',
+				"message" => 'Заказы успешно удалены'
+			);
+		}else{
+			$res = array(
+				"status" => 'error',
+				"message" => 'Не выбрано ни одного элемента'
+			);
+			
+		}
+		
+		return Response::json($res);
+	}
 
 }

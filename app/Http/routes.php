@@ -74,9 +74,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	/* Заказы */
 	Route::get('/gallery/', ['as' => 'admin.gallery.index', 'uses' => 'Admin\AdminGalleryController@index']);
 	Route::get('/gallery/success/{id}', ['as' => 'admin.gallery.success', 'uses' => 'Admin\AdminGalleryController@success']);
-	Route::post('/gallery/success/all/', ['as' => 'admin.gallery.success_all', 'uses' => 'Admin\AdminGalleryController@successAll']);
 	Route::get('/gallery/cancel/{id}', ['as' => 'admin.gallery.cancel', 'uses' => 'Admin\AdminGalleryController@cancel']);
 	Route::get('/gallery/delete/{id}', ['as' => 'admin.gallery.delete', 'uses' => 'Admin\AdminGalleryController@delete']);
+	
+	Route::post('/gallery/success/all/', ['as' => 'admin.gallery.success_all', 'uses' => 'Admin\AdminGalleryController@successAll']);
+	Route::post('/gallery/moderation/all/', ['as' => 'admin.gallery.moderation_all', 'uses' => 'Admin\AdminGalleryController@moderationAll']);
+	Route::post('/gallery/delete/all/', ['as' => 'admin.gallery.delete_all', 'uses' => 'Admin\AdminGalleryController@deleteAll']);
+	
 
 	
 	
