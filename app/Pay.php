@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Pay;
 use App\Gallery;
 use App\Tarif;
+use App\Monitor;
 
 
 class Pay extends Model {
@@ -25,10 +26,26 @@ class Pay extends Model {
 	
 	public function tarif()
     {
-        return $this->hasOne('App\tarif');
+        return $this->belongsTo('App\Tarif');
+    }
+	
+	public function monitor()
+    {
+        return $this->belongsTo('App\Monitor');
     }
 	
 	
+	
+	public function getAll(){
+		$pay = false;
+		$pay = $this
+			->with('tarif')
+			->with('monitor')
+			->orderBy('created_at')
+			->get();
+		//dd($pay);
+		return $pay;
+	}
 	
 	/*
 	* Создание заказа

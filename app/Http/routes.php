@@ -85,7 +85,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	
 	
 	/* Тарифы */
-	Route::resource('/tarif', 'Admin\AdminTarifController', array('names' => array(
+	/*Route::resource('/tarif', 'Admin\AdminTarifController', array('names' => array(
 		'index' => 'admin.tarif.index',
 		'create' => 'admin.tarif.create',
 		'store' => 'admin.tarif.store',
@@ -93,7 +93,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 		'edit' => 'admin.tarif.edit',
 		'update' => 'admin.tarif.update',
 		'destroy' => 'admin.tarif.destroy',
-	)));
+	)));*/
 	
 	/* Транзакции */
 	Route::resource('/pay', 'Admin\AdminPayController', array('names' => array(

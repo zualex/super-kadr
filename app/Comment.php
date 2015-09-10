@@ -37,6 +37,9 @@ class Comment extends Model {
 		$res = array();
 		if(Auth::check() AND $gallery_id != ''  AND $comment != ''){
 			
+			/* Удаляем все тэги кроме */
+			$comment = strip_tags($comment, '<div><br>');
+			
 			$newComment = new Comment;
 			$newComment->gallery_id = $gallery_id;
 			$newComment->user_id = Auth::user()->id;

@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
+use App\Pay;
+
 class AdminPayController extends Controller {
 
 	/**
@@ -12,9 +14,10 @@ class AdminPayController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(Pay $payModel)
 	{
-		return view('admin.pay.index');
+		$pay = $payModel->getAll();
+		return view('admin.pay.index')->with('pay', $pay);
 	}
 
 	/**
