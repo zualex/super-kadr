@@ -169,6 +169,8 @@ class GalleryController extends Controller {
 		$paramGallery = array(
 			'monitor' => Request::input('monitor'),
 			'image' => Request::input('image'),
+			'tarif' => Request::input('tarif'),
+			'dateShow' => Request::input('dateShow'),
 		);		
 		//Создание галереи
 		$gallery = $galleryModel->createGallery($paramGallery);
@@ -177,8 +179,6 @@ class GalleryController extends Controller {
 			$param = array(
 				'gallery_id' => $gallery->id,
 				'tarif' => Request::input('tarif'),
-				'monitor' => Request::input('monitor'),
-				'dateShow' => Request::input('dateShow'),
 			);	
 			$pay = $payModel->createPay($param);
 		}

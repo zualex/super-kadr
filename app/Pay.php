@@ -24,23 +24,13 @@ class Pay extends Model {
         return $this->belongsTo('App\Gallery');
     }
 	
-	public function tarif()
-    {
-        return $this->belongsTo('App\Tarif');
-    }
-	
-	public function monitor()
-    {
-        return $this->belongsTo('App\Monitor');
-    }
 	
 	
 	
 	public function getAll(){
 		$pay = false;
 		$pay = $this
-			->with('tarif')
-			->with('monitor')
+			->where('visible', '=', '1')
 			->orderBy('created_at')
 			->get();
 		//dd($pay);
@@ -51,21 +41,14 @@ class Pay extends Model {
 	* Создание заказа
 	*	'gallery_id' 
 	*	'tarif' 
-	*	'monitor'
-	*	'dateShow'
 	*/
 	public function createPay($param){
 		$pay = false;
 		if(!array_key_exists('gallery_id', $param)){$param['gallery_id'] = '';}
 		if(!array_key_exists('tarif', $param)){$param['tarif'] = '';}
-		if(!array_key_exists('monitor', $param)){$param['monitor'] = '';}
-		if(!array_key_exists('dateShow', $param)){$param['dateShow'] = '';}
-		
 		
 		if($param['gallery_id'] == ''){$this->error[] = 'Нет идентификатора галлереи';}
 		if($param['tarif'] == ''){$this->error[] = 'Не выбран тариф';}
-		if($param['monitor'] == ''){$this->error[] = 'Не выбран экран';}
-		if($param['dateShow'] == ''){$this->error[] = 'Не выбрана дата и начало паказа';}
 		if(!Auth::check()){$this->error[] = 'Необходимо авторизоваться';}
 		
 		
@@ -83,9 +66,6 @@ class Pay extends Model {
 			$pay->status_pay = $status_pay->id;
 			$pay->name = "Пользователь: ".Auth::user()->id." сделал заказ";
 			$pay->price = $tarif->price;
-			$pay->date_show = Carbon::createFromFormat('H:i d.m.Y', $param['dateShow']);
-			$pay->tarif_id = $param['tarif'];
-			$pay->monitor_id = $param['monitor'];
 			$pay->save();
 		}
 

@@ -170,14 +170,20 @@ class Gallery extends Model {
 	* Создание галереи
 	*	'monitor'
 	*	'image'
+	*	'tarif'
+	*	'dateShow'
 	*/
 	public function createGallery($param){
 		$gallery = false;
 		if(!array_key_exists('monitor', $param)){$param['monitor'] = '';}
 		if(!array_key_exists('image', $param)){$param['image'] = '';}
+		if(!array_key_exists('tarif', $param)){$param['tarif'] = '';}
+		if(!array_key_exists('dateShow', $param)){$param['dateShow'] = '';}
 		
 		if($param['monitor'] == ''){$this->error[] = 'Не выбран экран';}
 		if($param['image'] == ''){$this->error[] = 'Не загружено фото';}
+		if($param['tarif'] == ''){$this->error[] = 'Не выбран тариф';}
+		if($param['dateShow'] == ''){$this->error[] = 'Не выбрана дата и начало паказа';}
 		if(!Auth::check()){$this->error[] = 'Необходимо авторизоваться';}
 		
 		//Проверка наличия файла	
@@ -207,7 +213,9 @@ class Gallery extends Model {
 			$gallery->user_id = Auth::user()->id;
 			$gallery->status_main = $status_main->id;
 			$gallery->status_order = $status_order->id;
-			$gallery->status_order = $status_order->id;
+			$gallery->date_show = Carbon::createFromFormat('H:i d.m.Y', $param['dateShow']);
+			$gallery->tarif_id = $param['tarif'];
+			$gallery->monitor_id = $param['monitor'];
 			$gallery->save();
 			
 			$galleryId = $gallery->id;
@@ -262,10 +270,10 @@ class Gallery extends Model {
 	
 	public function queryAdminGallery($status){
 		$gallery =$this
-				->select(DB::raw('galleries.*, pays.id as pay_id, pays.date_show, pays.price, tarifs.name as tarif_name, tarifs.hours, tarifs.interval_sec, statuses.name as status_name, statuses.caption as status_caption'))
+				->select(DB::raw('galleries.*, pays.id as pay_id, pays.price, tarifs.name as tarif_name, tarifs.hours, tarifs.interval_sec, statuses.name as status_name, statuses.caption as status_caption'))
 				->join('statuses', 'statuses.id', '=', 'galleries.status_order')
-				->join('pays', 'pays.gallery_id', '=', 'galleries.id')
-				->join('tarifs', 'tarifs.id', '=', 'pays.tarif_id')
+				->leftJoin('pays', 'pays.gallery_id', '=', 'galleries.id')
+				->join('tarifs', 'tarifs.id', '=', 'galleries.tarif_id')
 				->where('galleries.status_main', '=', $status)
 				->orderBy('galleries.created_at', 'desc')
 				->get();
