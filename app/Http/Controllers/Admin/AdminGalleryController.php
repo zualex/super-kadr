@@ -3,10 +3,13 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Illuminate\Http\Request;
+
 
 use Session;
 use File;
+use Response;
+use Request;
+use Input;
 
 use App\Gallery;
 use App\Status;
@@ -65,8 +68,6 @@ class AdminGalleryController extends Controller {
 		return $gallery;
 	}
 	
-
-
 	/*
 	* Удаление заказа
 	*/
@@ -100,6 +101,89 @@ class AdminGalleryController extends Controller {
 		 
 		Session::flash('message', 'Заказ удален');
 		return redirect()->route('admin.gallery.index');
+	}
+	
+	/*
+	* Выставление статуса одобрена для выбранных записей
+	*/
+	public function successAll()
+	{
+		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
+		$checkelement = Request::input('checkelement');
+		if(count($checkelement) > 0){
+			foreach($checkelement as $key => $value){
+				$this->changeStatus($value, $status_main->id);			//вызов функции которая по одной выставляет статус
+			}
+			
+			Session::flash('message', 'Заказы одобрены');
+			$res = array(
+				"status" => 'success',
+				"message" => 'Заказы одобрены'
+			);
+		}else{
+			$res = array(
+				"status" => 'error',
+				"message" => 'Не выбрано ни одного элемента'
+			);
+			
+		}
+		
+		return Response::json($res);
+	}
+	
+	/*
+	* Выставление статуса на модерацию для выбранных записей
+	*/
+	public function moderationAll()
+	{
+		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'moderation')->first();
+		$checkelement = Request::input('checkelement');
+		if(count($checkelement) > 0){
+			foreach($checkelement as $key => $value){
+				$this->changeStatus($value, $status_main->id);			//вызов функции которая по одной выставляет статус
+			}
+			
+			Session::flash('message', 'Заказы успешно отправлены на модерацию');
+			$res = array(
+				"status" => 'success',
+				"message" => 'Заказы успешно отправлены на модерацию'
+			);
+		}else{
+			$res = array(
+				"status" => 'error',
+				"message" => 'Не выбрано ни одного элемента'
+			);
+			
+		}
+		
+		return Response::json($res);
+	}
+	
+	/*
+	* Удаление заказов
+	*/
+	public function deleteAll(Gallery $modelGallery)
+	{
+		$checkelement = Request::input('checkelement');
+		if(count($checkelement) > 0){
+			foreach($checkelement as $key => $value){
+				$this->delete($modelGallery, $value);			//удаление одного заказа
+			}
+			
+			Session::flash('message', 'Заказы успешно удалены');
+			$res = array(
+				"status" => 'success',
+				"message" => 'Заказы успешно удалены'
+			);
+		}else{
+			$res = array(
+				"status" => 'error',
+				"message" => 'Не выбрано ни одного элемента'
+			);
+			
+		}
+		
+		return Response::json($res);
 	}
 
 }

@@ -6,10 +6,15 @@
 	{!! HTML::style('/assets/admin/css/styles.css') !!}
 	{!! HTML::style('/assets/admin/css/fonts.css') !!}
 	
-	
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	
+	{!! HTML::style('/assets/admin/lib/fancybox/jquery.fancybox.css') !!}
+	{!! HTML::style('/assets/admin/lib/fancybox/helpers/jquery.fancybox-thumbs.css') !!}
+	{!! HTML::script('/assets/admin/lib/fancybox/jquery.fancybox.pack.js') !!}
+	{!! HTML::script('/assets/admin/lib/fancybox/helpers/jquery.fancybox-thumbs.min.js') !!}
+	
 	{!! HTML::script('/assets/admin/js/script.js') !!}
 	<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
 </head>
@@ -35,7 +40,6 @@
 	<div id="menu" class="menu-panel">
 		<ul>
 			<li class="{{ Route::is('admin.gallery.index') ? 'active' : '' }}"><a href="{{ route('admin.gallery.index') }}"><i class="fa pull-left fa-credit-card"></i>Заказы</a></li>
-			<li class="{{ Route::is('admin.tarif.index') ? 'active' : '' }}"><a href="{{ route('admin.tarif.index') }}"><i class="fa pull-left fa-rub"></i>Тарифы</a></li>
 			<li class="{{ Route::is('admin.pay.index') ? 'active' : '' }}"><a href="{{ route('admin.pay.index') }}"><i class="fa pull-left fa-exchange"></i>Транзакции</a></li>
 			<li class="{{ Route::is('admin.playlist.index') ? 'active' : '' }}"><a href="{{ route('admin.playlist.index') }}"><i class="fa pull-left fa-tasks"></i>Плейлисты</a></li>
 			<li class="{{ Route::is('admin.setting.index') ? 'active' : '' }}"><a href="{{ route('admin.setting.index') }}"><i class="fa pull-left fa-wrench"></i>Настройки</a></li>

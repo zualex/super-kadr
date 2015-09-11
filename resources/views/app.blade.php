@@ -105,5 +105,16 @@ $(function(){
 			<a href="http://sirene.ru/" title="Интерне-агенство СИРЕНА"><span>Разработка сайта СИРЕНА AGENCY</span><img src="/img/sirene.svg" alt="Интерне-агенство СИРЕНА"></a>
 		</div>
 	</footer>
+	
+	
+	@if (Session::has('message'))
+		<script>
+			alert('{{ Session::get('message') }}');
+		</script>
+	@endif
+		
+		
+	
+	
 </body>
 </html>

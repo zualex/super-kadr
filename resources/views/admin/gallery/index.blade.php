@@ -7,13 +7,14 @@
 			<div class="title"><span>Заказы</span></div>
 			<div class="controls">
 				<div class="btn-group">
-					<a href="" class="btn add"><i class="fa pull-left fa-floppy-o"></i>Одобрить</a>
-					<a href="" class="btn info"><i class="fa pull-left fa-floppy-o"></i>На модерацию</a>
-					<a href="" class="btn del"><i class="fa pull-left fa-trash"></i>Удалить</a>
+					<a href="#" class="btn add" onclick="actionAll('{{ route('admin.gallery.success_all') }}')"><i class="fa pull-left fa-floppy-o"></i>Одобрить</a>
+					<a href="#" class="btn info" onclick="actionAll('{{ route('admin.gallery.moderation_all') }}')"><i class="fa pull-left fa-floppy-o"></i>На модерацию</a>
+					<a href="#" class="btn del" onclick="if(confirm('Вы действительно хотите удалить заказ?')){actionAll('{{ route('admin.gallery.delete_all') }}')}"><i class="fa pull-left fa-trash"></i>Удалить</a>
 				</div>
 			</div>
 		</div>
 	</div>
+
 	
 	
 	<div class="content-orders tab-block">
@@ -30,7 +31,7 @@
 			<div class="alert alert-info">{{ Session::get('message') }}</div>
 		@endif
 		
-		<form id="form-admin" role="form" method="POST" action="{{ route('admin.gallery.update') }}">
+		<form id="form-admin" role="form" method="POST" >
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		
 		<div class="box-content">
@@ -53,10 +54,14 @@
 						@foreach($data['galleryModeration'] as $key => $value)
 							<tr>
 								<td class="center col-1">
-									<input type="checkbox" name="checkelement[]" value="">
+									<input type="checkbox" name="checkelement[]" value="{{ $value->id }}">
 								</td>
 								<td class="center col-2">{{ $value->id }}</td>
-								<td class="center col-3"><img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt=""></td>
+								<td class="center col-3">
+									<a href="{{ $data['pathImages'].'/o_'.$value->src }}" rel="group1" class="modalbox">
+										<img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt="">
+									</a>
+								</td>
 								<td>Изображение будет показано {{ $value->hours*60*60/$value->interval_sec }} раз в течение {{ $value->hours }} часа<br>Начало показа {{ $value->date_show }}</td>
 								<td class="col-4">AA{{ $value->pay_id }}</td>
 								<td class="col-4">{{ $value->tarif_name }}</td>
@@ -103,10 +108,14 @@
 						@foreach($data['gallerySuccess'] as $key => $value)
 							<tr>
 								<td class="center col-1">
-									<input type="checkbox" name="checkelement[]" value="">
+									<input type="checkbox" name="checkelement[]" value="{{ $value->id }}">
 								</td>
 								<td class="center col-2">{{ $value->id }}</td>
-								<td class="center col-3"><img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt=""></td>
+								<td class="center col-3">
+									<a href="{{ $data['pathImages'].'/o_'.$value->src }}" rel="group2" class="modalbox">
+										<img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt="">
+									</a>
+								</td>
 								<td>Изображение будет показано {{ $value->hours*60*60/$value->interval_sec }} раз в течение {{ $value->hours }} часа<br>Начало показа {{ $value->date_show }}</td>
 								<td class="col-4">AA{{ $value->pay_id }}</td>
 								<td class="col-4">{{ $value->tarif_name }}</td>
@@ -157,10 +166,14 @@
 						@foreach($data['galleryCancel'] as $key => $value)
 							<tr>
 								<td class="center col-1">
-									<input type="checkbox" name="checkelement[]" value="">
+									<input type="checkbox" name="checkelement[]" value="{{ $value->id }}">
 								</td>
 								<td class="center col-2">{{ $value->id }}</td>
-								<td class="center col-3"><img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt=""></td>
+								<td class="center col-3">
+									<a href="{{ $data['pathImages'].'/o_'.$value->src }}" rel="group3" class="modalbox">
+										<img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt="">
+									</a>
+								</td>
 								<td>Изображение будет показано {{ $value->hours*60*60/$value->interval_sec }} раз в течение {{ $value->hours }} часа<br>Начало показа {{ $value->date_show }}</td>
 								<td class="col-4">AA{{ $value->pay_id }}</td>
 								<td class="col-4">{{ $value->tarif_name }}</td>

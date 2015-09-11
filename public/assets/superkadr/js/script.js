@@ -320,8 +320,7 @@ function paySite(el){
 				var data = $.parseJSON(msg);
 				if(data.status == 'error'){alert(data.message);}
 				if(data.status == 'success'){
-					alert('Фотография успешно добавлена');
-					window.location.reload();
+					window.location.href=data.message;
 				}	
 				//console.log(msg);
 			},
