@@ -134,34 +134,30 @@ header>div .logo img{display:block;width:100%;}
 .wrapper #upload .body .stand:after{content:'';display:block;position:absolute;bottom:0;left:0;right:0;height:15px;background-color:#fff;border-radius:10px;}
 
 .wrapper #schedule>.body{padding:40px 20px;}
-.wrapper #schedule>.body .tariff{background-color:#C4C9E7;float:left;width:300px;margin-right:-300px;position:relative;}
+.wrapper #schedule>.body .tariffs{position:relative;}
+.wrapper #schedule>.body .tariffs:after{content:'';display:table;clear:both;}
+.wrapper #schedule>.body .tariff{background-color:#C4C9E7;float:left;width:calc((100% - 60px)/3);margin-right:30px;position:relative;}
+.wrapper #schedule>.body .tariff:last-child{margin-right:0;}
 .wrapper #schedule>.body .tariff .header{background-color:#3E50B4;padding: 15px 0;text-align:center;}
 .wrapper #schedule>.body .tariff .header span{color:#fff;font-size:1.3em;}
-.wrapper #schedule>.body .tariff .switch{background-color:#3E50B4;padding: 10px 0 20px;position:relative;}
-.wrapper #schedule>.body .tariff .switch .label{padding: 0 40px;text-align:center;}
-.wrapper #schedule>.body .tariff .switch .controls>div{cursor:pointer;position:absolute;color:#fff;top: 10px;bottom: 20px;padding: 13px 0;width: 40px;text-align: center;}
-.wrapper #schedule>.body .tariff .switch .controls .nav-left{
-    left: 0;
-}
-.wrapper #schedule>.body .tariff .switch .controls .nav-right{
-    right: 0;
-}
-.wrapper #schedule>.body .tariff .switch span{color:#fff;font-family:'SegoeUIBold';text-transform:uppercase;font-size:2.3em;}
+.wrapper #schedule>.body .tariff .header .title{display:block;text-align:center;text-transform:uppercase;font-family:'SegoeUIBold';font-size:1.5em;}
 .wrapper #schedule>.body .tariff .info{text-align:center;padding-top: 35px;}
 .wrapper #schedule>.body .tariff .info span{color:#2F3D9E;}
 .wrapper #schedule>.body .tariff .info .views-num{font-size:2.5em;}
 .wrapper #schedule>.body .tariff .info num{font-weight:bold;}
 .wrapper #schedule>.body .tariff .info .duration{font-size:1.6em;}
-.wrapper #schedule>.body .tariff .info .price{font-size:2.2em;font-family:'SegoeUIBold';margin-top: 33px;}
-.wrapper #schedule>.body .tariff .monitor{padding: 40px 0 0;}
-.wrapper #schedule>.body .tariff .monitor select{width:100%;border:0;outline:none;background-color:#3E50B4;color:#fff;height: 60px;padding-left: 100px;font-size: 1.6em;font-family:'SegoeUIBold';text-transform:uppercase;}
-.wrapper #schedule>.body .tariff .pay{background-color:#FE5252;}
-.wrapper #schedule>.body .tariff .pay a{position:relative;height: 67px;display:block;padding:15px 0;text-align:center;font-size:2em;color:#fff;font-family:'SegoeUIBold';text-transform:uppercase;}
+.wrapper #schedule>.body .tariff .info .price{font-size:2.2em;font-family:'SegoeUIBold';margin: 15px 0 20px;}
+.wrapper #schedule>.body .tariffs .button{background-color:#FE5252;}
+.wrapper #schedule>.body .tariffs .button .select{position:relative;height: 67px;display:block;padding:15px 0;text-align:center;font-size:2em;color:#fff;font-family:'SegoeUIBold';text-transform:uppercase;cursor:pointer;}
+.wrapper #schedule>.body .monitor{margin: 20px auto;width:calc((100% - 60px)/2);}
+.wrapper #schedule>.body .monitor select{width:100%;border:0;outline:none;background-color:#3E50B4;color:#fff;height: 60px;padding-left: 220px;font-size: 1.6em;font-family:'SegoeUIBold';text-transform:uppercase;}
 
-.wrapper #schedule>.body .schedule-block{float:left;width:100%;float:left;padding-left:300px;background-color:#BFBFBF;}
+.wrapper #schedule>.body .schedule-block{background-color:#BFBFBF;}
 .wrapper #schedule>.body .schedule-block .content>.header{padding:10px 20px;background-color:#3E50B4;}
 .wrapper #schedule>.body .schedule-block .content>.header span{color:#fff;font-size:1.3em;}
 .wrapper #schedule>.body .schedule-block .time-list{padding: 20px 20px 0;}
+.wrapper #schedule>.body .schedule-block .pay{background-color:#FE5252;}
+.wrapper #schedule>.body .schedule-block .pay a{position:relative;height: 67px;display:block;padding:15px 0;text-align:center;font-size:2em;color:#fff;font-family:'SegoeUIBold';text-transform:uppercase;}
 
 .wrapper #social{}
 .wrapper #social>.body{padding: 20px 0 40px;}

@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Вход в панель управления</title>
+	<title>Авторизация на сайте</title>
 	{!! HTML::style('/assets/admin/css/styles.css') !!}
 	{!! HTML::style('/assets/admin/css/fonts.css') !!}
 	{!! HTML::style('/assets/admin/css/datetimepicker.css') !!}
@@ -10,7 +10,7 @@
 <body class="auth">
 	<div id="auth" class="login-block">
 		<div>
-			<div class="logo"><span><b>Панель</b>Управления</span></div>
+			<div class="logo"><span><b>Авторизация</b>на сайте</span></div>
 			
 			@if (count($errors) > 0)
 				<div class="alert alert-danger">

@@ -101,38 +101,31 @@
 		</div>
 		<div id="schedule" class="block color-1">
 			<div class="body clear">
-				<div class="tariff" data-url = "{{ route('gallery.create') }}" data-tarif = "" data-monitor = "" data-dateShow = "" data-image = "">
-					<div class="header"><span>тариф</span></div>
-					<div class="switch">
-					
-						@foreach($data['tarifs'] as $key => $value)
-							<input type="hidden" name="tarif_id" value="{{ $value->name }}">
-							<div class="label item_{{ $value->id }} hidden" data-tarif = "{{ $value->id }}"><span>{{ $value->name }}</span></div>
-						@endforeach
-						
-							<div class="controls">
-								<div class="nav-left"><i class="fa fa-chevron-left"></i></div>
-								<div class="nav-right"><i class="fa fa-chevron-right"></i></div>
-							</div>
-					</div>
+				<div class="tariffs" data-url = "{{ route('gallery.create') }}" data-tariff = "" data-monitor = "" data-dateShow = "" data-image = "">
 					@foreach($data['tarifs'] as $key => $value)
-						<div class="info info_{{ $value->id }} hidden">
+					<div class="tariff">
+						<div class="header">
+							<span>тариф</span>
+							<input type="hidden" name="tarif_id" value="{{ $value->name }}">
+							<span class="title">{{ $value->name }}</span>
+						</div>
+						<div class="info info_{{ $value->id }}">
 							<div class="views-num"><span>{{ $value->desc_main }}</span></div>
 							<div class="duration"><span>{{ $value->desc_dop }}</span></div>
 							<div class="price"><span>{{ $value->price }}<i class="fa pull-right fa-rub"></i></span></div>
 						</div>
+						<div class="button">
+							<div class="select" tariff-id="{{ $value->id }}"><span>Выбрать</span></div>
+						</div>
+					</div>
 					@endforeach
-					
-					<div class="monitor">
-						<select name="monitor">
-							@foreach($data['paramMonitor'] as $key => $value)
-								 <option value="{{ $value['id'] }}">Экран {{ $value['number'] }}</option>
-							@endforeach	
-						</select>
-					</div>
-					<div class="pay">
-						<a href="#" title="Оплатить заказ" onclick="paySite(this);return false;"><i class="fa pull-left fa-credit-card"></i><span>Оплатить</a>
-					</div>
+				</div>
+				<div class="monitor">
+					<select name="monitor">
+						@foreach($data['paramMonitor'] as $key => $value)
+							 <option value="{{ $value['id'] }}">Экран {{ $value['number'] }}</option>
+						@endforeach	
+					</select>
 				</div>
 				<div class="schedule-block">
 					<div class="content">
@@ -145,6 +138,10 @@
 								{!! $data['dateContent'] !!}
 							</div>
 						</div>
+					</div>
+					
+					<div class="pay">
+						<a href="#" title="Оплатить заказ" onclick="paySite(this);return false;"><i class="fa pull-left fa-credit-card"></i><span>Оплатить</a>
 					</div>
 				</div>
 			</div>

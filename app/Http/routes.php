@@ -34,6 +34,12 @@ Route::get('/comment/{gallery_id}', ['as' => 'comment.index', 'uses' => 'Comment
 Route::post('/comment/save', ['as' => 'comment.save', 'uses' => 'CommentController@save']);					//Сохранение комментария
 
 
+Route::get('/pay/index', ['as' => 'pay.index', 'uses' => 'PayController@index']);					//Отправка данных для оплаты
+Route::get('/pay/result', ['as' => 'pay.result', 'uses' => 'PayController@result']);				//Result Url
+Route::get('/pay/success', ['as' => 'pay.success', 'uses' => 'PayController@success']);	//Success Url
+Route::get('/pay/fail', ['as' => 'pay.fail', 'uses' => 'PayController@fail']);	//Fail Url
+
+
 
 /*
 * Auth admin
@@ -72,16 +78,20 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	
 	
 	/* Заказы */
-	Route::resource('/gallery', 'Admin\AdminGalleryController', array('names' => array(
-		'index' => 'admin.gallery.index'
-	)));
+	Route::get('/gallery/', ['as' => 'admin.gallery.index', 'uses' => 'Admin\AdminGalleryController@index']);
 	Route::get('/gallery/success/{id}', ['as' => 'admin.gallery.success', 'uses' => 'Admin\AdminGalleryController@success']);
 	Route::get('/gallery/cancel/{id}', ['as' => 'admin.gallery.cancel', 'uses' => 'Admin\AdminGalleryController@cancel']);
 	Route::get('/gallery/delete/{id}', ['as' => 'admin.gallery.delete', 'uses' => 'Admin\AdminGalleryController@delete']);
 	
+	Route::post('/gallery/success/all/', ['as' => 'admin.gallery.success_all', 'uses' => 'Admin\AdminGalleryController@successAll']);
+	Route::post('/gallery/moderation/all/', ['as' => 'admin.gallery.moderation_all', 'uses' => 'Admin\AdminGalleryController@moderationAll']);
+	Route::post('/gallery/delete/all/', ['as' => 'admin.gallery.delete_all', 'uses' => 'Admin\AdminGalleryController@deleteAll']);
+	
+
+	
 	
 	/* Тарифы */
-	Route::resource('/tarif', 'Admin\AdminTarifController', array('names' => array(
+	/*Route::resource('/tarif', 'Admin\AdminTarifController', array('names' => array(
 		'index' => 'admin.tarif.index',
 		'create' => 'admin.tarif.create',
 		'store' => 'admin.tarif.store',
@@ -89,7 +99,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 		'edit' => 'admin.tarif.edit',
 		'update' => 'admin.tarif.update',
 		'destroy' => 'admin.tarif.destroy',
-	)));
+	)));*/
 	
 	/* Транзакции */
 	Route::resource('/pay', 'Admin\AdminPayController', array('names' => array(

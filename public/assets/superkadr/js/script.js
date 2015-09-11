@@ -233,55 +233,15 @@ $(document).ready( function () {
 	
 	
 	
-	
-	
-	/*
-	*	Показываем первый тариф
-	*/
-	$('.tariff').find('.label').each(function(i){
-		if(i == 0){
-			tarif = $(this).attr('data-tarif');
-			$(this).removeClass('hidden');
-			$('.tariff').attr('data-tarif', tarif);
-			$('.tariff').find('.info_'+tarif).removeClass('hidden');
-		}
-	});
-	
 	/*
 	*	Переключение тарифов
 	*/
-	$('.tariff').on('click', '.controls .nav-left', function() {changeTarif(-1)});
-	$('.tariff').on('click', '.controls .nav-right', function() {changeTarif(1)});
+	$('.tariffs').on('click', '.tariff .select', function() {changeTarif($(this).attr('tariff-id'))});
 	function changeTarif(cnt){
-		var arrTarif = [];
-		var nowTarif = $('.tariff').attr('data-tarif');
-		var nextTarif = 0;
+		var tariff = cnt;
 		
-		$('.tariff').find('.label').each(function(i){
-			arrTarif.push($(this).attr('data-tarif'));
-		});
-		var arrLen = arrTarif.length;
-		for(i = 0; arrLen > i; i++){
-			if(arrTarif[i] == nowTarif){
-				nextIndex = i+cnt;
-				//console.log('nextIndex: '+nextIndex);
-				if(nextIndex >= arrLen){nextIndex = 0;}
-				if(nextIndex < 0){nextIndex = arrLen-1;}
-				nextTarif = arrTarif[nextIndex]
-			}
-		}
-		
-		//console.log('Текущий тариф: '+nowTarif);
-		//console.log('Следующий тариф: '+nextTarif);
-		
-		
-		$('.tariff').attr('data-tarif', nextTarif);
-		$('.tariff').find('.item_'+nowTarif).addClass('hidden');
-		$('.tariff').find('.info_'+nowTarif).addClass('hidden');
-		$('.tariff').find('.item_'+nextTarif).removeClass('hidden');
-		$('.tariff').find('.info_'+nextTarif).removeClass('hidden');
+		$('.tariffs').attr('data-tariff', tariff);
 
-		
 	}
 	
 	
@@ -290,7 +250,7 @@ $(document).ready( function () {
 	*/
 	var nowMonitor = $('.monitor select').val();
 	$('#monitor-change-class').addClass('activeMonitor_'+nowMonitor);
-	$('.tariff').attr('data-monitor', nowMonitor);
+	$('.tariffs').attr('data-monitor', nowMonitor);
 	croppic.options.cropData.monitor = nowMonitor;
 
 	
@@ -298,9 +258,9 @@ $(document).ready( function () {
 	*	Переключение экранов
 	*/
 	$('.monitor select').change(function() {
-		oldMonitor = $('.tariff').attr('data-monitor');
+		oldMonitor = $('.tariffs').attr('data-monitor');
 		newMonitor = $(this).val();
-		$('.tariff').attr('data-monitor', newMonitor);
+		$('.tariffs').attr('data-monitor', newMonitor);
 		croppic.options.cropData.monitor = newMonitor;
 
 		
@@ -324,7 +284,7 @@ $(document).ready( function () {
 		$(this).addClass('select');
 		
 		dateShow = $(this).attr('data-time');
-		$('.tariff').attr('data-dateShow', dateShow);
+		$('.tariffs').attr('data-dateShow', dateShow);
 	});
 	
 	
@@ -335,9 +295,9 @@ $(document).ready( function () {
 *	Оплата
 */
 function paySite(el){
-	var selector = $('.tariff');
+	var selector = $('.tariffs');
 	var url = selector.attr('data-url');
-	var tarif = selector.attr('data-tarif');
+	var tarif = selector.attr('data-tariff');
 	var monitor = selector.attr('data-monitor');
 	var dateShow = selector.attr('data-dateShow');
 	var image = selector.attr('data-image');
@@ -360,7 +320,7 @@ function paySite(el){
 				var data = $.parseJSON(msg);
 				if(data.status == 'error'){alert(data.message);}
 				if(data.status == 'success'){
-					alert('Фотография успешно добавилась');
+					alert('Фотография успешно добавлена');
 					window.location.reload();
 				}	
 				//console.log(msg);
@@ -375,7 +335,7 @@ function paySite(el){
 		if(url == ''){err += 'Не задан url оплаты\n';}
 		if(tarif == ''){err += 'Не выбран тариф\n';}
 		if(monitor == ''){err += 'Не выбран экран\n';}
-		if(dateShow == ''){err += 'Не выбрана дата и начало паказа\n';}
+		if(dateShow == ''){err += 'Не выбраны дата и начало паказа\n';}
 		if(image == ''){err += 'Не загружено фото\n';}
 		
 		if(err){alert(err);}
