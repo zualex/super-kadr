@@ -10,19 +10,21 @@ use Redirect;
 use Auth;
 use App\Pay;
 use App\Gallery;
+use App\Status;
 
 class PayController extends Controller {
 
 	
 	public function conditions($gallery_id)
 	{
+	
 		$gallery = Gallery::where('id', '=', $gallery_id)->first();
 		if($gallery->user_id != Auth::user()->id){
 			Session::flash('message', 'Вы не можете оплатить так как заказ не ваш');
 			 return redirect()->route('main');
 		}
 		
-		return view('pages.conditions.pay')->with('gallery_id', $gallery_id);
+		return view('pages.pay.conditions')->with('gallery_id', $gallery_id);
 	}
 	
 	
@@ -45,8 +47,9 @@ class PayController extends Controller {
 		$out_summ = $pay->price;
 		$in_curr = "";
 		$culture = "ru";
+		$Shp_user = $gallery->user_id;
 		
-		$crc  = md5("$mrh_login:$out_summ:$inv_id:$mrh_pass1");
+		$crc  = md5("$mrh_login:$out_summ:$inv_id:$mrh_pass1:Shp_user=$Shp_user");
 		
 		$url = 'https://merchant.roboxchange.com/Index.aspx';
 		if(env('ROBOKASSA_TEST')){
@@ -62,6 +65,7 @@ class PayController extends Controller {
 			'SignatureValue' => $crc,
 			'IncCurrLabel' => $in_curr,
 			'Culture' => $culture,
+			'Shp_user' => $Shp_user,
 		));
 
 		return Redirect::to($url.'?'.$query);
@@ -76,19 +80,20 @@ class PayController extends Controller {
 		
 		$out_summ = $_REQUEST["OutSum"];
 		$inv_id = $_REQUEST["InvId"];
+		$Shp_user = $_REQUEST["Shp_user"];
 		$crc = $_REQUEST["SignatureValue"];
 		$crc = strtoupper($crc);
 		
-		$my_crc = strtoupper(md5("$out_summ:$inv_id:$mrh_pass2"));
+		$my_crc = strtoupper(md5("$out_summ:$inv_id:$mrh_pass2:Shp_user=$Shp_user"));
 		
 		if ($my_crc !=$crc){
 			return "bad sign\n";
 			exit();
 		}
 		
-		
+		/* Смена статуса на оплачен */
 		$status_pay = Status::where('type_status', '=', 'pay')->where('caption', '=', 'paid')->first();
-		$pay = Pay::where('id', '=', $inv_id)->first();
+		$pay = Pay::find($inv_id);
 		$pay->status_pay = $status_pay->id;
 		$pay->save();
 		
@@ -96,7 +101,7 @@ class PayController extends Controller {
 		
 		$f=@fopen(base_path()."/public/pay/order.txt","a+") or
 				  die("error");
-		fputs($f,"order_num :$inv_id;Summ :$out_summ;Date :$date\n");
+		fputs($f,"order_num :$inv_id;Summ :$out_summ;Date :$date;User :$Shp_user\n");
 		fclose($f);
 
 		
@@ -110,15 +115,18 @@ class PayController extends Controller {
 		$mrh_pass1 = env('ROBOKASSA_PASSWORD_1');
 		$out_summ = $_REQUEST["OutSum"];
 		$inv_id = $_REQUEST["InvId"];
+		$Shp_user = $_REQUEST["Shp_user"];
 		$crc = $_REQUEST["SignatureValue"];
 		$crc = strtoupper($crc);
 
-		$my_crc = strtoupper(md5("$out_summ:$inv_id:$mrh_pass1"));
+		$my_crc = strtoupper(md5("$out_summ:$inv_id:$mrh_pass1:Shp_user=$Shp_user"));
 		
 		if ($my_crc != $crc){
 			return "bad sign\n";
 			exit();
 		}
+		
+		$result = "Произошла ошибка";
 		
 		$f=@fopen(base_path()."/public/pay/order.txt","a+") or die("error");
 		while(!feof($f)){
@@ -126,20 +134,34 @@ class PayController extends Controller {
 
 			$str_exp = explode(";", $str);
 			if ($str_exp[0]=="order_num :$inv_id"){ 
-				return "Операция прошла успешно\n";
+				$result = "Операция прошла успешно";
 			}
 		}
 		fclose($f);
 		
-		return "Произошла ошибка\n";
+		return view('pages.pay.success')->with('result', $result);
 	}
 	
 	
 	
 	public function fail()
 	{
+		$Shp_user = $_REQUEST["Shp_user"];
 		$inv_id = $_REQUEST["InvId"];
-		return "Вы отказались от оплаты. Заказ# $inv_id\n";
+		
+		if($Shp_user != Auth::user()->id){
+			Session::flash('message', 'Доступ запрещен');
+			 return redirect()->route('main');
+		}
+		
+		/* Смена статуса на Отклонено пользователем */
+		$status_pay = Status::where('type_status', '=', 'pay')->where('caption', '=', 'cancelUser')->first();
+		$pay = Pay::find($inv_id);
+		$pay->status_pay = $status_pay->id;
+		$pay->save();
+		
+		$result = "Вы отказались от оплаты. Заказ# ".$inv_id;
+		return view('pages.pay.fail')->with('result', $result);
 	}
 	
 }
