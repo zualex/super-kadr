@@ -86,7 +86,7 @@
 							processInline:true,
 							loaderHtml:'<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div> ',
 							onBeforeImgUpload: function(){  },
-							onAfterImgUpload: function(){  },
+							onAfterImgUpload: function(){ },
 							onImgDrag: function(){  },
 							onImgZoom: function(){  },
 							onBeforeImgCrop: function(){  },
