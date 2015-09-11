@@ -34,10 +34,11 @@ Route::get('/comment/{gallery_id}', ['as' => 'comment.index', 'uses' => 'Comment
 Route::post('/comment/save', ['as' => 'comment.save', 'uses' => 'CommentController@save']);					//Сохранение комментария
 
 
-Route::get('/pay/index', ['as' => 'pay.index', 'middleware' => 'auth', 'uses' => 'PayController@index']);					//Отправка данных для оплаты
-Route::get('/pay/result', ['as' => 'pay.result', 'middleware' => 'auth', 'uses' => 'PayController@result']);				//Result Url
+Route::get('/pay/conditions/{gallery_id}', ['as' => 'pay.conditions', 'middleware' => 'auth', 'uses' => 'PayController@conditions']);		//Принятие условий перед оплатой
+Route::get('/pay/index/{gallery_id}', ['as' => 'pay.index', 'middleware' => 'auth', 'uses' => 'PayController@index']);			//Отправка данных для оплаты
+Route::get('/pay/result', ['as' => 'pay.result', 'middleware' => 'auth', 'uses' => 'PayController@result']);			//Result Url
 Route::get('/pay/success', ['as' => 'pay.success', 'middleware' => 'auth', 'uses' => 'PayController@success']);	//Success Url
-Route::get('/pay/fail', ['as' => 'pay.fail', 'middleware' => 'auth', 'uses' => 'PayController@fail']);	//Fail Url
+Route::get('/pay/fail', ['as' => 'pay.fail', 'middleware' => 'auth', 'uses' => 'PayController@fail']);						//Fail Url
 
 
 

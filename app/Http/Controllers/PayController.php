@@ -5,35 +5,55 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
+use Session;
 use Redirect;
 use Auth;
+use App\Pay;
+use App\Gallery;
 
 class PayController extends Controller {
 
-
-	public function index()
+	
+	public function conditions($gallery_id)
 	{
+		$gallery = Gallery::where('id', '=', $gallery_id)->first();
+		if($gallery->user_id != Auth::user()->id){
+			Session::flash('message', 'Вы не можете оплатить так как заказ не ваш');
+			 return redirect()->route('main');
+		}
+		
+		return view('pages.conditions.pay')->with('gallery_id', $gallery_id);
+	}
+	
+	
+	public function index($gallery_id)
+	{
+
+		$gallery = Gallery::where('id', '=', $gallery_id)->first();
+		$pay = Pay::where('gallery_id', '=', $gallery_id)->first();
+		
+		if($gallery->user_id != Auth::user()->id){
+			Session::flash('message', 'Вы не можете оплатить так как заказ не ваш');
+			 return redirect()->route('main');
+		}
+	
 		$mrh_login = env('ROBOKASSA_LOGIN');
 		$mrh_pass1 = env('ROBOKASSA_PASSWORD_1');
 
-
-		$inv_id = 0;
-		$inv_desc = "ROBOKASSA Advanced User Guide";
-		$out_summ = "150";
+		$inv_id = $pay->id;
+		$inv_desc = "Pay ROBOKASSA";
+		$out_summ = $pay->price;
 		$in_curr = "";
 		$culture = "ru";
-		$Shp_user = Auth::user()->id;
 		
-		$crc  = md5("$mrh_login:$out_summ:$inv_id:$mrh_pass1:Shp_user=$Shp_user");
+		$crc  = md5("$mrh_login:$out_summ:$inv_id:$mrh_pass1");
 		
 		$url = 'https://merchant.roboxchange.com/Index.aspx';
 		if(env('ROBOKASSA_TEST')){
 			$url = 'http://test.robokassa.ru/Index.aspx';
 		}
 		
-		
-
-		
+	
 		$query = http_build_query(array(
 			'MrchLogin' => $mrh_login,
 			'OutSum' => $out_summ,
@@ -43,7 +63,6 @@ class PayController extends Controller {
 			'SignatureValue' => $crc,
 			'IncCurrLabel' => $in_curr,
 			'Culture' => $culture,
-			'Shp_user' => $Shp_user,
 		));
 
 		return Redirect::to($url.'?'.$query);
@@ -58,16 +77,23 @@ class PayController extends Controller {
 		
 		$out_summ = $_REQUEST["OutSum"];
 		$inv_id = $_REQUEST["InvId"];
-		$Shp_user = $_REQUEST["Shp_user"];
 		$crc = $_REQUEST["SignatureValue"];
 		$crc = strtoupper($crc);
 		
-		$my_crc = strtoupper(md5("$out_summ:$inv_id:$mrh_pass2:Shp_user=$Shp_user"));
+		$my_crc = strtoupper(md5("$out_summ:$inv_id:$mrh_pass2"));
 		
 		if ($my_crc !=$crc){
 			return "bad sign\n";
 			exit();
 		}
+		
+		
+		$status_pay = Status::where('type_status', '=', 'pay')->where('caption', '=', 'paid')->first();
+		$pay = Pay::where('id', '=', $inv_id)->first();
+		$pay->status_pay = $status_pay->id;
+		$pay->save();
+		
+		
 		
 		$f=@fopen(base_path()."/public/pay/order.txt","a+") or
 				  die("error");
@@ -85,11 +111,10 @@ class PayController extends Controller {
 		$mrh_pass1 = env('ROBOKASSA_PASSWORD_1');
 		$out_summ = $_REQUEST["OutSum"];
 		$inv_id = $_REQUEST["InvId"];
-		$Shp_user = $_REQUEST["Shp_user"];
 		$crc = $_REQUEST["SignatureValue"];
 		$crc = strtoupper($crc);
 
-		$my_crc = strtoupper(md5("$out_summ:$inv_id:$mrh_pass1:Shp_user=$Shp_user"));
+		$my_crc = strtoupper(md5("$out_summ:$inv_id:$mrh_pass1"));
 		
 		if ($my_crc != $crc){
 			return "bad sign\n";

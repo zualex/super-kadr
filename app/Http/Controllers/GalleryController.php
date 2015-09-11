@@ -188,6 +188,7 @@ class GalleryController extends Controller {
 		if($error == ''){
 			return Response::json( array(
 				"status" => 'success',
+				"message" => route('pay.conditions', $gallery->id),
 			));
 		}else{
 			return Response::json( array(
