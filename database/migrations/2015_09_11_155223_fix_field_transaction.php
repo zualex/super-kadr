@@ -14,6 +14,9 @@ class FixFieldTransaction extends Migration {
 	{
 		Schema::table('pays', function($table)
 		{
+			$table->tinyInteger('visible')->default(1);
+			
+			
 			$table->dropForeign('pays_tarif_id_foreign');
 			$table->dropColumn('tarif_id');
 			$table->dropForeign('pays_monitor_id_foreign');
@@ -41,6 +44,9 @@ class FixFieldTransaction extends Migration {
 	{
 		Schema::table('pays', function($table)
 		{
+			$table->dropColumn('visible');
+			
+			
 			$table->dateTime('date_show');
 			$table->integer('tarif_id')->unsigned()->nullable();
 			$table->foreign('tarif_id')->references('id')->on('tarifs');
