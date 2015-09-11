@@ -320,7 +320,13 @@ function paySite(el){
 				var data = $.parseJSON(msg);
 				if(data.status == 'error'){alert(data.message);}
 				if(data.status == 'success'){
-					window.location.href=data.message;
+					if(data.pay == 'true'){
+						window.location.href=data.url;
+					}else{
+						alert(data.message);
+						window.location.reload();
+					}
+					
 				}	
 				//console.log(msg);
 			},

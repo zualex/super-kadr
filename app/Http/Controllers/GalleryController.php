@@ -134,6 +134,8 @@ class GalleryController extends Controller {
 					// finally output png image
 					//imagepng($final_image, base_path().$output_filename.$type, $png_quality);
 					imagejpeg($final_image, base_path().$output_filename.$type, $jpeg_quality);
+					
+					
 					return Response::json( array(
 						"status" => 'success',
 						"url" => $output_filename.$type
@@ -186,9 +188,19 @@ class GalleryController extends Controller {
 		if(count($galleryModel->error) > 0){$error .= implode(', ', $galleryModel->error);}
 		if(count($payModel->error) > 0){$error .= implode(', ', $payModel->error);}
 		if($error == ''){
+		
+			$pay = "";
+			$url = "";
+			if(env('ROBOKASSA')){
+				$pay = "true";
+				$url = route('pay.conditions', $gallery->id);
+			}
+					
 			return Response::json( array(
 				"status" => 'success',
-				"message" => route('pay.conditions', $gallery->id),
+				"message" => 'Заказ отправлен',
+				"pay" => $pay,
+				"url" => $url,
 			));
 		}else{
 			return Response::json( array(

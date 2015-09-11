@@ -91,7 +91,7 @@
 							onImgZoom: function(){  },
 							onBeforeImgCrop: function(){  },
 							onAfterImgCrop:function(){
-								$('.tariff').attr('data-image', response.url);
+								$('.tariffs').attr('data-image', response.url);
 							},
 							onError:function(errormessage){ alert(errormessage) }
 					}	
