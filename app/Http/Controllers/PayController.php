@@ -41,7 +41,7 @@ class PayController extends Controller {
 		$mrh_pass1 = env('ROBOKASSA_PASSWORD_1');
 
 		$inv_id = $pay->id;
-		$inv_desc = "Pay ROBOKASSA";
+		$inv_desc = $pay->name;
 		$out_summ = $pay->price;
 		$in_curr = "";
 		$culture = "ru";
@@ -58,7 +58,6 @@ class PayController extends Controller {
 			'MrchLogin' => $mrh_login,
 			'OutSum' => $out_summ,
 			'InvId' => $inv_id,
-			'Desc' => $inv_desc,
 			'Desc' => $inv_desc,
 			'SignatureValue' => $crc,
 			'IncCurrLabel' => $in_curr,
