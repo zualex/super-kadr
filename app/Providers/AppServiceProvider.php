@@ -1,6 +1,8 @@
 <?php namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use View;
+use App\Setting;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -9,9 +11,17 @@ class AppServiceProvider extends ServiceProvider {
 	 *
 	 * @return void
 	 */
-	public function boot()
+	public function boot(Setting $settingModel)
 	{
-		//
+		$result = array();
+		$setting = $settingModel->getSettingMain();
+		if(count($setting) > 0){
+			foreach($setting as $key => $value){
+				$result[$value->name] = $value->value;
+			}
+		}
+
+		View::share ('mainSetting', $result);
 	}
 
 	/**

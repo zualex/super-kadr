@@ -46,6 +46,15 @@ class Setting extends Model {
 	}
 	
 	
+	/* Название сайта */
+	public function getNameSite(){
+		$setting = $this->where('name', '=', 'name_site')->get();
+		return $setting->value;
+	}
+	
+	
+	
+	
 	
 	/* 
 	*	Создание настройки
@@ -69,19 +78,19 @@ class Setting extends Model {
 	public function createSettingDefault(){
 		/* Основные */
 		$this->createSetting(array(
-			'name' => 'name_site',
+			'name' => 'title',
 			'caption' => 'Название сайта',
 			'value' => 'Супер Кадр',
 			'type' => 'main',
 		));
 		$this->createSetting(array(
-			'name' => 'description_site',
+			'name' => 'description',
 			'caption' => 'Описание (Description)',
 			'value' => '',
 			'type' => 'main',
 		));
 		$this->createSetting(array(
-			'name' => 'keywords_site',
+			'name' => 'keywords',
 			'caption' => 'Ключевые слова',
 			'value' => '',
 			'type' => 'main',

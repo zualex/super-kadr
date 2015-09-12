@@ -2,8 +2,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="description" content="" />
-<meta name="keywords" content="" />
+<title>{{ $mainSetting['title'] }}</title>
+<meta name="description" content="{{ $mainSetting['description'] }}" />
+<meta name="keywords" content="{{ $mainSetting['keywords'] }}" />
 {!! HTML::script('/assets/superkadr/js/jquery.js') !!}
 <link rel="shortcut icon" href="images/favicon.ico" />
 
@@ -33,7 +34,6 @@ $(function(){
 
 </head>
 <body>
-
 	<header>
 		<div class="clear">
 			<div class="description"><span>Моментальное размещение фото на светодиодных экранах!</span></div>
