@@ -19,6 +19,7 @@ class CreateSettingsTable extends Migration {
 			$table->string('caption');
 			$table->string('value')->nullable();
 			$table->string('type', 50)->index();
+			$table->string('type_input')->default('text');
 			$table->timestamps();
 		});
 	}

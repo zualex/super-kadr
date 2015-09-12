@@ -5,12 +5,20 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
+use App\Setting;
+
 class AdminSettingController extends Controller {
 
 
-	public function index()
+	public function index(Setting $settingModel)
 	{
-		return view('admin.setting.index');
+		$data = array(
+			"settingMain" => $settingModel->getSettingMain(),
+			"settingPay" => $settingModel->getSettingPay(),
+			"settingUser" => $settingModel->getSettingUser(),
+		);		
+		//$settingModel->createSettingDefault();
+		return view('admin.setting.index')->with('data', $data);
 	}
 
 	/**
