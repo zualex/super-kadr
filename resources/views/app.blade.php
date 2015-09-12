@@ -76,10 +76,14 @@ $(function(){
 				@if (Auth::guest())
 					<div class="auth">
 						<a href="{{ url('/auth/login') }}" rel="nofollow" class="sbutton login"><span><i class="fa pull-left fa-sign-in"></i>Войти</span></a>
-						<a href="/login/vkontakte" rel="nofollow" class="sbutton social vk"><span><i class="fa fa-vk"></i></span></a>
-						<a href="/login/facebook" rel="nofollow" class="sbutton social fb"><span><i class="fa fa-facebook"></i></span></a>
-						<a href="/login/twitter" rel="nofollow" class="sbutton social tw"><span><i class="fa fa-twitter"></i></span></a>
-						<a href="/login/odnoklassniki" rel="nofollow" class="sbutton social ok"><span><i class="fa fa-odnoklassniki"></i></span></a>
+						
+						@if($mainSetting['authorization'] == 1)
+							<a href="/login/vkontakte" rel="nofollow" class="sbutton social vk"><span><i class="fa fa-vk"></i></span></a>
+							<a href="/login/facebook" rel="nofollow" class="sbutton social fb"><span><i class="fa fa-facebook"></i></span></a>
+							<a href="/login/twitter" rel="nofollow" class="sbutton social tw"><span><i class="fa fa-twitter"></i></span></a>
+							<a href="/login/odnoklassniki" rel="nofollow" class="sbutton social ok"><span><i class="fa fa-odnoklassniki"></i></span></a>
+						@endif
+
 					</div>
 				@else
 

@@ -3,7 +3,23 @@
 use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model {
-
+	
+	/* 
+	* Глобальные настройки 
+	*Подключаются \app\Providers\AppServiceProvider.php
+	*/
+	public function getSettingGlobal(){
+		$setting = $this
+			->where('name', '=', 'title')
+			->orWhere('name', '=', 'description')
+			->orWhere('name', '=', 'keywords')
+			->orWhere('name', '=', 'off_site')
+			->orWhere('name', '=', 'authorization')
+			->get();
+		return $setting;
+	}
+	
+	
 	/*Основные настройки */
 	public function getSettingMain(){
 		$setting = $this->where('type', '=', 'main')->get();

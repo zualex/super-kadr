@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider {
 		* во все шаблоны включаются Основные настройки
 		*/
 		$result = array();
-		$setting = $settingModel->getSettingMain();
+		$setting = $settingModel->getSettingGlobal();
 		if(count($setting) > 0){
 			foreach($setting as $key => $value){
 				$result[$value->name] = $value->value;
