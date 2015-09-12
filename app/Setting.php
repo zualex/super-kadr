@@ -38,7 +38,7 @@ class Setting extends Model {
 		$setting->caption = $param['caption'];
 		$setting->value = $param['value'];
 		$setting->type = $param['type'];
-		if(array_key_exists('type_input', $param)){$setting->type = $param['type_input'];}
+		if(array_key_exists('type_input', $param)){$setting->type_input = $param['type_input'];}
 		$setting->save();
 	}
 	
