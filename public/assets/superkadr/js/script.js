@@ -252,6 +252,8 @@ $(document).ready( function () {
 	$('#monitor-change-class').addClass('activeMonitor_'+nowMonitor);
 	$('.tariffs').attr('data-monitor', nowMonitor);
 	croppic.options.cropData.monitor = nowMonitor;
+	croppic.objW = $('#objW_'+nowMonitor).val()/1;
+	croppic.objH = $('#objH_'+nowMonitor).val()/1;
 
 	
 	/*
@@ -262,6 +264,15 @@ $(document).ready( function () {
 		newMonitor = $(this).val();
 		$('.tariffs').attr('data-monitor', newMonitor);
 		croppic.options.cropData.monitor = newMonitor;
+		
+		// Для того чтобы нормально отображалась картинка при смене экранов
+		var newW = $('#objW_'+newMonitor).val()/1;
+		var newH = $('#objH_'+newMonitor).val()/1;
+		croppic.objW = newW;
+		croppic.objH = newH;
+		$('.cropImgWrapper').width(newW);
+		$('.cropImgWrapper').height(newH);
+		$('.cropImgWrapper').find('img').css({ "top": "0px", "left": "0px" });
 
 		
 		
