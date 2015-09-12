@@ -51,7 +51,7 @@
 								@endif
 								<label for="{{ $value->name }}"></label>
 							@else
-								<input class="inputbox" type="text" name="{{ $value->name }}" value="{{ $value->value }}" placeholder="Название {{ $value->value }}">
+								<input class="inputbox" type="text" name="{{ $value->name }}" value="{{ $value->value }}" placeholder="{{ $value->value }}">
 							@endif
 							</div>
 							
@@ -76,7 +76,7 @@
 								@endif
 								<label for="{{ $value->name }}"></label>
 							@else
-								<input class="inputbox" type="text" name="{{ $value->name }}" value="{{ $value->value }}" placeholder="Название {{ $value->value }}">
+								<input class="inputbox" type="text" name="{{ $value->name }}" value="{{ $value->value }}" placeholder="{{ $value->value }}">
 							@endif
 							</div>
 							
@@ -101,7 +101,7 @@
 								@endif
 								<label for="{{ $value->name }}"></label>
 							@else
-								<input class="inputbox" type="text" name="{{ $value->name }}" value="{{ $value->value }}" placeholder="Название {{ $value->value }}">
+								<input class="inputbox" type="text" name="{{ $value->name }}" value="{{ $value->value }}" placeholder="{{ $value->value }}">
 							@endif
 							</div>
 							

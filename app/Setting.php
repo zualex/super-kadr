@@ -224,7 +224,7 @@ class Setting extends Model {
 			'type' => 'user',
 		));
 		$this->createSetting(array(
-			'name' => 'id_secret',
+			'name' => 'od_secret',
 			'caption' => 'Секретный ключ Odnoklassniki',
 			'value' => '1111',
 			'type' => 'user',
