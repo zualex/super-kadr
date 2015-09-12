@@ -16,6 +16,7 @@ use App\Pay;
 use App\Like;
 use App\Comment;
 use App\User;
+use App\Setting;
 
 
 class GalleryController extends Controller {
@@ -191,7 +192,11 @@ class GalleryController extends Controller {
 		
 			$pay = "";
 			$url = "";
-			if(env('ROBOKASSA')){
+			
+			
+			$setting = new Setting;
+			$robokassa = $setting->getPayment();
+			if($setting->getPayment() == 1){
 				$pay = "true";
 				$url = route('pay.conditions', $gallery->id);
 			}

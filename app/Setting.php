@@ -46,11 +46,42 @@ class Setting extends Model {
 	}
 	
 	
-	/* Название сайта */
+	/* Переменна выключен сайт или нет */
 	public function siteOff(){
 		$setting = $this->where('name', '=', 'off_site')->first();
 		return $setting->value;
 	}
+	
+	/* Переменна Включить оплату */
+	public function getPayment(){
+		$setting = $this->where('name', '=', 'payment')->first();
+		return $setting->value;
+	}
+	
+	/* Переменна Платежи Логин */
+	public function getPaymentLogin(){
+		$setting = $this->where('name', '=', 'payment_login')->first();
+		return $setting->value;
+	}
+	
+	/* Переменна Платежи пароль 1 */
+	public function getPaymentPassword1(){
+		$setting = $this->where('name', '=', 'payment_password_1')->first();
+		return $setting->value;
+	}
+	
+	/* Переменна Платежи пароль 2 */
+	public function getPaymentPassword2(){
+		$setting = $this->where('name', '=', 'payment_password_2')->first();
+		return $setting->value;
+	}
+	
+	/* Переменна Тестовые платежи */
+	public function getPaymentTest(){
+		$setting = $this->where('name', '=', 'payment_test')->first();
+		return $setting->value;
+	}
+	
 	
 	
 	

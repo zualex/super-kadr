@@ -11,6 +11,7 @@ use Auth;
 use App\Pay;
 use App\Gallery;
 use App\Status;
+use App\Setting;
 
 class PayController extends Controller {
 
@@ -38,9 +39,11 @@ class PayController extends Controller {
 			Session::flash('message', 'Вы не можете оплатить так как заказ не ваш');
 			 return redirect()->route('main');
 		}
-	
-		$mrh_login = env('ROBOKASSA_LOGIN');
-		$mrh_pass1 = env('ROBOKASSA_PASSWORD_1');
+		
+		$setting = new Setting;
+		
+		$mrh_login = $setting->getPaymentLogin();
+		$mrh_pass1 = $setting->getPaymentPassword1();
 
 		$inv_id = $pay->id;
 		$inv_desc = $pay->name;
@@ -52,7 +55,8 @@ class PayController extends Controller {
 		$crc  = md5("$mrh_login:$out_summ:$inv_id:$mrh_pass1:Shp_user=$Shp_user");
 		
 		$url = 'https://merchant.roboxchange.com/Index.aspx';
-		if(env('ROBOKASSA_TEST')){
+		
+		if($setting->getPaymentTest() == 1){
 			$url = 'http://test.robokassa.ru/Index.aspx';
 		}
 		
@@ -74,7 +78,9 @@ class PayController extends Controller {
 	
 	public function result()
 	{
-		$mrh_pass2 = env('ROBOKASSA_PASSWORD_2');
+		$setting = new Setting;
+				
+		$mrh_pass2 = $setting->getPaymentPassword2();
 		$tm=getdate(time()+9*3600);
 		$date="$tm[year]-$tm[mon]-$tm[mday] $tm[hours]:$tm[minutes]:$tm[seconds]";
 		
@@ -112,7 +118,9 @@ class PayController extends Controller {
 	
 	public function success()
 	{
-		$mrh_pass1 = env('ROBOKASSA_PASSWORD_1');
+		$setting = new Setting;
+		
+		$mrh_pass1 = $setting->getPaymentPassword1();
 		$out_summ = $_REQUEST["OutSum"];
 		$inv_id = $_REQUEST["InvId"];
 		$Shp_user = $_REQUEST["Shp_user"];
