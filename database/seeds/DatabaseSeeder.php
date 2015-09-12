@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Tarif;
 use App\Status;
 use App\Monitor;
+use App\Setting;
 
 class DatabaseSeeder extends Seeder {
 
@@ -18,12 +19,29 @@ class DatabaseSeeder extends Seeder {
 	{
 		Model::unguard();
 		
+		//$this->call('SettingTableSeeder');
 		$this->call('MonitorTableSeeder');
 		$this->call('TarifTableSeeder');
 		$this->call('StatusTableSeeder');
 		
 	}
 
+}
+
+/*
+* Setting - отключен, так как может удалить измененные данные
+*/
+class SettingTableSeeder extends Seeder {
+
+	DB::table('settings')->delete();
+
+    Setting::create([
+		'name' => '1',
+		'caption' => '1',
+		'value' => '',
+		'type' => '1',
+	]);
+	
 }
 
 
