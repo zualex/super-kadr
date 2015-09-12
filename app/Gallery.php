@@ -275,7 +275,7 @@ class Gallery extends Model {
 				->leftJoin('pays', 'pays.gallery_id', '=', 'galleries.id')
 				->join('tarifs', 'tarifs.id', '=', 'galleries.tarif_id')
 				->where('galleries.status_main', '=', $status)
-				->orderBy('galleries.created_at', 'desc')
+				->orderBy('galleries.date_show', 'asc')
 				->get();
 		return $gallery;
 	}

@@ -18,12 +18,21 @@
 			<div class="share">
 				<div class="description"><span>или поделитесь с друзьями:</span></div>
 				<div class="buttons">
-					<a href="" class="icon social vk"><i class="fa fa-vk"></i></a>
-					<a href="" class="icon social in"><i class="fa fa-instagram"></i></a>
-					<a href="" class="icon social fb"><i class="fa fa-facebook"></i></a>
-					<a href="" class="icon social tw"><i class="fa fa-twitter"></i></a>
-					<a href="" class="icon social gg"><i class="fa fa-google-plus"></i></a>
+					<a href="#" class="icon social vk" 
+					onclick="window.open('http://share.yandex.ru/go.xml?service=vkontakte&amp;url={{ Request::url() }}&amp;title=Супер кадр&amp;image={{ Request::root().$gallery->pathImages.'/m_'.$gallery->src  }}');return false;"><i class="fa fa-vk"></i></a>
+					<a href="#" class="icon social in" style="display:none"><i class="fa fa-instagram"></i></a>
+					<a href="#" class="icon social fb"
+					onclick="window.open('http://share.yandex.ru/go.xml?service=facebook&amp;url={{ Request::url() }}&amp;title=Супер кадр&amp;image={{ Request::root().$gallery->pathImages.'/m_'.$gallery->src  }}');return false;"><i class="fa fa-facebook"></i></a>
+					<a href="#" class="icon social tw"
+					onclick="window.open('http://share.yandex.ru/go.xml?service=twitter&amp;url={{ Request::url() }}&amp;title=Супер кадр&amp;image={{ Request::root().$gallery->pathImages.'/m_'.$gallery->src  }}');return false;"><i class="fa fa-twitter"></i></a>
+					<a href="#" class="icon social gg"
+					onclick="window.open('http://share.yandex.ru/go.xml?service=gplus&amp;url={{ Request::url() }}&amp;title=Супер кадр&amp;image={{ Request::root().$gallery->pathImages.'/m_'.$gallery->src  }}');return false;"
+					><i class="fa fa-google-plus"></i></a>
 				</div>
+
+
+				
+				
 			</div>
 		</div>
 	</div>
