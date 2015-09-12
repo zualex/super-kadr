@@ -90,51 +90,21 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::post('/gallery/delete/all/', ['as' => 'admin.gallery.delete_all', 'uses' => 'Admin\AdminGalleryController@deleteAll']);
 	
 
-	
-	
-	/* Тарифы */
-	/*Route::resource('/tarif', 'Admin\AdminTarifController', array('names' => array(
-		'index' => 'admin.tarif.index',
-		'create' => 'admin.tarif.create',
-		'store' => 'admin.tarif.store',
-		'show' => 'admin.tarif.show',
-		'edit' => 'admin.tarif.edit',
-		'update' => 'admin.tarif.update',
-		'destroy' => 'admin.tarif.destroy',
-	)));*/
+
 	
 	/* Транзакции */
 	Route::resource('/pay', 'Admin\AdminPayController', array('names' => array(
 		'index' => 'admin.pay.index',
-		'create' => 'admin.pay.create',
-		'store' => 'admin.pay.store',
-		'show' => 'admin.pay.show',
-		'edit' => 'admin.pay.edit',
-		'update' => 'admin.pay.update',
-		'destroy' => 'admin.pay.destroy',
 	)));
 	
-	/* Настройки */
+	/* Плейлисты */
 	Route::resource('/playlist', 'Admin\AdminPlaylistController', array('names' => array(
 		'index' => 'admin.playlist.index',
-		'create' => 'admin.playlist.create',
-		'store' => 'admin.playlist.store',
-		'show' => 'admin.playlist.show',
-		'edit' => 'admin.playlist.edit',
-		'update' => 'admin.playlist.update',
-		'destroy' => 'admin.playlist.destroy',
 	)));
 	
 	/* Настройки */
-	Route::resource('/setting', 'Admin\AdminSettingController', array('names' => array(
-		'index' => 'admin.setting.index',
-		'create' => 'admin.setting.create',
-		'store' => 'admin.setting.store',
-		'show' => 'admin.setting.show',
-		'edit' => 'admin.setting.edit',
-		'update' => 'admin.setting.update',
-		'destroy' => 'admin.setting.destroy',
-	)));
+	Route::get('/setting/', ['as' => 'admin.setting.index', 'uses' => 'Admin\AdminSettingController@index']);
+	Route::post('/setting/success/all/', ['as' => 'admin.setting.success_all', 'uses' => 'Admin\AdminSettingController@successAll']);
 	
 	/* Пользователи */
 	/*Route::resource('/users', 'Admin\UserController', array('names' => array(

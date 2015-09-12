@@ -23,6 +23,29 @@ class Setting extends Model {
 	}
 	
 	
+	/* Сохранение настроек */
+	public function saveSetting($param){
+		/* Обнуляем все Checkbox, так как 0 в param не попадает */
+		$settingCheckbox = $this->where('type_input', '=', 'checkbox')->get();
+		if(count($settingCheckbox) > 0){
+			foreach($settingCheckbox as $key => $value){
+				$value->value = 0;
+				$value->save();
+			}
+
+		}
+	
+		foreach ($param as $key => $value){
+			$setting = $this->where('name', '=', $key)->first();
+			if(count($setting) > 0){
+				$setting->value = $value;
+				$setting->save();
+			}
+		}
+		return 1;
+	}
+	
+	
 	
 	/* 
 	*	Создание настройки

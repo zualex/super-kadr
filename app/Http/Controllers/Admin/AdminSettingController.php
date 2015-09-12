@@ -3,9 +3,12 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Illuminate\Http\Request;
+
 
 use App\Setting;
+use Response;
+use Request;
+use Session;
 
 class AdminSettingController extends Controller {
 
@@ -21,68 +24,27 @@ class AdminSettingController extends Controller {
 		return view('admin.setting.index')->with('data', $data);
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
+	
+	public function successAll(Setting $settingModel)
 	{
-		//
-	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
+		$result = $settingModel->saveSetting(Request::except('_token'));
+		
+		if($result == '1'){
+			Session::flash('message', 'Настройки сохранены');
+			$res = array(
+				"status" => 'success',
+				"message" => 'Настройки сохранены'
+			);
+		}else{
+			$res = array(
+				"status" => 'error',
+				"message" => 'Произошла ошибка при сохранении'
+			);
+		}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
+		return Response::json($res);
 	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+	
 
 }

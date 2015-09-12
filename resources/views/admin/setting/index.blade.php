@@ -7,7 +7,7 @@
 			<div class="title"><span>Настройки</span></div>
 			<div class="controls">
 				<div class="btn-group">
-					<a href="" class="btn add savesettings"><i class="fa pull-left fa-floppy-o"></i>Сохранить</a>
+					<a href="#" class="btn add savesettings" onclick="actionAll('{{ route('admin.setting.success_all') }}')"><i class="fa pull-left fa-floppy-o"></i>Сохранить</a>
 				</div>
 			</div>
 		</div>
@@ -20,7 +20,19 @@
 				<li>Пользователи</li>
 			</ul>
 		</div>
+		
+		@if (Session::has('message'))
+			<br>
+			<div class="alert alert-info">{{ Session::get('message') }}</div>
+		@endif
+		
 		<div class="box-content">
+		
+			
+			<form id="form-admin" role="form" method="POST" >
+			<input type="hidden" name="_token" value="{{ csrf_token() }}">
+		
+		
 			<section id="general" class="visible">
 			
 				@if(count($data['settingMain']) > 0)
@@ -96,6 +108,9 @@
 				@endif
 			
 			</section>
+			
+			</form>
+			
 		</div>
 	</div>
 </div>				
