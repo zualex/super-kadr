@@ -30,7 +30,8 @@
 					><i class="fa fa-google-plus"></i></a>
 				</div>
 
-
+				
+			{{ Config::get('super-kadr.ROBOKASSA') }}!!!
 				
 				
 			</div>
