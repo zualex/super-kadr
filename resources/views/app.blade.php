@@ -36,6 +36,11 @@ $(function(){
 <body>
 	<header>
 		<div class="clear">
+			@if($mainSetting['off_site'] == 1)
+				<div class="description" style="color: #FE5252"><span>Сайт выключен для пользователей!</span></div>
+			@endif
+			
+			
 			<div class="description"><span>Моментальное размещение фото на светодиодных экранах!</span></div>
 			<div class="screen left">
 				<div class="image"></div>

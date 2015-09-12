@@ -47,8 +47,8 @@ class Setting extends Model {
 	
 	
 	/* Название сайта */
-	public function getNameSite(){
-		$setting = $this->where('name', '=', 'name_site')->get();
+	public function siteOff(){
+		$setting = $this->where('name', '=', 'off_site')->first();
 		return $setting->value;
 	}
 	

@@ -22,6 +22,8 @@ Route::get('/gallery/{id}', ['as' => 'gallery.show', 'uses' => 'GalleryControlle
 Route::get('/conditions', ['as' => 'conditions', function(){ return view('pages.conditions.index'); }]);	//Страница Услуги
 Route::get('/contacts', ['as' => 'contacts', function(){ return view('pages.contacts.index'); }]);			//Страница Контакты
 
+Route::get('/dev', ['as' => 'dev', function(){ return view('dev'); }]);	//Станица при отключении сайта
+
 
 /*
 * Actions
@@ -39,8 +41,6 @@ Route::get('/pay/index/{gallery_id}', ['as' => 'pay.index', 'middleware' => 'aut
 Route::get('/pay/result', ['as' => 'pay.result', 'uses' => 'PayController@result']);			//Result Url
 Route::get('/pay/success', ['as' => 'pay.success', 'middleware' => 'auth', 'uses' => 'PayController@success']);	//Success Url
 Route::get('/pay/fail', ['as' => 'pay.fail', 'middleware' => 'auth', 'uses' => 'PayController@fail']);						//Fail Url
-
-
 
 
 /*

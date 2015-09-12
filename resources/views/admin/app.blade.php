@@ -20,7 +20,14 @@
 </head>
 <header>
 	<div class="clear">
-		<div id="logo"><a href="{{ route('admin') }}" title="На главную"><span><b>Панель</b> управления</span></a></div>
+		<div id="logo">
+			<a href="{{ route('admin') }}" title="На главную"><span><b>Панель</b> управления</span></a>
+			
+			@if($mainSetting['off_site'] == 1)
+				<span class="description" style="padding-left:150px;">Сайт выключен для пользователей!</span>
+			@endif
+			
+		</div>
 		<div class="profile">
 			<div class="name">
 			<span><i class="fa pull-left fa-user"></i>{{ Auth::user()->name }}</span>
