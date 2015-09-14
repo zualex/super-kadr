@@ -37,7 +37,7 @@ class Pay extends Model {
 			->join('galleries', 'galleries.id', '=', 'pays.gallery_id')
 			->join('statuses', 'statuses.id', '=', 'pays.status_pay')
 			->where('pays.visible', '=', '1')
-			->orderBy('pays.created_at')
+			->orderBy('pays.created_at', 'desc')
 			->get();
 		//dd($pay);
 		return $pay;
