@@ -29,9 +29,6 @@
 					onclick="window.open('http://share.yandex.ru/go.xml?service=gplus&amp;url={{ Request::url() }}&amp;title=Супер кадр&amp;image={{ Request::root().$gallery->pathImages.'/m_'.$gallery->src  }}');return false;"
 					><i class="fa fa-google-plus"></i></a>
 				</div>
-
-				
-			{{ Config::get('super-kadr.ROBOKASSA') }}!!!
 				
 				
 			</div>
