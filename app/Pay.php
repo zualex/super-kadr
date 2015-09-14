@@ -8,6 +8,8 @@ use App\Pay;
 use App\Gallery;
 use App\Tarif;
 use App\Monitor;
+use App\Status;
+use DB;
 
 
 class Pay extends Model {
@@ -27,11 +29,14 @@ class Pay extends Model {
 	
 	
 	
+	
 	public function getAll(){
 		$pay = false;
 		$pay = $this
-			->where('visible', '=', '1')
-			->orderBy('created_at')
+			->select(DB::raw('pays.*, statuses.name as status_name, statuses.caption as status_caption'))
+			->join('statuses', 'statuses.id', '=', 'pays.status_pay')
+			->where('pays.visible', '=', '1')
+			->orderBy('pays.created_at')
 			->get();
 		//dd($pay);
 		return $pay;

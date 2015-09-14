@@ -28,7 +28,22 @@
 					<td class="col-4">{{ $value->price }} руб.</td>
 					<td class="col-5">{{ $value->created_at }}</td>
 					<td class="col-4">
-						<span class="status ok"><i class="fa pull-left fa-chevron-down"></i>Оплачено</span>
+						@if($value->status_caption == 'paid')
+							<span class="status ok"><i class="fa pull-left fa-chevron-down"></i>
+						@elseif($value->status_caption == 'wait')
+							<span class="status wait"><i class="fa pull-left fa-clock-o"></i>
+						@elseif($value->status_caption == 'Error')
+							<span class="status cancel"><i class="fa pull-left fa-ban"></i>
+						@elseif($value->status_caption == 'cancelUser')
+							<span class="status cancel"><i class="fa pull-left fa-ban"></i>
+						@elseif($value->status_caption == 'cancelAdmin')
+							<span class="status cancel"><i class="fa pull-left fa-ban"></i>
+						@endif
+						
+						{{ $value->status_name }}</span>
+						
+						
+						
 					</td>
 					<td class="center col-btn">
 						<div class="droplist-group">
