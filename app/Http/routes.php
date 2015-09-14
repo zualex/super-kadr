@@ -93,9 +93,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 
 	
 	/* Транзакции */
-	Route::resource('/pay', 'Admin\AdminPayController', array('names' => array(
-		'index' => 'admin.pay.index',
-	)));
+	Route::get('/pay/', ['as' => 'admin.pay.index', 'uses' => 'Admin\AdminPayController@index']);
+	Route::get('/gallery/hide/{id}', ['as' => 'admin.pay.hide', 'uses' => 'Admin\AdminPayController@hide']);
+	
+	Route::post('/gallery/paid/all/', ['as' => 'admin.pay.paid_all', 'uses' => 'Admin\AdminPayController@paidAll']);
+	Route::post('/gallery/wait/all/', ['as' => 'admin.pay.wait_all', 'uses' => 'Admin\AdminPayController@waitAll']);
+	Route::post('/gallery/cancel/all/', ['as' => 'admin.pay.cancel_all', 'uses' => 'Admin\AdminPayController@cancelAll']);
+	Route::post('/gallery/hide/all/', ['as' => 'admin.pay.hide_all', 'uses' => 'Admin\AdminPayController@hideAll']);
+
 	
 	/* Плейлисты */
 	Route::resource('/playlist', 'Admin\AdminPlaylistController', array('names' => array(

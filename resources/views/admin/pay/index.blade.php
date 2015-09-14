@@ -5,11 +5,29 @@
 	<div class="header">
 		<div class="clear">
 			<div class="title"><span>Транзакции</span></div>
+			
+			<div class="controls">
+				<div class="btn-group">
+					<a href="#" class="btn add" onclick="actionAll('{{ route('admin.pay.paid_all') }}')"><i class="fa pull-left fa-floppy-o"></i>Оплачено</a>
+					<a href="#" class="btn info" onclick="actionAll('{{ route('admin.pay.wait_all') }}')"><i class="fa pull-left fa-floppy-o"></i>Ожидает оплаты</a>
+					<a href="#" class="btn del" onclick="actionAll('{{ route('admin.pay.cancel_all') }}')"><i class="fa pull-left fa-floppy-o"></i>Отмена</a>
+					<a href="#" class="btn del" onclick="if(confirm('Вы действительно хотите удалить транзакцию?')){actionAll('{{ route('admin.pay.hide_all') }}')}"><i class="fa pull-left fa-trash"></i>Удалить</a>
+				</div>
+			</div>
+			
 		</div>
 	</div>
 
+	
+	@if (Session::has('message'))
+		<br>
+		<div class="alert alert-info">{{ Session::get('message') }}</div>
+	@endif
+	
 	@if(count($pay) > 0)
-		<form method="post">
+		<form id="form-admin" role="form" method="POST" >
+		<input type="hidden" name="_token" value="{{ csrf_token() }}">
+		
 		<table class="table-list">
 			<tr>
 				<th class="center col-1"><input class="checkbox" type="checkbox" name="checkall" value=""></th>
@@ -24,7 +42,10 @@
 				<tr>
 					<td class="center col-1"><input type="checkbox" name="checkelement[]" value="{{ $value->id }}"></td>
 					<td class="center col-2"> {{ $value->id }} </td>
-					<td>{{ $value->name }}</td>
+					<td>
+						{{ $value->name }}
+						<a href="{{ $pathImages.'/o_'.$value->src }}" rel="group1" class="modalbox">(подробнее)</a>
+					</td>
 					<td class="col-4">{{ $value->price }} руб.</td>
 					<td class="col-5">{{ $value->created_at }}</td>
 					<td class="col-4">
@@ -51,7 +72,9 @@
 							<div class="droplist" style="display: none">
 								<div>
 									<ul>
-										<li><a onclick="r_delete({id})" class="deny"><i class="fa pull-left fa-times"></i>Удалить</a></li>
+										<li><a href="{{ route('admin.pay.hide', $value->id) }}" onclick="return confirm('Вы действительно хотите удалить транзакцию?')"><i class="fa pull-left fa-times"></i>Удалить</a></li>
+										
+										<!--<li><a onclick="r_delete({id})" class="deny"><i class="fa pull-left fa-times"></i>Удалить</a></li>-->
 									</ul>
 								</div>
 							</div>
