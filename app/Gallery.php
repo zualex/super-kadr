@@ -54,7 +54,6 @@ class Gallery extends Model {
 	*/
 	public function galleryAll(){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
-		$status_pay = Status::where('type_status', '=', 'pay')->where('caption', '=', 'paid')->first();
 		
 		$galleries =$this
 				->select(DB::raw('galleries.*, COUNT(likes.id) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
