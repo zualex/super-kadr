@@ -10,7 +10,8 @@
 		"laravel/socialite": "~2.0",
 		"socialiteproviders/vkontakte": "^1.1",
 		"jhaoda/socialite-odnoklassniki": "^1.1",
-		"intervention/image": "^2.3"
+		"intervention/image": "^2.3",
+		"soapbox/laravel-formatter": "^2.0"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",
