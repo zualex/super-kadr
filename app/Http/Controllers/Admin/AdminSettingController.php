@@ -20,6 +20,7 @@ class AdminSettingController extends Controller {
 			"settingPay" => $settingModel->getSettingPay(),
 			"settingUser" => $settingModel->getSettingUser(),
 		);		
+		
 		//$settingModel->createSettingDefault();
 		return view('admin.setting.index')->with('data', $data);
 	}

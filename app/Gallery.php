@@ -270,7 +270,7 @@ class Gallery extends Model {
 	
 	public function queryAdminGallery($status){
 		$status_pay = Status::where('type_status', '=', 'pay')->where('caption', '=', 'paid')->first();
-		
+
 		$gallery =$this
 				->select(DB::raw('galleries.*, pays.id as pay_id, pays.price, tarifs.name as tarif_name, tarifs.hours, tarifs.interval_sec, statuses.name as status_name, statuses.caption as status_caption'))
 				->join('statuses', 'statuses.id', '=', 'galleries.status_order')
@@ -278,7 +278,7 @@ class Gallery extends Model {
 				->join('tarifs', 'tarifs.id', '=', 'galleries.tarif_id')
 				->where('galleries.status_main', '=', $status)
 				->where('pays.status_pay', '=', $status_pay->id)
-				->orderBy('galleries.date_show', 'asc')
+				->orderBy('galleries.date_s2how', 'asc')
 				->get();
 		return $gallery;
 	}

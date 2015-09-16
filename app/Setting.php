@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
+use Schema;
+
 class Setting extends Model {
 	
 	/* 
@@ -9,14 +11,17 @@ class Setting extends Model {
 	*Подключаются \app\Providers\AppServiceProvider.php
 	*/
 	public function getSettingGlobal(){
-		$setting = $this
-			->where('name', '=', 'title')
-			->orWhere('name', '=', 'description')
-			->orWhere('name', '=', 'keywords')
-			->orWhere('name', '=', 'off_site')
-			->orWhere('name', '=', 'authorization')
-			->get();
-		return $setting;
+		$res = array();
+		if(Schema::hasTable('settings')){
+			$res = $this
+				->where('name', '=', 'title')
+				->orWhere('name', '=', 'description')
+				->orWhere('name', '=', 'keywords')
+				->orWhere('name', '=', 'off_site')
+				->orWhere('name', '=', 'authorization')
+				->get();
+		}
+		return $res;
 	}
 	
 	
@@ -34,8 +39,11 @@ class Setting extends Model {
 	
 	/*настройки пользователей*/
 	public function getSettingUser(){
-		$setting = $this->where('type', '=', 'user')->get();
-		return $setting;
+		$res = array();
+		if(Schema::hasTable('settings')){
+			$res = $this->where('type', '=', 'user')->get();
+		}
+		return $res;
 	}
 	
 	
@@ -64,8 +72,12 @@ class Setting extends Model {
 	
 	/* Переменна выключен сайт или нет */
 	public function siteOff(){
-		$setting = $this->where('name', '=', 'off_site')->first();
-		return $setting->value;
+		$res = false;
+		if(Schema::hasTable('settings')){
+			$setting = $this->where('name', '=', 'off_site')->first();
+			if(count($setting) > 0){$res = $setting->value;}
+		}
+		return $res;
 	}
 	
 	/* Переменна Включить оплату */

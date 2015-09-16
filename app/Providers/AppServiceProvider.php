@@ -25,6 +25,15 @@ class AppServiceProvider extends ServiceProvider {
 			foreach($setting as $key => $value){
 				$result[$value->name] = $value->value;
 			}
+		}else{
+			$result = array(
+				'title' => '',
+				'description' => '',
+				'keywords' => '',
+				'off_site' => '',
+				'authorization' => '',
+			);
+			
 		}
 
 		View::share ('mainSetting', $result);
@@ -36,24 +45,30 @@ class AppServiceProvider extends ServiceProvider {
 			foreach($settingSocial as $key => $value){
 				$social[$value->name] = $value->value;
 			}
+			
+			
+			
+			
+					
+			Config::set('services.twitter.client_id', $social['twitter_id']);
+			Config::set('services.twitter.client_secret', $social['twitter_secret']);
+			Config::set('services.twitter.redirect', Request::root().'/login/callback/twitter');
+			
+			Config::set('services.facebook.client_id', $social['facebook_id']);
+			Config::set('services.facebook.client_secret', $social['facebook_secret']);
+			Config::set('services.facebook.redirect', Request::root().'/login/callback/facebook');
+			
+			Config::set('services.vkontakte.client_id', $social['vk_id']);
+			Config::set('services.vkontakte.client_secret', $social['vk_secret']);
+			Config::set('services.vkontakte.redirect', Request::root().'/login/callback/vkontakte');
+			
+			Config::set('services.odnoklassniki.client_id', $social['od_id']);
+			Config::set('services.odnoklassniki.client_secret', $social['od_secret']);
+			Config::set('services.odnoklassniki.redirect', Request::root().'/login/callback/odnoklassniki');
+			
 		}
 		
-		
-		Config::set('services.twitter.client_id', $social['twitter_id']);
-		Config::set('services.twitter.client_secret', $social['twitter_secret']);
-		Config::set('services.twitter.redirect', Request::root().'/login/callback/twitter');
-		
-		Config::set('services.facebook.client_id', $social['facebook_id']);
-		Config::set('services.facebook.client_secret', $social['facebook_secret']);
-		Config::set('services.facebook.redirect', Request::root().'/login/callback/facebook');
-		
-		Config::set('services.vkontakte.client_id', $social['vk_id']);
-		Config::set('services.vkontakte.client_secret', $social['vk_secret']);
-		Config::set('services.vkontakte.redirect', Request::root().'/login/callback/vkontakte');
-		
-		Config::set('services.odnoklassniki.client_id', $social['od_id']);
-		Config::set('services.odnoklassniki.client_secret', $social['od_secret']);
-		Config::set('services.odnoklassniki.redirect', Request::root().'/login/callback/odnoklassniki');
+
 
 		
 	}
