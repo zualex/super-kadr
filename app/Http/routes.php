@@ -103,9 +103,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 
 	
 	/* Плейлисты */
-	Route::resource('/playlist', 'Admin\AdminPlaylistController', array('names' => array(
-		'index' => 'admin.playlist.index',
-	)));
+	Route::get('/playlist/', ['as' => 'admin.playlist.index', 'uses' => 'Admin\AdminPlaylistController@index']);
+	Route::get('/playlist/delete/{id}', ['as' => 'admin.playlist.delete', 'uses' => 'Admin\AdminPlaylistController@delete']);
+
+	Route::get('/playlist/initfile', ['as' => 'admin.playlist.initfile', 'uses' => 'Admin\AdminPlaylistController@initFile']);	//Загрузка исходных файлов в БД
+
 	
 	/* Настройки */
 	Route::get('/setting/', ['as' => 'admin.setting.index', 'uses' => 'Admin\AdminSettingController@index']);

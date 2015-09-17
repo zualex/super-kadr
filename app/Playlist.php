@@ -3,8 +3,8 @@
 use Illuminate\Database\Eloquent\Model;
 
 use SoapBox\Formatter\Formatter;
-use File;
 use App\Monitor;
+use File;
 
 class Playlist extends Model {
 
@@ -19,8 +19,28 @@ class Playlist extends Model {
 		$this->pathPlaylistMonitor_2 = base_path()."/resources/playlistFiles/Monitor2";
 	}
 	
+	public function monitor()
+    {
+        return $this->belongsTo('App\Monitor');
+    }
+	
 	/*
-	* Определение исходных файлов
+	* Получение исходного плейлиста из БД
+	*/
+	public function getInitPlaylist(){
+		$playlist = $this
+			->with('monitor')
+			->where('type', '=', '0')
+			->orderBy('monitor_id', 'asc')
+			->orderBy('sort', 'asc')
+			->get();
+		//dd($playlist);
+		return $playlist;
+	}
+	
+	
+	/*
+	* Определение и загрузка исходных файлов в базу данных
 	*/
 	public function initFile(){
 		$Monitor_1 = Monitor::where('number', '=', 1)->first();
@@ -40,7 +60,7 @@ class Playlist extends Model {
 			$this->saveFileInDB($file, $Monitor_2->id);
 		}
 		
-		return true;
+		return 1;
 	}
 	
 	
