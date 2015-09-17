@@ -96,7 +96,7 @@ class TarifTableSeeder extends Seeder {
 		'name' => 'Забавно',
 		'desc_main' => '4 показа',
 		'desc_dop' => 'в течение 5 часов',
-		'hours' => '4',
+		'hours' => '5',
 		'interval_sec' => '900',
 		'price' => '200',
 	]);
