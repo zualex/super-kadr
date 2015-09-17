@@ -14,9 +14,11 @@ class AdminPlaylistController extends Controller {
 
 	public function index(Playlist $playlistModel)
 	{
-
+		//$playlistModel->testGalleryUpload();
 		$data = array(
-			'initPlaylist' => $playlistModel->getInitPlaylist()
+			'initPlaylist' => $playlistModel->getInitPlaylist(),
+			'galleryGeneration_1' => $playlistModel->getGalleryGeneration(1),
+			'galleryGeneration_2' => $playlistModel->getGalleryGeneration(2),
 		);
 		return view('admin.playlist.index')->with('data', $data);
 	}

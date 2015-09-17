@@ -7,6 +7,8 @@ use App\Tarif;
 use App\Status;
 use App\Monitor;
 use App\Setting;
+use App\Gallery;
+use App\Pay;
 
 class DatabaseSeeder extends Seeder {
 
@@ -197,3 +199,5 @@ class StatusTableSeeder extends Seeder {
   }
 
 }
+
+
