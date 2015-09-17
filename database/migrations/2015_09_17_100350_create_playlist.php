@@ -21,6 +21,9 @@ class CreatePlaylist extends Migration {
 			$table->tinyInteger('is_time')->default(0);
 			$table->integer('time')->default(0);
 			$table->tinyInteger('type')->default(0);	//0 - исходный 1 - новый сформированный
+			$table->integer('monitor_id')->unsigned()->nullable();
+			$table->foreign('monitor_id')->references('id')->on('monitors');
+			$table->integer('sort')->default(0);
 			$table->timestamps();
 		});
 	}
