@@ -44,6 +44,8 @@ class Playlist extends Model {
         return $this->belongsTo('App\Monitor');
     }
 	
+
+	
 	
 	/*
 	* Получение исходного плейлиста из БД
@@ -62,18 +64,91 @@ class Playlist extends Model {
 	
 	/*
 	* Заказы в очередь на генерацию плейлиста
+	* Определение порядка зависит от коэффициентов. Например есть 3 тарифа:
+	* 		- 1й.Тариф «Просто» включает 12 показов в течение часа.(каждые 5 мин.)
+	* 		- 2й.Тариф «Забавно» 4 показа в час в течение 5 часов.( каждые 15 мин.)
+	* 		- 3й.Тариф «Весело» 2 показа в час в течение суток( каждые 30 мин)
+	*
+	* Генерация плейлистов:
+	* 		по порядку 5 минут из исходного плейлиста + 5 показов по 5 секунд  из  заказов
+	*
+	* То есть вероятность попадания заказа с тарифом 1 в первую 5-ти минутка = 100%
+	*																							    с тарифом 2 = 33%
+	*																							    с тарифом 3 = 16%
+	*
+	*
+	* Если заказ был в предыдущей пятиминтку то коэффициенты равны по умолчанию.
+	* Для того чтобы определить попадал товар в предыдущую пятимитку или нет для этого есть count_show, который показывает сколько показов осталось
+	* Например если заказ с датаой показа 12:00 c тарифом 2 (4 показа в час в течение 5 часов. - каждые 15 мин. - всего count_show = 20)
+	* сейчас время например 12:00, count_show = 20, то коэффициент попадания = 1%
+	* сейчас время например 12:05, count_show = 20, то коэффициент попадания = 33%
+	* сейчас время например 12:10, count_show = 20, то коэффициент попадания = 66%
+	* сейчас время например 12:15, count_show = 20, то коэффициент попадания = 100%
+	* сейчас время например 12:20, count_show = 20, то коэффициент попадания = 133%
+	* сейчас время например 12:25, count_show = 19, то коэффициент попадания = 66%
+	* сейчас время например 12:30, count_show = 18, то коэффициент попадания = 1%
+	* сейчас время например 12:35, count_show = 18, то коэффициент попадания = 33%
+	*
+	*
 	*/
 	public function getGalleryGeneration($monitorId = ''){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 		
-		$gallery = Gallery::select(DB::raw('galleries.*'))
+		$gallery = Gallery::select(DB::raw('galleries.*, tarifs.hours, tarifs.interval_sec'))
 			->join('tarifs', 'tarifs.id', '=', 'galleries.tarif_id')
 			->where('status_main', '=', $status_main->id)
 			->where('count_show', '>', '0')
 			->where('monitor_id', '=', $monitorId)
-			->where('date_show', '>=', $this->dateStart)
+			->where('date_show', '<=', $this->dateEnd)
+			->orderBy('date_show', 'asc')
 			->get();
-		//dd($gallery);
+			
+		$arrGallery = array();
+		if(count($gallery) > 0){
+			foreach($gallery as $key => $item){				
+			
+				$tarifCountShow = $item->hours*60*60/$item->interval_sec;								//Узнаем сколько по тарифу должно быть показов
+				$secondAdd = $tarifCountShow*$item->interval_sec;											//Узнаем через сколько секунд тариф закончится
+				$dataEndTarif = Carbon::parse($item->date_show)->addSeconds($secondAdd);	//Узнаем дату конца тарифа
+				
+				//Если текущая дата больше чем дата конца тарифа то $ost_sec = 0.01
+				//Если текущая дата меньше чем дата конца тарифа то проблем нет
+				if(Carbon::now()->timestamp >= $dataEndTarif->timestamp){
+					$ost_sec = 0.01;
+				}else{
+					$ost_sec = Carbon::now()->diffInSeconds($dataEndTarif);		//разница между текущим временем и концом даты тарифа
+				}
+				
+				
+				/*
+				* Формула:
+				* Td/Ir * It/Ir, где Td - 5 минут из исходного плейлиста
+				*							Ir - реальный интервал = кол-во оставшихся секунд до конца тарифа / кол-во оставшихся показов		
+				*							It - интервал по тарифу = кол-во оставшихся секунд до конца тарифа / кол-во показов из тарифа
+				*/
+				$real_interval = $ost_sec/$item->count_show;
+				$sort = 300/$real_interval*($item->interval_sec/$real_interval)*100;
+				
+				
+				
+				if($key == 19){
+					//dd($item->interval_sec);
+				}
+				
+
+				
+				$arrGallery[$item->id] = array(
+					"id" => $item->id,
+					"src" => $item->src,
+					"count_show" => $item->count_show,
+					"date_show" => $item->date_show,
+					"hours" => $item->hours,
+					"interval_sec" => $item->interval_sec,
+					"sort" => $sort,
+				);
+			}
+		}
+		dd($arrGallery);
 		return $gallery;
 	}
 	
@@ -176,13 +251,13 @@ class Playlist extends Model {
 		$nowDate = Carbon::now();
 		$tarif = array(
 			'1' => 12, 
-			'2' => 16,
+			'2' => 20,
 			'3' => 48 
 		);
 
-		for($i = 31; $i <= 100; $i++){
+		for($i = 1; $i <= 50; $i++){
 			$id = $i;
-			$date_show = $nowDate->addMinutes(1)->toDateTimeString();
+			$date_show = $nowDate->addMinutes(4)->toDateTimeString();
 			$tarif_id = $i%3+1;
 			
 			/*$Gallery = new Gallery;
