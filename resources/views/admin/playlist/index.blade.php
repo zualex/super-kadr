@@ -36,9 +36,9 @@
 						<td class="center col-2">{{ $value->id }}</td>
 						<td class="center col-3">
 							@if($value->enable == 1)
-								<input id="original-enable-{{ $value->id }}" class="toggle" name="enable" type="checkbox" value="1" checked>
+								<input id="original-enable-{{ $value->id }}" class="toggle" name="enable" type="checkbox" value="1" checked onchange="saveFieldCheckbox(this, '{{ route('admin.playlist.enable', $value->id) }}')">
 							@else
-								<input id="original-enable-{{ $value->id }}" class="toggle" name="enable" type="checkbox" value="1">
+								<input id="original-enable-{{ $value->id }}" class="toggle" name="enable" type="checkbox" value="1" onchange="saveFieldCheckbox(this, '{{ route('admin.playlist.enable', $value->id) }}')">
 							@endif
 							<label for="original-enable-{{ $value->id }}"></label>
 						</td>
@@ -51,9 +51,9 @@
 						</td>
 						<td class="center col-3">
 							@if($value->is_time == 1)
-								<input id="original-is_time-{{ $value->id }}" class="toggle" name="is_time" type="checkbox" value="1" checked>
+								<input id="original-is_time-{{ $value->id }}" class="toggle" name="is_time" type="checkbox" value="1" checked onchange="saveFieldCheckbox(this, '{{ route('admin.playlist.isTime', $value->id) }}')">
 							@else
-								<input id="original-is_time-{{ $value->id }}" class="toggle" name="is_time" type="checkbox" value="1">
+								<input id="original-is_time-{{ $value->id }}" class="toggle" name="is_time" type="checkbox" value="1" onchange="saveFieldCheckbox(this, '{{ route('admin.playlist.isTime', $value->id) }}')">
 							@endif
 							<label for="original-is_time-{{ $value->id }}"></label>
 						</td>

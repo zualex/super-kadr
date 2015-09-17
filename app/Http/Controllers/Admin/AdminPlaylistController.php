@@ -3,7 +3,8 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Illuminate\Http\Request;
+use Request;
+use Response;
 
 use App\Playlist;
 use Session;
@@ -28,6 +29,7 @@ class AdminPlaylistController extends Controller {
 	}
 	
 	
+	// удаление записи
 	public function delete($id){
 		$playlist = Playlist::find($id);
 		if($playlist){
@@ -36,6 +38,54 @@ class AdminPlaylistController extends Controller {
 		}
 		return redirect()->route('admin.playlist.index');
 	}
+	
+	//Изменение состояния
+	public function enable($id){
+		$playlist = Playlist::find($id);
+		$enable = Request::input('value');
+		if($playlist){
+			$playlist->enable = $enable;
+			$playlist->save();
+		
+			$res = array(
+				"status" => 'success',
+				"message" => 'Изменения сохранены'
+			);
+		}else{
+			$res = array(
+				"status" => 'error',
+				"message" => 'Произошла ошибка. Изменения не сохранены'
+			);
+		}
+
+		
+		return Response::json($res);
+	}
+	
+	
+	//Изменение IsTime
+	public function isTime($id){
+		$playlist = Playlist::find($id);
+		$isTime = Request::input('value');
+		if($playlist){
+			$playlist->is_time = $isTime;
+			$playlist->save();
+		
+			$res = array(
+				"status" => 'success',
+				"message" => 'Изменения сохранены'
+			);
+		}else{
+			$res = array(
+				"status" => 'error',
+				"message" => 'Произошла ошибка. Изменения не сохранены'
+			);
+		}
+
+		
+		return Response::json($res);
+	}
+	
 	
 	
 

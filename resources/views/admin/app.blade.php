@@ -17,6 +17,19 @@
 	
 	{!! HTML::script('/assets/admin/js/script.js') !!}
 	<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+	
+	
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+	<script>
+	$(function(){
+		$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+		});
+	});
+	</script>
+	
 </head>
 <header>
 	<div class="clear">

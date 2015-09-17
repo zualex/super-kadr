@@ -23,7 +23,7 @@ $(document).ready( function () {
 });
 
 
-/* Одобрить заказы */
+/* массовые операции */
 function actionAll(url){
 	var data = $("#form-admin").serialize();
 	$.ajax({
@@ -43,4 +43,31 @@ function actionAll(url){
 			alert('Произошла ошибка');
 		}
 	});
+}
+
+
+
+/* Изменения одного поля checkbox */
+function saveFieldCheckbox(el, url){
+	var value = 0;
+	if($(el).prop('checked')){
+		value = $(el).val();
+	}
+	$.ajax({
+		url: url, 
+		dataType: "html",
+		type: 'POST',
+		data: {
+			'value' : value
+		},
+		success: function(data){
+			var data = $.parseJSON(data);
+			if(data.status == 'error'){alert(data.message);}
+			if(data.status == 'success'){alert(data.message);}
+		},
+		error: function(){
+			alert('Произошла ошибка');
+		}
+	});
+	
 }
