@@ -131,7 +131,7 @@ class Playlist extends Model {
 			$enable = '';
 			$name = '';
 			$loop = '';
-			$IsTime = '';
+			$IsTime = 'true'; //По умолчанию true так как у многих элементов аттрибут IsTime отсуствует
 			$time = '';
 			
 			if (array_key_exists('enable', $item)) {$enable = $item['enable'];}
