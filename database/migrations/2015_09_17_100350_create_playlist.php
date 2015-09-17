@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlaylistsTableEmpty extends Migration {
+class CreatePlaylist extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -32,7 +32,7 @@ class CreatePlaylistsTableEmpty extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('playlists');
+		Schema::dropIfExists('playlists');
 	}
 
 }

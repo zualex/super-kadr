@@ -15,13 +15,12 @@ class AdminSettingController extends Controller {
 
 	public function index(Setting $settingModel)
 	{
+		//$settingModel->createSettingDefault();
 		$data = array(
 			"settingMain" => $settingModel->getSettingMain(),
 			"settingPay" => $settingModel->getSettingPay(),
 			"settingUser" => $settingModel->getSettingUser(),
 		);		
-		
-		//$settingModel->createSettingDefault();
 		return view('admin.setting.index')->with('data', $data);
 	}
 
