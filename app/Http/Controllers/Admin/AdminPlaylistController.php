@@ -5,7 +5,9 @@ use App\Http\Controllers\Controller;
 
 use Request;
 use Response;
-
+use Carbon\Carbon;
+use App\Pay;
+use App\Gallery;
 use App\Playlist;
 use Session;
 
@@ -14,7 +16,7 @@ class AdminPlaylistController extends Controller {
 
 	public function index(Playlist $playlistModel)
 	{
-		//$playlistModel->testGalleryUpload();
+		//$this->testGalleryUpload();
 		$data = array(
 			'initPlaylist' => $playlistModel->getInitPlaylist(),
 			'galleryGeneration_1' => $playlistModel->getGalleryGeneration(1),
@@ -88,6 +90,52 @@ class AdminPlaylistController extends Controller {
 		return Response::json($res);
 	}
 	
+	
+	
+	
+	
+	
+	/*
+	* Тестовое заполенения базы данных галлереей
+	* Не использовать на рабочем сайте
+	*/
+	public function testGalleryUpload(){
+		$nowDate = Carbon::now();
+		$nowDate = $nowDate->hour(0)->minute(0)->second(0);
+		
+		$tarif = array(
+			'1' => 12, 
+			'2' => 20,
+			'3' => 48 
+		);
+
+		for($i = 1; $i <= 50; $i++){
+			$id = $i;
+			$date_show = $nowDate->addMinutes(2)->toDateTimeString();
+			$tarif_id = $i%3+1;
+			
+			/*$Gallery = new Gallery;
+			$Gallery->id = $id;
+			$Gallery->user_id = 1;
+			$Gallery->src =  '1.jpeg';
+			$Gallery->status_main =  6;
+			$Gallery->status_order =  11;
+			$Gallery->count_show =  $tarif[$tarif_id];
+			$Gallery->date_show =  $date_show;
+			$Gallery->tarif_id =  $tarif_id;
+			$Gallery->monitor_id =  1;
+			$Gallery->save();
+			
+			$Pay = new Pay;
+			$Pay->gallery_id = $id;
+			$Pay->status_pay = 1;
+			$Pay->name = 'Пользователь: 1 сделал заказ';
+			$Pay->price = 150;
+			$Pay->visible = 1;
+			$Pay->save();*/
+		
+		}
+	}
 	
 	
 
