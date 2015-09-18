@@ -159,9 +159,12 @@ class Playlist extends Model {
 		
 		$dateStart = $this->infoPlayist[$monitorId]['dateStart'];
 		$dateEnd = $this->infoPlayist[$monitorId]['dateEnd'];
+		$diffDate= Carbon::parse($dateStart)->diffInSeconds(Carbon::parse($dateEnd));	//Разница в секундах между датой начала и конца
+		$timeOnePlayList = $this->timeInit + ($this->countGallery*$this->timeGallery);		//Время одного прогона плейлиста с учетом заказов
+		$allCountPlaylist = ceil($diffDate/$timeOnePlayList);												//Кол-во прогонов плейлиста
+		
 		
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
-		
 		$gallery = Gallery::select(DB::raw('galleries.*, tarifs.hours, tarifs.interval_sec'))
 			->join('tarifs', 'tarifs.id', '=', 'galleries.tarif_id')
 			->where('status_main', '=', $status_main->id)
@@ -171,32 +174,59 @@ class Playlist extends Model {
 			->orderBy('date_show', 'asc')
 			->get();
 			
-		$countPlaylist = 1;			//Какая по счету пятиминутка, !!!Нужно доделать переключение	
+			
+		// все заказы которые удовлетворяют условиям заносим в массив	
 		$arrGallery = array();
-		$arrSort = array();
 		if(count($gallery) > 0){
 			foreach($gallery as $key => $item){				
-				$sort = $this->getSort($countPlaylist, $item);
-				if($sort > 0){
-					$arrSort[$item->id] = $sort;
-					$arrGallery[$item->id] = array(
-						"id" => $item->id,
-						"src" => $item->src,
-						"count_show" => $item->count_show,
-						"date_show" => $item->date_show,
-						"hours" => $item->hours,
-						"interval_sec" => $item->interval_sec,
-						"sort" => $sort,
-					);
-				}
+				$arrGallery[$item->id] = array(
+					"id" => $item->id,
+					"src" => $item->src,
+					"count_show" => $item->count_show,
+					"date_show" => $item->date_show,
+					"hours" => $item->hours,
+					"interval_sec" => $item->interval_sec,
+					"monitor_id" => $item->monitor_id,
+					"sort" => 0,
+					"countPlaylist" => 9999,
+				);
 			}
-			
-			$arrGallery = $this->array_orderby($arrGallery, 'sort', SORT_DESC);
-			
+		}		
 
+		
+		//в $arrRes собираем заказы по 5 штук 
+		$arrRes = array();
+		$arrGalleryTemp = array();
+		if(count($arrGallery) > 0){	
+			for($countPlaylist = 1; $countPlaylist <=$allCountPlaylist; $countPlaylist++){
+				foreach($arrGallery as $key => $item){			
+					$item['count_show'] = $item['count_show'] - $countPlaylist + 1;			//фикс для корректной работы getSort
+	
+					$sort = $this->getSort($countPlaylist, $item);
+					if($sort > 0 AND $item['count_show'] > 0 AND !array_key_exists($item['id'], $arrGalleryTemp)){
+						$arrGalleryTemp[$item['id']]['id'] = $item['id'];
+						$arrGalleryTemp[$item['id']]['src'] = $item['src'];
+						$arrGalleryTemp[$item['id']]['count_show'] = $item['count_show'] - 1;
+						$arrGalleryTemp[$item['id']]['date_show'] = $item['date_show'];
+						$arrGalleryTemp[$item['id']]['hours'] = $item['hours'];
+						$arrGalleryTemp[$item['id']]['interval_sec'] = $item['interval_sec'];
+						$arrGalleryTemp[$item['id']]['monitor_id'] = $item['monitor_id'];
+						
+						$arrGalleryTemp[$item['id']]['sort'] = $sort;
+						$arrGalleryTemp[$item['id']]['countPlaylist'] = $countPlaylist;
+					}
+				}
+				
+				$arrGalleryTemp = $this->checkOneIter($arrGalleryTemp, $countPlaylist);	//Сортировка по полю sort и отсеиваем если больше 5 заказов
+				$arrRes[$countPlaylist] = $arrGalleryTemp;
+				
+			}
 		}
 
-		dd($arrGallery);
+		
+
+
+		dd($arrRes);
 		return $gallery;
 	}
 	
@@ -209,18 +239,18 @@ class Playlist extends Model {
 	public function getSort($countPlaylist, $item){
 		$sort = 0;
 		
-		$dateStart = $this->infoPlayist[$item->monitor_id]['dateStart'];
+		$dateStart = $this->infoPlayist[$item['monitor_id']]['dateStart'];
 		
 		$dateInit = Carbon::parse($dateStart)->addSeconds(($countPlaylist-1) * $this->timeInit);		//Узнаем дату начала пятиминутки
-		if(Carbon::parse($item->date_show)->timestamp <= $dateInit->timestamp){								//Если дата показа меньше или равно дате начала пятиминутки то включаем заказ
+		if(Carbon::parse($item['date_show'])->timestamp <= $dateInit->timestamp){								//Если дата показа меньше или равно дате начала пятиминутки то включаем заказ
 			$intervalAll = $countPlaylist * $this->timeInit;																				//Узнаем для пятиминутки общий интервал 
-			$tarifCountShow = $item->hours*60*60/$item->interval_sec;															//Узнаем сколько по тарифу должно быть показов
+			$tarifCountShow = $item['hours']*60*60/$item['interval_sec'];															//Узнаем сколько по тарифу должно быть показов
 			
-			$diffSec = Carbon::parse($item->date_show)->diffInSeconds($dateInit);										//Узнаем разницу между датой показа и датой формируемого плейлиста
-			$abstractCount = ceil($diffSec/$item->interval_sec);																		//Узнаем сколько должно было быть показов
-			$diffCount = $abstractCount - ($tarifCountShow - $item->count_show);											//Узнаем разницу между сколько должно быть и сколько показалось товаров
+			$diffSec = Carbon::parse($item['date_show'])->diffInSeconds($dateInit);										//Узнаем разницу между датой показа и датой формируемого плейлиста
+			$abstractCount = ceil($diffSec/$item['interval_sec']);																		//Узнаем сколько должно было быть показов
+			$diffCount = $abstractCount - ($tarifCountShow - $item['count_show']);											//Узнаем разницу между сколько должно быть и сколько показалось товаров
 			
-			$useInterval = ($tarifCountShow - $item->count_show + 1) * $item->interval_sec; 							//Узнаем используемый интервал
+			$useInterval = ($tarifCountShow - $item['count_show'] + 1) * $item['interval_sec']; 							//Узнаем используемый интервал
 			$sort = $intervalAll/$useInterval * $diffCount * 100;																		//Отношение общего интервала к интервалу показа и умножить коэффициент
 		}
 		
@@ -229,6 +259,28 @@ class Playlist extends Model {
 	}
 	
 	
+	
+	/*
+	*	Сортировка по полю sort и отсеиваем если больше 5 заказов
+	*/
+	public function checkOneIter($arrGallery, $countPlaylist){
+		$arrGallery = $this->array_orderby($arrGallery, 'countPlaylist', SORT_ASC, 'sort', SORT_DESC);
+		$counter = 0;
+		foreach($arrGallery as $key => $value){
+			if($value['countPlaylist'] == $countPlaylist){
+				$counter += 1;
+				if($counter > $this->countGallery){
+					unset($arrGallery[$key]);
+				}		
+			}else{
+				unset($arrGallery[$key]);
+			}
+
+		}
+		return $arrGallery;
+	}
+
+				
 
 	/*
 	* Удаление исходного плейлиста
