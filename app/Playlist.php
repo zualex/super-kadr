@@ -31,35 +31,40 @@ class Playlist extends Model {
 		$this->timeInit = 300;
 		$this->countGallery = 5;
 		$this->timeGallery = 5;
-
 		
-		//Интервал каждые пол часа
-		$nowDate = Carbon::now();
-		
-		//$this->dateStart - нужно чтобы равнялся дате начала формирования плейлистов
-		//$this->dateStart - дата окончания формирования плейлиста
-		
-		
-		$addHour = 0;
-		$startMinute = 0;
-		$endMinute = 30;
-		if($nowDate->minute >= 30){
-			$addHour = 1;
-			$startMinute = 30;
-			$endMinute = 0;
-		}
-		$this->dateStart = $nowDate->second(0)->minute($startMinute)->toDateTimeString();
-		$this->dateEnd = $nowDate->second(0)->minute($endMinute)->addHour($addHour)->toDateTimeString();
-		
-
-	
 	}
 	
 	public function monitor(){
         return $this->belongsTo('App\Monitor');
     }
 	
+	
+	/*
+	* Инициализация даты начала и даты конца плейлиста
+	*/
+	public function dateInit($monitorId = ''){
+		$playlist = Playlist::select(DB::raw('SUM(playlists.time) as allTime, loop_xml'))
+			->where('enable', '=', 1)
+			->where('is_time', '=', 1)
+			->where('monitor_id', '=', $monitorId)
+			->groupBy('loop_xml')
+			->get();
+		$allTime = 0;
+		if(count($playlist) > 0){
+			foreach ($playlist as $key => $value){
+				$allTime += $value->allTime*($value->loop_xml + 1);
+			}
+		}
+		$countPlaylist = ceil($allTime/$this->timeInit);
+		$dopTime = $countPlaylist*$this->timeGallery;		//Узнаем дополнительное время с учетом заказов
+		$allTime += $dopTime;
 
+		$nowDate = Carbon::now();
+		$this->dateStart = $nowDate->toDateTimeString();
+		$this->dateEnd = $nowDate->addSeconds($allTime)->toDateTimeString();
+
+		return $playlist;
+    }
 	
 	
 	/*
@@ -72,7 +77,6 @@ class Playlist extends Model {
 			->orderBy('monitor_id', 'asc')
 			->orderBy('sort', 'asc')
 			->get();
-		//dd($playlist);
 		return $playlist;
 	}
 	
@@ -94,6 +98,9 @@ class Playlist extends Model {
 	*
 	*/
 	public function getGalleryGeneration($monitorId = ''){
+
+		$this->dateInit($monitorId);	//инициализация даты начала и даты конца плейлиста
+		
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 		
 		$gallery = Gallery::select(DB::raw('galleries.*, tarifs.hours, tarifs.interval_sec'))
@@ -128,6 +135,7 @@ class Playlist extends Model {
 				}
 			}
 		}
+
 		dd($arrGallery);
 		return $gallery;
 	}
