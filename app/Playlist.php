@@ -171,13 +171,13 @@ class Playlist extends Model {
 			->orderBy('date_show', 'asc')
 			->get();
 			
-		$countPlaylist = 1;			//Какая по счету пятиминутка
+		$countPlaylist = 1;			//Какая по счету пятиминутка, !!!Нужно доделать переключение	
 		$arrGallery = array();
 		$arrSort = array();
 		if(count($gallery) > 0){
 			foreach($gallery as $key => $item){				
 				$sort = $this->getSort($countPlaylist, $item);
-				if($sort >= 100){
+				if($sort > 0){
 					$arrSort[$item->id] = $sort;
 					$arrGallery[$item->id] = array(
 						"id" => $item->id,
@@ -190,7 +190,10 @@ class Playlist extends Model {
 					);
 				}
 			}
+			
 			$arrGallery = $this->array_orderby($arrGallery, 'sort', SORT_DESC);
+			
+
 		}
 
 		dd($arrGallery);
@@ -220,6 +223,7 @@ class Playlist extends Model {
 			$useInterval = ($tarifCountShow - $item->count_show + 1) * $item->interval_sec; 							//Узнаем используемый интервал
 			$sort = $intervalAll/$useInterval * $diffCount * 100;																		//Отношение общего интервала к интервалу показа и умножить коэффициент
 		}
+		
 		
 		return $sort;
 	}
@@ -384,7 +388,7 @@ class Playlist extends Model {
 			'3' => 48 
 		);
 
-		for($i = 12; $i <= 70; $i++){
+		for($i = 1; $i <= 70; $i++){
 			$id = $i;
 			$date_show = $nowDate->addMinutes(4)->toDateTimeString();
 			$tarif_id = $i%3+1;
