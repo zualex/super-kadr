@@ -7,6 +7,7 @@ use SoapBox\Formatter\Formatter;
 use App\Monitor;
 use App\Gallery;
 use App\Pay;
+use App\PlaylistTime;
 use File;
 use DB;
 
@@ -31,12 +32,29 @@ class Playlist extends Model {
 		$this->timeInit = 300;
 		$this->countGallery = 5;
 		$this->timeGallery = 5;
-		
 	}
+	
+	
 	
 	public function monitor(){
         return $this->belongsTo('App\Monitor');
     }
+	
+	
+	
+	/*
+	* Получение исходного плейлиста из БД
+	*/
+	public function getInitPlaylist(){
+		$playlist = $this
+			->with('monitor')
+			->where('type', '=', '0')
+			->orderBy('monitor_id', 'asc')
+			->orderBy('sort', 'asc')
+			->get();
+		return $playlist;
+	}
+	
 	
 	
 	/*
@@ -67,18 +85,33 @@ class Playlist extends Model {
     }
 	
 	
+	
 	/*
-	* Получение исходного плейлиста из БД
+	* Определение и загрузка исходных файлов в базу данных
 	*/
-	public function getInitPlaylist(){
-		$playlist = $this
-			->with('monitor')
-			->where('type', '=', '0')
-			->orderBy('monitor_id', 'asc')
-			->orderBy('sort', 'asc')
-			->get();
-		return $playlist;
+	public function initFile(){
+		$Monitor_1 = Monitor::where('number', '=', 1)->first();
+		$Monitor_2 = Monitor::where('number', '=', 2)->first();
+		
+		// для первого экрана очистка и сохранение в базу данных
+		$this->deleteInitPlaylist($Monitor_1->id);
+		$files = File::files($this->pathPlaylistMonitor_1);
+		foreach($files as $key => $file){
+			$this->saveFileInDB($file, $Monitor_1->id);
+		}
+		
+		// для второго экрана очистка и сохранение в базу данных
+		$this->deleteInitPlaylist($Monitor_2->id);
+		$files = File::files($this->pathPlaylistMonitor_2);
+		foreach($files as $key => $file){
+			$this->saveFileInDB($file, $Monitor_2->id);
+		}
+		
+		//заносим в базу данных даты начала и конца генерации плейлистов
+		
+		return 1;
 	}
+	
 	
 	
 	/*
@@ -94,7 +127,6 @@ class Playlist extends Model {
 	* То есть вероятность попадания заказа с тарифом 1 в первую 5-ти минутка = 100%
 	*																							    с тарифом 2 = 33%
 	*																							    с тарифом 3 = 16%
-	*
 	*
 	*/
 	public function getGalleryGeneration($monitorId = ''){
@@ -141,25 +173,6 @@ class Playlist extends Model {
 	}
 	
 	
-	/*
-	* сортировка массив
-	*/
-	function array_orderby() {
-		$args = func_get_args();
-		$data = array_shift($args);
-		foreach ($args as $n => $field) {
-			if (is_string($field)) {
-				$tmp = array();
-				foreach ($data as $key => $row)
-					$tmp[$key] = $row[$field];
-				$args[$n] = $tmp;
-				}
-		}
-		$args[] = &$data;
-		call_user_func_array('array_multisort', $args);
-		return array_pop($args);
-	}
-	
 	
 	/*
 	* Вычисление коэффициента вероятности показа галлереи
@@ -185,32 +198,7 @@ class Playlist extends Model {
 	}
 	
 	
-	
-	/*
-	* Определение и загрузка исходных файлов в базу данных
-	*/
-	public function initFile(){
-		$Monitor_1 = Monitor::where('number', '=', 1)->first();
-		$Monitor_2 = Monitor::where('number', '=', 2)->first();
-		
-		// для первого экрана
-		$this->deleteInitPlaylist($Monitor_1->id);
-		$files = File::files($this->pathPlaylistMonitor_1);
-		foreach($files as $key => $file){
-			$this->saveFileInDB($file, $Monitor_1->id);
-		}
-		
-		// для второго экрана
-		$this->deleteInitPlaylist($Monitor_2->id);
-		$files = File::files($this->pathPlaylistMonitor_2);
-		foreach($files as $key => $file){
-			$this->saveFileInDB($file, $Monitor_2->id);
-		}
-		
-		return 1;
-	}
-	
-	
+
 	/*
 	* Удаление исходного плейлиста
 	*/
@@ -223,6 +211,8 @@ class Playlist extends Model {
 		}
 		return $res;
 	}
+	
+	
 	
 	/*
 	* Сохранение файла в базу данных
@@ -276,6 +266,35 @@ class Playlist extends Model {
 	}
 	
 	
+	
+	
+	
+	
+	/*
+	* ---------------------------------------------------------------------------------------------
+	*/
+	
+	/*
+	* сортировка массив
+	*/
+	function array_orderby() {
+		$args = func_get_args();
+		$data = array_shift($args);
+		foreach ($args as $n => $field) {
+			if (is_string($field)) {
+				$tmp = array();
+				foreach ($data as $key => $row)
+					$tmp[$key] = $row[$field];
+				$args[$n] = $tmp;
+				}
+		}
+		$args[] = &$data;
+		call_user_func_array('array_multisort', $args);
+		return array_pop($args);
+	}
+	
+	
+	
 	/*
 	* Тестовое заполенения базы данных галлереей
 	* Не использовать на рабочем сайте
@@ -314,8 +333,6 @@ class Playlist extends Model {
 			$Pay->save();*/
 		
 		}
-
-
 	}
 	
 }

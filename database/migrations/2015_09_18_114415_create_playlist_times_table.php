@@ -16,8 +16,11 @@ class CreatePlaylistTimesTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('number');
+			$table->tinyInteger('complete')->default(0);
 			$table->dateTime('dateStart');
 			$table->dateTime('dateEnd');
+			$table->integer('monitor_id')->unsigned()->nullable();
+			$table->foreign('monitor_id')->references('id')->on('monitors');
 			$table->timestamps();
 		});
 	}
