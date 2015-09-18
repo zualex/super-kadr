@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
+use Image;
 use Carbon\Carbon;
 use SoapBox\Formatter\Formatter;
 use App\Monitor;
@@ -14,8 +15,15 @@ use DB;
 class Playlist extends Model {
 
 	public $error;
-	public $pathPlaylistMonitor_1;	//Исходный плейлист для Экрана 1
-	public $pathPlaylistMonitor_2;	//Исходный плейлист для Экрана 2
+	public $pathPlaylistMonitor_1;	//плейлисты для Экрана 1
+	public $pathPlaylistMonitor_2;	//плейлисты для Экрана 2
+	public $folderInit;						//папка исходного плейлиста
+	public $folderImg;					//путь к картинкам
+	public $imgSize;						//размеры для плейлистов
+	
+	public $pathImages;					//путь к оригинальным картинкам
+
+	
 	public $timeInit;						//5 минут из исходного плейлиста
 	public $countGallery;				//5 показов наших заказов
 	public $timeGallery;					//5 секунд показ заказов
@@ -27,6 +35,21 @@ class Playlist extends Model {
 		$this->error = array();
 		$this->pathPlaylistMonitor_1 = base_path()."/resources/playlistFiles/Monitor1";
 		$this->pathPlaylistMonitor_2 = base_path()."/resources/playlistFiles/Monitor2";
+		$this->folderInit = 'init';
+		$this->folderImg = 'images';
+		$this->imgSize = array(
+			'1' => array(
+				'w' => 280,
+				'h' => 180,
+			),
+			'2' => array(
+				'w' => 240,
+				'h' => 192,
+			),
+		);
+		
+		$this->pathImages = base_path()."/public/images";
+		
 		$this->timeInit = 300;
 		$this->countGallery = 5;
 		$this->timeGallery = 5;
@@ -83,14 +106,14 @@ class Playlist extends Model {
 		/*
 		// для первого экрана очистка и сохранение в базу данных
 		$this->deleteInitPlaylist($Monitor_1->id);
-		$files = File::files($this->pathPlaylistMonitor_1);
+		$files = File::files($this->pathPlaylistMonitor_1.'/'.$this->folderInit);
 		foreach($files as $key => $file){
 			$this->saveFileInDB($file, $Monitor_1->id);
 		}
 		
 		// для второго экрана очистка и сохранение в базу данных
 		$this->deleteInitPlaylist($Monitor_2->id);
-		$files = File::files($this->pathPlaylistMonitor_2);
+		$files = File::files($this->pathPlaylistMonitor_2.'/'.$this->folderInit);
 		foreach($files as $key => $file){
 			$this->saveFileInDB($file, $Monitor_2->id);
 		}
@@ -112,14 +135,18 @@ class Playlist extends Model {
 	*/
 	public function generationNewPlay($monitorId = '', $offset = 0){
 		$this->getDateNext($monitorId, $offset);									//Формирование в $this->infoPlayist информации следующего плейлиста
-		$playlist = $this->getInitPlaylistByMonitor($monitorId);				//Получение исходного плейлиста
 		$arrAddGallery = $this->getArrAddGallery($monitorId);				//Получение списка добавляемых заказов для данного плейлиста
+		$playlist = $this->getInitPlaylistByMonitor($monitorId);				//Получение исходного плейлиста
 		
 		$arrRes = $this->getMergeArray($playlist, $arrAddGallery);			//объединение исходного плейлиста с закзазами
 		
-		$timePlaylist = $this->getTimePlaylist($arrRes);							//Получение общего времени
+		$timePlaylist = $this->getTimePlaylist($arrRes);							//Получение общего времени и обновление dateEnd
+		$this->infoPlayist[$monitorId]['dateEnd'] = Carbon::parse($this->infoPlayist[$monitorId]['dateStart'])->addSeconds($timePlaylist)->toDateTimeString();
 		
-		dd($timePlaylist);
+		$this->savePlaylistWithGallery($monitorId, $arrRes);										//Сохранение плейлиста
+		
+		
+		dd($dateEnd);
 		return $arrRes;
 	}
 	
@@ -471,7 +498,71 @@ class Playlist extends Model {
 	}
 
 		
+	
+	/*
+	*	savePlaylistWithGallery - Сохранение плейлиста
+	*/
+	public function savePlaylistWithGallery($monitorId = '', $arrRes = array()){
+		if($monitorId != '' AND count($arrRes) > 0){
+			$dateStart = $this->infoPlayist[$monitorId]['dateStart'];
+			$dateEnd = $this->infoPlayist[$monitorId]['dateEnd'];
+			
+			$dateStart = Carbon::parse($dateStart);
+			$namePlaylist = 'PL'.$dateStart->format('YmdHis').'.xml';
+			if($monitorId == 1){
+				$pathSave = $this->pathPlaylistMonitor_1.'/'.$namePlaylist;
+			}
+			if($monitorId == 2){
+				$pathSave = $this->pathPlaylistMonitor_2.'/'.$namePlaylist;
+			}
+			
+			
+			$xml = '';
+			
+			$xml .= '<?xml version="1.0" encoding="windows-1251"?>
+<!--Nata-Info Ltd. NISheduler.Sheduler playlist-->
+<tasks>
+	<collection base="C:\Ролики\Ролики\">';
+			
+			foreach($arrRes as $key => $item){
+				$xml .= '<item enable="'.$item['enable'].'" name="'.$item['name'].'" loop="'.$item['loop'].'" IsTime="'.$item['IsTime'].'" time="'.$item['time'].'"></item>
+';
+				if($item['init'] == 0){
+					$this->savePlaylistImg($monitorId, $item);		//сохранение картинки для плейлиста			
+				}
+				
+			}
+	
+			$xml .= '	</collection>
+</tasks>';
+			
+			File::put($pathSave, $xml);
+			dd($xml);
+		}
+	}
+	
+	
+	
+	/*
+	* savePlaylistImg - сохранение картинки для плейлиста
+	*/
+	public function savePlaylistImg($monitorId, $item){
+		$pathStart = $this->pathImages.'/o_'.$item['name'];
+		if($monitorId == 1){
+			$pathSave = $this->pathPlaylistMonitor_1.'/'.$this->folderImg.'/'.$item['name'];
+		}
+		if($monitorId == 2){
+			$pathSave = $this->pathPlaylistMonitor_2.'/'.$this->folderImg.'/'.$item['name'];
+		}
+		$w = $this->imgSize[$monitorId]['w'];
+		$h = $this->imgSize[$monitorId]['h'];
 		
+		if(!File::exists($pathSave)){
+			Image::make($pathStart)->resize($w, $h)->save($pathSave);
+		}
+		
+		return 1;
+	}
 		
 	
 	/*
