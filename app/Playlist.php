@@ -18,15 +18,28 @@ class Playlist extends Model {
 	public $dateStart;						//Время показа для генерируемых плейлистов
 	public $dateEnd;						//Конечное время показа для генерируемых плейлистов
 	
+	public $timeInit;						//5 минут из исходного плейлиста
+	public $countGallery;				//5 показов наших заказов
+	public $timeGallery;					//5 секунд показ заказов
+	
 	
 	public function __construct(){
 		$this->error = array();
 		$this->pathPlaylistMonitor_1 = base_path()."/resources/playlistFiles/Monitor1";
 		$this->pathPlaylistMonitor_2 = base_path()."/resources/playlistFiles/Monitor2";
+		
+		$this->timeInit = 300;
+		$this->countGallery = 5;
+		$this->timeGallery = 5;
 
 		
 		//Интервал каждые пол часа
 		$nowDate = Carbon::now();
+		
+		//$this->dateStart - нужно чтобы равнялся дате начала формирования плейлистов
+		//$this->dateStart - дата окончания формирования плейлиста
+		
+		
 		$addHour = 0;
 		$startMinute = 0;
 		$endMinute = 30;
@@ -37,6 +50,8 @@ class Playlist extends Model {
 		}
 		$this->dateStart = $nowDate->second(0)->minute($startMinute)->toDateTimeString();
 		$this->dateEnd = $nowDate->second(0)->minute($endMinute)->addHour($addHour)->toDateTimeString();
+		
+
 	
 	}
 	
@@ -77,19 +92,6 @@ class Playlist extends Model {
 	*																							    с тарифом 3 = 16%
 	*
 	*
-	* Если заказ был в предыдущей пятиминтку то коэффициенты равны по умолчанию.
-	* Для того чтобы определить попадал товар в предыдущую пятимитку или нет для этого есть count_show, который показывает сколько показов осталось
-	* Например если заказ с датаой показа 12:00 c тарифом 2 (4 показа в час в течение 5 часов. - каждые 15 мин. - всего count_show = 20)
-	* сейчас время например 12:00, count_show = 20, то коэффициент попадания = 1%
-	* сейчас время например 12:05, count_show = 20, то коэффициент попадания = 33%
-	* сейчас время например 12:10, count_show = 20, то коэффициент попадания = 66%
-	* сейчас время например 12:15, count_show = 20, то коэффициент попадания = 100%
-	* сейчас время например 12:20, count_show = 20, то коэффициент попадания = 133%
-	* сейчас время например 12:25, count_show = 19, то коэффициент попадания = 66%
-	* сейчас время например 12:30, count_show = 18, то коэффициент попадания = 1%
-	* сейчас время например 12:35, count_show = 18, то коэффициент попадания = 33%
-	*
-	*
 	*/
 	public function getGalleryGeneration($monitorId = ''){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
@@ -103,54 +105,77 @@ class Playlist extends Model {
 			->orderBy('date_show', 'asc')
 			->get();
 			
+		$countPlaylist = 1;			//Какая по счету пятиминутка
 		$arrGallery = array();
+		$arrSort = array();
 		if(count($gallery) > 0){
 			foreach($gallery as $key => $item){				
-			
-				$tarifCountShow = $item->hours*60*60/$item->interval_sec;								//Узнаем сколько по тарифу должно быть показов
-				$secondAdd = $tarifCountShow*$item->interval_sec;											//Узнаем через сколько секунд тариф закончится
-				$dataEndTarif = Carbon::parse($item->date_show)->addSeconds($secondAdd);	//Узнаем дату конца тарифа
-				
-				//Если текущая дата больше чем дата конца тарифа то $ost_sec = 0.01
-				//Если текущая дата меньше чем дата конца тарифа то проблем нет
-				if(Carbon::now()->timestamp >= $dataEndTarif->timestamp){
-					$ost_sec = 0.01;
-				}else{
-					$ost_sec = Carbon::now()->diffInSeconds($dataEndTarif);		//разница между текущим временем и концом даты тарифа
+				$sort = $this->getSort($countPlaylist, $item);
+				if($sort >= 100){
+					$arrSort[$item->id] = $sort;
+					$arrGallery[$item->id] = array(
+						"id" => $item->id,
+						"src" => $item->src,
+						"count_show" => $item->count_show,
+						"date_show" => $item->date_show,
+						"hours" => $item->hours,
+						"interval_sec" => $item->interval_sec,
+						"sort" => $sort,
+					);
+					$arrGallery = $this->array_orderby($arrGallery, 'sort', SORT_DESC);
+					
+					
 				}
-				
-				
-				/*
-				* Формула:
-				* Td/Ir * It/Ir, где Td - 5 минут из исходного плейлиста
-				*							Ir - реальный интервал = кол-во оставшихся секунд до конца тарифа / кол-во оставшихся показов		
-				*							It - интервал по тарифу = кол-во оставшихся секунд до конца тарифа / кол-во показов из тарифа
-				*/
-				$real_interval = $ost_sec/$item->count_show;
-				$sort = 300/$real_interval*($item->interval_sec/$real_interval)*100;
-				
-				
-				
-				if($key == 19){
-					//dd($item->interval_sec);
-				}
-				
-
-				
-				$arrGallery[$item->id] = array(
-					"id" => $item->id,
-					"src" => $item->src,
-					"count_show" => $item->count_show,
-					"date_show" => $item->date_show,
-					"hours" => $item->hours,
-					"interval_sec" => $item->interval_sec,
-					"sort" => $sort,
-				);
 			}
 		}
 		dd($arrGallery);
 		return $gallery;
 	}
+	
+	
+	/*
+	* сортировка массив
+	*/
+	function array_orderby() {
+		$args = func_get_args();
+		$data = array_shift($args);
+		foreach ($args as $n => $field) {
+			if (is_string($field)) {
+				$tmp = array();
+				foreach ($data as $key => $row)
+					$tmp[$key] = $row[$field];
+				$args[$n] = $tmp;
+				}
+		}
+		$args[] = &$data;
+		call_user_func_array('array_multisort', $args);
+		return array_pop($args);
+	}
+	
+	
+	/*
+	* Вычисление коэффициента вероятности показа галлереи
+	* Если значение больше 100 то должен быть показан
+	*/
+	public function getSort($countPlaylist, $item){
+		$sort = 0;
+			
+		$dateInit = Carbon::parse($this->dateStart)->addSeconds(($countPlaylist-1) * $this->timeInit);		//Узнаем дату начала пятиминутки
+		if(Carbon::parse($item->date_show)->timestamp <= $dateInit->timestamp){								//Если дата показа меньше или равно дате начала пятиминутки то включаем заказ
+			$intervalAll = $countPlaylist * $this->timeInit;																				//Узнаем для пятиминутки общий интервал 
+			$tarifCountShow = $item->hours*60*60/$item->interval_sec;															//Узнаем сколько по тарифу должно быть показов
+			
+			$diffSec = Carbon::parse($item->date_show)->diffInSeconds($dateInit);										//Узнаем разницу между датой показа и датой формируемого плейлиста
+			$abstractCount = ceil($diffSec/$item->interval_sec);																		//Узнаем сколько должно было быть показов
+			$diffCount = $abstractCount - ($tarifCountShow - $item->count_show);											//Узнаем разницу между сколько должно быть и сколько показалось товаров
+			
+			$useInterval = ($tarifCountShow - $item->count_show + 1) * $item->interval_sec; 							//Узнаем используемый интервал
+			$sort = $intervalAll/$useInterval * $diffCount * 100;																		//Отношение общего интервала к интервалу показа и умножить коэффициент
+		}
+		
+		return $sort;
+	}
+	
 	
 	
 	/*
@@ -255,7 +280,7 @@ class Playlist extends Model {
 			'3' => 48 
 		);
 
-		for($i = 1; $i <= 50; $i++){
+		for($i = 12; $i <= 70; $i++){
 			$id = $i;
 			$date_show = $nowDate->addMinutes(4)->toDateTimeString();
 			$tarif_id = $i%3+1;
