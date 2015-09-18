@@ -57,6 +57,23 @@ class Playlist extends Model {
 	
 	
 	/*
+	* getInitPlaylistByMonitor - Получение исходного плейлиста из БД выборка по экрану
+	*/
+	public function getInitPlaylistByMonitor($monitorId){
+		$playlist = $this
+			->with('monitor')
+			->where('type', '=', '0')
+			->where('enable', '=', 1)
+			->where('is_time', '=', 1)
+			->where('monitor_id', '=', $monitorId)
+			->orderBy('sort', 'asc')
+			->get();
+		return $playlist;
+	}
+	
+	
+	
+	/*
 	* initFile - загрузка исходных файлов в базу данных
 	*/
 	public function initFile(){		
@@ -95,10 +112,15 @@ class Playlist extends Model {
 	*/
 	public function generationNewPlay($monitorId = '', $offset = 0){
 		$this->getDateNext($monitorId, $offset);									//Формирование в $this->infoPlayist информации следующего плейлиста
+		$playlist = $this->getInitPlaylistByMonitor($monitorId);				//Получение исходного плейлиста
 		$arrAddGallery = $this->getArrAddGallery($monitorId);				//Получение списка добавляемых заказов для данного плейлиста
-		dd($arrAddGallery);
 		
+		$arrRes = $this->getMergeArray($playlist, $arrAddGallery);			//объединение исходного плейлиста с закзазами
 		
+		$timePlaylist = $this->getTimePlaylist($arrRes);							//Получение общего времени
+		
+		dd($timePlaylist);
+		return $arrRes;
 	}
 	
 	
@@ -176,7 +198,7 @@ class Playlist extends Model {
 	* $offset = 1 - инициальзация плейлиста для следущей даты
 	*/
 	public function getDateNext($monitorId = '', $offset = 0){		
-		$allSecond = $this->getAllSecond($monitorId, 1);	//общее время одного плейлиста в секундах
+		$allSecond = $this->getAllSecond($monitorId, 0);	//общее время одного плейлиста в секундах
 		$playlistTime = PlaylistTime::where('monitor_id', '=', $monitorId)
 			->where('complete', '=', 1)
 			->orderBy('dateEnd', 'desc')
@@ -239,8 +261,8 @@ class Playlist extends Model {
 		$dateStart = $this->infoPlayist[$monitorId]['dateStart'];
 		$dateEnd = $this->infoPlayist[$monitorId]['dateEnd'];
 		$allSecond = $this->infoPlayist[$monitorId]['allSecond'];
-		$timeOneIterPlayList = $this->timeInit + ($this->countGallery*$this->timeGallery);			//Время одного прогона плейлиста с учетом заказов
-		$countIterOnePlaylist = ceil($allSecond/$timeOneIterPlayList);											//Кол-во прогонов
+		//$timeOneIterPlayList = $this->timeInit + ($this->countGallery*$this->timeGallery);		//Время одного прогона плейлиста с учетом заказов
+		$countIterOnePlaylist = ceil($allSecond/$this->timeInit);												//Кол-во прогонов
 		$arrGallery = $this->getGalleryDateShow($monitorId, $dateEnd);									//Получение галерей которые попадут в генерируемый плейлист
 		
 		$arrRes = array();
@@ -283,6 +305,7 @@ class Playlist extends Model {
 					"monitor_id" => $item->monitor_id,
 					"sort" => 0,
 					"countPlaylist" => 9999,
+					"init" => 0,
 				);
 			}
 		}	
@@ -310,6 +333,7 @@ class Playlist extends Model {
 					
 					$gallery[$item['id']]['sort'] = $sort;
 					$gallery[$item['id']]['countPlaylist'] = $countPlaylist;
+					$gallery[$item['id']]['init'] = 0;
 				}
 			}
 			
@@ -377,6 +401,7 @@ class Playlist extends Model {
 					$arrGallery[$item['id']]['monitor_id'] = $item['monitor_id'];
 					$arrGallery[$item['id']]['sort'] =  $item['sort'];
 					$arrGallery[$item['id']]['countPlaylist'] =  $item['countPlaylist'];
+					$arrGallery[$item['id']]['init'] =  $item['init'];
 				}
 			}
 		}
@@ -384,6 +409,70 @@ class Playlist extends Model {
 	}
 	
 	
+	
+	/*
+	* getMergeArray - объединение исходного плейлиста с закзазами
+	*/
+	public function getMergeArray($playlist, $arrAddGallery){
+		$arrRes = array();
+		$timePlaylist = 0;
+		if(count($playlist) > 0){
+			foreach($playlist as $key => $item){
+				$timePlaylist += $item['time'] * ($item['loop_xml'] + 1);
+				$ratio = floor($timePlaylist / $this->timeInit) + 1;
+				
+				$arrRes[] = array(
+					'enable' => $item['enable'],
+					'name' => $item['name'],
+					'loop' => $item['loop_xml'],
+					'IsTime' => $item['is_time'],
+					'time' => $item['time'],
+					'sort' => $key,
+					'countPlaylist' => $ratio,
+					'init' => 1
+				);		
+			}
+		}
+		
+		if(count($arrAddGallery) > 0){
+			foreach($arrAddGallery as $key1 => $arrItem){
+				foreach($arrItem as $key2 => $item){	
+					$arrRes[] = array(
+						'enable' => 'True',
+						'name' => $item['src'],
+						'loop' => 0,
+						'IsTime' => 'True',
+						'time' => $this->timeGallery,
+						'sort' => $item['sort'],
+						'countPlaylist' => $item['countPlaylist'],
+						'init' => 0
+					);	
+				}	
+			}
+		}
+		$arrRes = $this->array_orderby($arrRes, 'countPlaylist', SORT_ASC, 'init', SORT_DESC, 'sort', SORT_DESC);
+		
+		return $arrRes;
+	}
+
+	
+	
+	/*
+	*	getTimePlaylist - Получение общего времени
+	*/
+	public function getTimePlaylist($arrRes){
+		$timePlaylist = 0;
+		if(count($arrRes) > 0){
+			foreach($arrRes as $key => $item){
+				$timePlaylist += $item['time'] * ($item['loop'] + 1);
+			}
+		}
+		return $timePlaylist;
+	}
+
+		
+		
+		
 	
 	/*
 	* сортировка массив
