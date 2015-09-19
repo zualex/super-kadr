@@ -111,7 +111,7 @@ class AdminPlaylistController extends Controller {
 
 		for($i = 1; $i <= 50; $i++){
 			$id = $i;
-			$date_show = $nowDate->addMinutes(2)->toDateTimeString();
+			$date_show = $nowDate->addMinutes(5)->toDateTimeString();
 			$tarif_id = $i%3+1;
 			
 			/*$Gallery = new Gallery;

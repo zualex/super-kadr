@@ -91,6 +91,24 @@ class Playlist extends Model {
 			->where('monitor_id', '=', $monitorId)
 			->orderBy('sort', 'asc')
 			->get();
+			
+		//Если дается мало времени на плейлист то ограничиваем	
+		if($playlist){
+			$allSecond = $this->infoPlayist[$monitorId]['allSecond'];
+			$allSecondAllPlaylist = $this->getAllSecond($monitorId, 0);
+			if($allSecondAllPlaylist != $allSecond){				//Ели общее время плейлистов не совпадает со временем которое дается на плейлист
+				$checkSecond = 0;
+				foreach($playlist as $key => $item){
+					$checkSecond += $item['time'] * ($item['loop_xml'] + 1);
+					if($checkSecond <= $allSecond){
+						$playlist[$key] = $item;
+					}else{
+						unset($playlist[$key] );
+					}
+				}
+			}
+		}
+	
 		return $playlist;
 	}
 	
@@ -103,23 +121,7 @@ class Playlist extends Model {
 		$Monitor_1 = Monitor::where('number', '=', 1)->first();
 		$Monitor_2 = Monitor::where('number', '=', 2)->first();
 		
-		/*
-		// для первого экрана очистка и сохранение в базу данных
-		$this->deleteInitPlaylist($Monitor_1->id);
-		$files = File::files($this->pathPlaylistMonitor_1.'/'.$this->folderInit);
-		foreach($files as $key => $file){
-			$this->saveFileInDB($file, $Monitor_1->id);
-		}
-		
-		// для второго экрана очистка и сохранение в базу данных
-		$this->deleteInitPlaylist($Monitor_2->id);
-		$files = File::files($this->pathPlaylistMonitor_2.'/'.$this->folderInit);
-		foreach($files as $key => $file){
-			$this->saveFileInDB($file, $Monitor_2->id);
-		}
-		*/
-		
-		//Генерация первого файла плейлиста
+		//Генерация плейлистов
 		$this->generationNewPlay($Monitor_1->id);
 		$this->generationNewPlay($Monitor_2->id);
 
@@ -135,18 +137,20 @@ class Playlist extends Model {
 	*/
 	public function generationNewPlay($monitorId = '', $offset = 0){
 		$this->getDateNext($monitorId, $offset);									//Формирование в $this->infoPlayist информации следующего плейлиста
-		$arrAddGallery = $this->getArrAddGallery($monitorId);				//Получение списка добавляемых заказов для данного плейлиста
-		$playlist = $this->getInitPlaylistByMonitor($monitorId);				//Получение исходного плейлиста
-
+		$this->checkGenerateInitPlaylist($monitorId);								//Проверка нужно ли сохранение исходного плейлиста в базу данных
+			
+		$playlist = $this->getInitPlaylistByMonitor($monitorId);				//Получение исходного плейлиста	
+		$arrAddGallery = $this->getArrAddGallery($monitorId);				//Получение списка добавляемых заказов для данного плейлиста		
 		$arrRes = $this->getMergeArray($playlist, $arrAddGallery);			//объединение исходного плейлиста с закзазами
 		
-		$timePlaylist = $this->getTimePlaylist($arrRes);							//Получение общего времени для обновление dateEnd
-		$this->infoPlayist[$monitorId]['dateEnd'] = Carbon::parse($this->infoPlayist[$monitorId]['dateStart'])->addSeconds($timePlaylist)->toDateTimeString();
+		$this->infoPlayist[$monitorId]['dateEnd'] = $this->setDateEnd($monitorId, $arrRes);		//Обновление dateEnd
 		
-		//$this->savePlaylistWithGalleryXml($monitorId, $arrRes);				//Сохранение плейлиста в xml
-		//$this->setGalleryCountShow($arrAddGallery);								//Обновление в заказах CountShow
-		$this->setPlaylistTime($this->infoPlayist[$monitorId]['dateStart'], $this->infoPlayist[$monitorId]['dateEnd']);		//Сохранение в базу данных инф. о плейлистах
+		$this->savePlaylistWithGalleryXml($monitorId, $arrRes);				//Сохранение плейлиста в xml
+		$this->setGalleryCountShow($arrAddGallery);								//Обновление в заказах CountShow
+		$this->setPlaylistTime($monitorId, $this->infoPlayist[$monitorId]['dateStart'], $this->infoPlayist[$monitorId]['dateEnd']);		//Сохранение в базу данных инф. о плейлистах
 		
+
+		dd($arrAddGallery);
 		return $arrRes;
 	}
 	
@@ -227,7 +231,6 @@ class Playlist extends Model {
 	public function getDateNext($monitorId = '', $offset = 0){		
 		$allSecond = $this->getAllSecond($monitorId, 0);	//общее время одного плейлиста в секундах
 		$playlistTime = PlaylistTime::where('monitor_id', '=', $monitorId)
-			->where('complete', '=', 1)
 			->orderBy('dateEnd', 'desc')
 			->first();
 
@@ -238,9 +241,18 @@ class Playlist extends Model {
 			$dateStart = $nowDate->hour(0)->minute(0)->second(0)->toDateTimeString();
 		}
 			
-		$dateStart = Carbon::parse($dateStart)->addSeconds($allSecond * $offset)->toDateTimeString();
-		$dateEnd = Carbon::parse($dateStart)->addSeconds($allSecond)->toDateTimeString();
+		$dateStart = Carbon::parse($dateStart)->addSeconds($allSecond * $offset);
+		$dateEnd = Carbon::parse($dateStart)->addSeconds($allSecond);
+		
+		//Если конец генерации попадает на конец нового день
+		if($dateStart->day != $dateEnd->day){
+			$dateEnd = $dateEnd->hour(0)->minute(0)->second(0);
+			$allSecond =  $dateEnd->diffInSeconds($dateStart);
+		}
 
+		$dateStart = $dateStart->toDateTimeString();
+		$dateEnd = $dateEnd->toDateTimeString();
+		
 		
 		$this->infoPlayist[$monitorId] = array(
 			'dateStart' =>  $dateStart,
@@ -287,19 +299,21 @@ class Playlist extends Model {
 	public function getArrAddGallery($monitorId = ''){
 		$dateStart = $this->infoPlayist[$monitorId]['dateStart'];
 		$dateEnd = $this->infoPlayist[$monitorId]['dateEnd'];
-		$allSecond = $this->infoPlayist[$monitorId]['allSecond'];
-		//$timeOneIterPlayList = $this->timeInit + ($this->countGallery*$this->timeGallery);		//Время одного прогона плейлиста с учетом заказов
-		$countIterOnePlaylist = ceil($allSecond/$this->timeInit);												//Кол-во прогонов
-		$arrGallery = $this->getGalleryDateShow($monitorId, $dateEnd);									//Получение галерей которые попадут в генерируемый плейлист
-		
+		$allSecond = $this->infoPlayist[$monitorId]['allSecond'];			//Время плейлиста	
+		$allSecondAllPlaylist = $this->getAllSecond($monitorId, 0);			//Общее время плейлиста
 		$arrRes = array();
-		$arrTemp = array();
-		for($countPlaylist = 1; $countPlaylist <=$countIterOnePlaylist; $countPlaylist++){
-			$arrTemp = $this->getGalleryIterPlaylist($arrGallery, $countPlaylist);					//Получение 5 заказов за данного прогона пока не закончится плейлист
-			$arrGallery = $this->countShowMinus($arrGallery, $arrTemp);								//Уменьшение кол-ва показов на 1
-			$arrRes[] = $arrTemp;
+
+		//если не совпадает то не нужно включать заказы, так как время плейлиста жестко ограничено $allSecond
+		if($allSecond == $allSecondAllPlaylist){
+			$countIterOnePlaylist = ceil($allSecond/$this->timeInit);												//Кол-во прогонов
+			$arrGallery = $this->getGalleryDateShow($monitorId, $dateEnd);									//Получение галерей которые попадут в генерируемый плейлист		
+			$arrTemp = array();
+			for($countPlaylist = 1; $countPlaylist <=$countIterOnePlaylist; $countPlaylist++){
+				$arrTemp = $this->getGalleryIterPlaylist($arrGallery, $countPlaylist);					//Получение 5 заказов за данного прогона пока не закончится плейлист
+				$arrGallery = $this->countShowMinus($arrGallery, $arrTemp);								//Уменьшение кол-ва показов на 1
+				$arrRes[] = $arrTemp;
+			}
 		}
-		
 		return $arrRes;
 	}
 	
@@ -457,9 +471,7 @@ class Playlist extends Model {
 				}else{
 					$item['is_time'] = 'False';
 				}
-				
-				
-				
+							
 				$arrRes[] = array(
 					'enable' => $item['enable'],
 					'name' => $item['name'],
@@ -623,13 +635,75 @@ class Playlist extends Model {
 	/*
 	* setPlaylistTime - Сохранение в базу данных инф. о плейлистах
 	*/
-	public function setPlaylistTime($dateStart = '', $dateEnd = ''){
-		if($dateStart != '' AND $dateEnd != ''){
-			dd($dateEnd);
+	public function setPlaylistTime($monitorId = '', $dateStart = '', $dateEnd = ''){
+		$playlistTime = false;
+		if($monitorId != '' AND $dateStart != '' AND $dateEnd != ''){
+			//Проверям есть ли в базе данная запись
+			$playlistTimeExist = PlaylistTime::where('monitor_id', '=', $monitorId)
+				->where('dateStart', '=', $dateStart)
+				->where('dateEnd', '=', $dateEnd)
+				->first();
+			if(!$playlistTimeExist){
+				$playlistTime = new PlaylistTime;
+				$playlistTime->monitor_id = $monitorId;
+				$playlistTime->dateStart = $dateStart;
+				$playlistTime->dateEnd = $dateEnd;
+				$playlistTime->save();
+			}
 		}
+		return $playlistTime;
 	}
 		
 	
+		
+	/*
+	*	checkGenerateInitPlaylist - Проверка нужно ли сохранение исходного плейлиста в базу данных
+	*/
+	public function checkGenerateInitPlaylist($monitorId){
+		$checkDate = Carbon::parse($this->infoPlayist[$monitorId]['dateStart']);
+		if($checkDate->hour == 0 AND $checkDate->minute == 0 AND $checkDate->second == 0){
+			$this->deleteInitPlaylist($monitorId);
+			if($monitorId == 1){
+				$files = File::files($this->pathPlaylistMonitor_1.'/'.$this->folderInit);
+			}
+			if($monitorId == 2){
+				$files = File::files($this->pathPlaylistMonitor_2.'/'.$this->folderInit);
+			}
+			foreach($files as $key => $file){
+				$this->saveFileInDB($file, $monitorId);
+			}
+		}
+	}
+	
+	
+	
+	/*
+	* setDateEnd - Обновление dateEnd
+	*/
+	public function setDateEnd($monitorId, $arrRes){
+		$dateStart = $this->infoPlayist[$monitorId]['dateStart'];
+		$dateEnd = $this->infoPlayist[$monitorId]['dateEnd'];
+		if(count($arrRes) > 0){
+			$timePlaylist = $this->getTimePlaylist($arrRes);			//Получение общего времени			
+			$dateEnd = Carbon::parse($dateStart)->addSeconds($timePlaylist);
+			//для того чтобы не сбилась генерация и для того чтобы слишком маленький файл плейлиста не формировался
+			if($dateEnd->hour == '23' AND $dateEnd->minute >= '57'){
+				$newDay = $dateEnd->day + 1;
+				$dateEnd = $dateEnd->day($newDay)->hour(0)->minute(0)->second(0);
+			}
+			
+			//для того чтобы не сбилась генерация
+			if($dateEnd->day != Carbon::parse($dateStart)->day){
+				$dateEnd = $dateEnd->hour(0)->minute(0)->second(0);
+			}
+			
+			$dateEnd = $dateEnd->toDateTimeString();
+		}
+		return $dateEnd;
+	}
+			
+		
+		
 	
 	/*
 	* сортировка массив
