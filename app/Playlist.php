@@ -137,16 +137,16 @@ class Playlist extends Model {
 		$this->getDateNext($monitorId, $offset);									//Формирование в $this->infoPlayist информации следующего плейлиста
 		$arrAddGallery = $this->getArrAddGallery($monitorId);				//Получение списка добавляемых заказов для данного плейлиста
 		$playlist = $this->getInitPlaylistByMonitor($monitorId);				//Получение исходного плейлиста
-		
+
 		$arrRes = $this->getMergeArray($playlist, $arrAddGallery);			//объединение исходного плейлиста с закзазами
 		
-		$timePlaylist = $this->getTimePlaylist($arrRes);							//Получение общего времени и обновление dateEnd
+		$timePlaylist = $this->getTimePlaylist($arrRes);							//Получение общего времени для обновление dateEnd
 		$this->infoPlayist[$monitorId]['dateEnd'] = Carbon::parse($this->infoPlayist[$monitorId]['dateStart'])->addSeconds($timePlaylist)->toDateTimeString();
 		
-		$this->savePlaylistWithGallery($monitorId, $arrRes);										//Сохранение плейлиста
+		//$this->savePlaylistWithGalleryXml($monitorId, $arrRes);				//Сохранение плейлиста в xml
+		//$this->setGalleryCountShow($arrAddGallery);								//Обновление в заказах CountShow
+		$this->setPlaylistTime($this->infoPlayist[$monitorId]['dateStart'], $this->infoPlayist[$monitorId]['dateEnd']);		//Сохранение в базу данных инф. о плейлистах
 		
-		
-		dd($dateEnd);
 		return $arrRes;
 	}
 	
@@ -447,6 +447,18 @@ class Playlist extends Model {
 			foreach($playlist as $key => $item){
 				$timePlaylist += $item['time'] * ($item['loop_xml'] + 1);
 				$ratio = floor($timePlaylist / $this->timeInit) + 1;
+				if($item['enable'] == 1){
+					$item['enable'] = 'True';
+				}else{
+					$item['enable'] = 'False';
+				}
+				if($item['is_time'] == 1){
+					$item['is_time'] = 'True';
+				}else{
+					$item['is_time'] = 'False';
+				}
+				
+				
 				
 				$arrRes[] = array(
 					'enable' => $item['enable'],
@@ -500,15 +512,17 @@ class Playlist extends Model {
 		
 	
 	/*
-	*	savePlaylistWithGallery - Сохранение плейлиста
+	*	savePlaylistWithGalleryXml - Сохранение плейлиста
 	*/
-	public function savePlaylistWithGallery($monitorId = '', $arrRes = array()){
+	public function savePlaylistWithGalleryXml($monitorId = '', $arrRes = array()){
 		if($monitorId != '' AND count($arrRes) > 0){
 			$dateStart = $this->infoPlayist[$monitorId]['dateStart'];
 			$dateEnd = $this->infoPlayist[$monitorId]['dateEnd'];
 			
 			$dateStart = Carbon::parse($dateStart);
-			$namePlaylist = 'PL'.$dateStart->format('YmdHis').'.xml';
+			$namePlaylist = 'ПЛ'.$dateStart->format('YmdHis').'.xml';
+			$namePlaylist = iconv("UTF-8", "cp1251", $namePlaylist);
+			
 			if($monitorId == 1){
 				$pathSave = $this->pathPlaylistMonitor_1.'/'.$namePlaylist;
 			}
@@ -525,19 +539,23 @@ class Playlist extends Model {
 	<collection base="C:\Ролики\Ролики\">';
 			
 			foreach($arrRes as $key => $item){
-				$xml .= '<item enable="'.$item['enable'].'" name="'.$item['name'].'" loop="'.$item['loop'].'" IsTime="'.$item['IsTime'].'" time="'.$item['time'].'"></item>
-';
 				if($item['init'] == 0){
-					$this->savePlaylistImg($monitorId, $item);		//сохранение картинки для плейлиста			
+					$item['name'] = $this->savePlaylistImg($monitorId, $item);		//сохранение картинки для плейлиста		
 				}
 				
+				
+				$xml .= '<item enable="'.$item['enable'].'" name="'.$item['name'].'" loop="'.$item['loop'].'" IsTime="'.$item['IsTime'].'" time="'.$item['time'].'"></item>
+';				
 			}
 	
 			$xml .= '	</collection>
 </tasks>';
 			
+			
+			$xml = iconv("UTF-8", "cp1251", $xml);
 			File::put($pathSave, $xml);
-			dd($xml);
+			
+			return $pathSave;
 		}
 	}
 	
@@ -548,6 +566,7 @@ class Playlist extends Model {
 	*/
 	public function savePlaylistImg($monitorId, $item){
 		$pathStart = $this->pathImages.'/o_'.$item['name'];
+		$pathSave = '';
 		if($monitorId == 1){
 			$pathSave = $this->pathPlaylistMonitor_1.'/'.$this->folderImg.'/'.$item['name'];
 		}
@@ -561,9 +580,56 @@ class Playlist extends Model {
 			Image::make($pathStart)->resize($w, $h)->save($pathSave);
 		}
 		
-		return 1;
+		
+		$pathSave = str_replace('/', '\\', $pathSave);
+		return $pathSave;
 	}
 		
+	
+	
+	/*
+	*	setGalleryCountShow - Обновление в заказах CountShow
+	*/
+	public function setGalleryCountShow($arrAddGallery){
+		$arrRes = array();
+		if(count($arrAddGallery) > 0){
+			foreach($arrAddGallery as $key1 => $arrItem){
+				foreach($arrItem as $key2 => $item){
+					if (array_key_exists($item['id'], $arrRes)) {
+						$arrRes[$item['id']] += 1;
+					}else{
+						$arrRes[$item['id']] = 1;
+					}
+				}
+			}
+		}
+		
+		if(count($arrRes) > 0){
+			foreach($arrRes as $id => $count){
+				$gallery = Gallery::find($id);
+				if($gallery){
+					$newCount = $gallery->count_show - $count;
+					if($newCount < 0){$newCount = 0;}
+					$gallery->count_show = $newCount;
+					$gallery->save();
+				}
+			}
+		}
+		return 1;
+	}
+	
+	
+	
+	/*
+	* setPlaylistTime - Сохранение в базу данных инф. о плейлистах
+	*/
+	public function setPlaylistTime($dateStart = '', $dateEnd = ''){
+		if($dateStart != '' AND $dateEnd != ''){
+			dd($dateEnd);
+		}
+	}
+		
+	
 	
 	/*
 	* сортировка массив
