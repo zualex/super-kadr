@@ -120,10 +120,26 @@ class Playlist extends Model {
 	public function initFile(){		
 		$Monitor_1 = Monitor::where('number', '=', 1)->first();
 		$Monitor_2 = Monitor::where('number', '=', 2)->first();
+		$check1 = 0;
+		$check2 = 0;
 		
 		//Генерация плейлистов
-		$check1 = $this->generationNewPlay($Monitor_1->id);
-		$check2 = $this->generationNewPlay($Monitor_2->id);
+		$this->getDateNext($Monitor_1->id);									//Формирование в $this->infoPlayist информации следующего плейлиста
+		$nowDate = Carbon::now();
+		$dateNowNext = $nowDate->timestamp + $this->infoPlayist[$Monitor_1->id]['allSecond'];
+		while($dateNowNext >= Carbon::parse($this->infoPlayist[$Monitor_1->id]['dateStart'])->timestamp){
+			$check1 = $this->generationNewPlay($Monitor_1->id);				//Генерация плейлистов
+			if($check1 == 0){break;}
+		}
+		
+		
+		$this->getDateNext($Monitor_2->id);									//Формирование в $this->infoPlayist информации следующего плейлиста
+		$nowDate = Carbon::now();
+		$dateNowNext = $nowDate->timestamp + $this->infoPlayist[$Monitor_2->id]['allSecond'];
+		while($dateNowNext >= Carbon::parse($this->infoPlayist[$Monitor_2->id]['dateStart'])->timestamp){
+			$check2 = $this->generationNewPlay($Monitor_2->id);				//Генерация плейлистов
+			if($check2 == 0){break;}
+		}
 
 		return $check1." - ".$check2 ;
 	}
@@ -132,26 +148,27 @@ class Playlist extends Model {
 	
 	/*
 	* generationNewPlay - генерация файла плейлиста
-	* $offset = 0 - генерация плейлиста для текущей даты
-	* $offset = 1 - генерация плейлиста для следущей даты
 	*/
-	public function generationNewPlay($monitorId = '', $offset = 0){
-		$this->getDateNext($monitorId, $offset);									//Формирование в $this->infoPlayist информации следующего плейлиста
-		$checkInit = $this->checkGenerateInitPlaylist($monitorId);								//Проверка нужно ли сохранение исходного плейлиста в базу данных
-		dd($checkInit);
+	public function generationNewPlay($monitorId = ''){
+		$res = 0;
+		$checkInit = $this->checkGenerateInitPlaylist($monitorId);			//Проверка нужно ли сохранение исходного плейлиста в базу данных
+		
 		$playlist = $this->getInitPlaylistByMonitor($monitorId);				//Получение исходного плейлиста	
 		$arrAddGallery = $this->getArrAddGallery($monitorId);				//Получение списка добавляемых заказов для данного плейлиста		
 		$arrRes = $this->getMergeArray($playlist, $arrAddGallery);			//объединение исходного плейлиста с закзазами
 		
-		$this->infoPlayist[$monitorId]['dateEnd'] = $this->setDateEnd($monitorId, $arrRes);		//Обновление dateEnd
+		if(count($arrRes) > 0){
+			$res = 1;
+			$this->infoPlayist[$monitorId]['dateEnd'] = $this->setDateEnd($monitorId, $arrRes);		//Обновление dateEnd
+			$this->savePlaylistWithGalleryXml($monitorId, $arrRes);				//Сохранение плейлиста в xml
+			$this->setGalleryCountShow($arrAddGallery);								//Обновление в заказах CountShow
+			$this->setPlaylistTime($monitorId, $this->infoPlayist[$monitorId]['dateStart'], $this->infoPlayist[$monitorId]['dateEnd']);		//Сохранение в базу данных инф. о плейлистах
+		}
 		
-		$this->savePlaylistWithGalleryXml($monitorId, $arrRes);				//Сохранение плейлиста в xml
-		$this->setGalleryCountShow($arrAddGallery);								//Обновление в заказах CountShow
-		$this->setPlaylistTime($monitorId, $this->infoPlayist[$monitorId]['dateStart'], $this->infoPlayist[$monitorId]['dateEnd']);		//Сохранение в базу данных инф. о плейлистах
+		$this->getDateNext($monitorId);			//Обновление информации
 		
 
-		dd($arrAddGallery);
-		return 1;
+		return $res;
 	}
 	
 	

@@ -108,7 +108,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::post('/playlist/enable/{id}', ['as' => 'admin.playlist.enable', 'uses' => 'Admin\AdminPlaylistController@enable']);
 	Route::post('/playlist/isTime/{id}', ['as' => 'admin.playlist.isTime', 'uses' => 'Admin\AdminPlaylistController@isTime']);
 
-	Route::get('/playlist/initfile', ['as' => 'admin.playlist.initfile', 'uses' => 'Admin\AdminPlaylistController@initFile']);				//Загрузка исходных файлов в БД
 
 	
 	/* Настройки */
@@ -126,4 +125,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 		'destroy' => 'admin.users.destroy',
 	)));*/
 });
+
+
+
+Route::get('/cron/playlist/initfile', ['as' => 'cron.playlist.initfile', 'uses' => 'Admin\AdminPlaylistController@initFile']);				//Загрузка исходных файлов в БД
 
