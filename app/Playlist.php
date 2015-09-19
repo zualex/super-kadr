@@ -122,10 +122,10 @@ class Playlist extends Model {
 		$Monitor_2 = Monitor::where('number', '=', 2)->first();
 		
 		//Генерация плейлистов
-		$this->generationNewPlay($Monitor_1->id);
-		$this->generationNewPlay($Monitor_2->id);
+		$check1 = $this->generationNewPlay($Monitor_1->id);
+		$check2 = $this->generationNewPlay($Monitor_2->id);
 
-		return 1;
+		return $check1." - ".$check2 ;
 	}
 	
 	
@@ -137,8 +137,8 @@ class Playlist extends Model {
 	*/
 	public function generationNewPlay($monitorId = '', $offset = 0){
 		$this->getDateNext($monitorId, $offset);									//Формирование в $this->infoPlayist информации следующего плейлиста
-		$this->checkGenerateInitPlaylist($monitorId);								//Проверка нужно ли сохранение исходного плейлиста в базу данных
-			
+		$checkInit = $this->checkGenerateInitPlaylist($monitorId);								//Проверка нужно ли сохранение исходного плейлиста в базу данных
+		dd($checkInit);
 		$playlist = $this->getInitPlaylistByMonitor($monitorId);				//Получение исходного плейлиста	
 		$arrAddGallery = $this->getArrAddGallery($monitorId);				//Получение списка добавляемых заказов для данного плейлиста		
 		$arrRes = $this->getMergeArray($playlist, $arrAddGallery);			//объединение исходного плейлиста с закзазами
@@ -151,7 +151,7 @@ class Playlist extends Model {
 		
 
 		dd($arrAddGallery);
-		return $arrRes;
+		return 1;
 	}
 	
 	
@@ -660,6 +660,7 @@ class Playlist extends Model {
 	*	checkGenerateInitPlaylist - Проверка нужно ли сохранение исходного плейлиста в базу данных
 	*/
 	public function checkGenerateInitPlaylist($monitorId){
+		$res = 0;
 		$checkDate = Carbon::parse($this->infoPlayist[$monitorId]['dateStart']);
 		if($checkDate->hour == 0 AND $checkDate->minute == 0 AND $checkDate->second == 0){
 			$this->deleteInitPlaylist($monitorId);
@@ -672,7 +673,9 @@ class Playlist extends Model {
 			foreach($files as $key => $file){
 				$this->saveFileInDB($file, $monitorId);
 			}
+			$res = 1;
 		}
+		return $res;
 	}
 	
 	
