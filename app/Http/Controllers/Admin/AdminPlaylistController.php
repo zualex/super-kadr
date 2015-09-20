@@ -34,6 +34,7 @@ class AdminPlaylistController extends Controller {
 		$playlistModel->getDateNext(1);
 		$arrAddGallery1 = $playlistModel->getArrAddGallery(1);
 		$dateStart1 = $playlistModel->infoPlayist[1]['dateStart'];
+
 		
 		$playlistModel->getDateNext(2);
 		$arrAddGallery2 = $playlistModel->getArrAddGallery(2);
