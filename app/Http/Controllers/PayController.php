@@ -12,6 +12,7 @@ use App\Pay;
 use App\Gallery;
 use App\Status;
 use App\Setting;
+use App\User;
 
 class PayController extends Controller {
 
