@@ -70,11 +70,35 @@ class AuthController extends Controller {
 		
 		if($user = $this->socialite->with($provider)->user()){
 			
+
+			$name = $user->getNickname();
+			if($provider == 'vkontakte'){
+				if($user->email != ''){$name = $user->email;}
+				if($user->name != ''){$name = $user->name;}
+			}
+			
+			if($provider == 'facebook'){
+				if($user->email != ''){$name = $user->email;}
+				if($user->name != ''){$name = $user->name;}
+			}
+			
+			if($provider == 'twitter'){
+				if($user->email != ''){$name = $user->email;}
+				if($user->name != ''){$name = $user->name;}
+			}
+			
+			if($provider == 'odnoklassniki'){
+				if($user->email != ''){$name = $user->email;}
+				if($user->name != ''){$name = $user->name;}
+			}
+
+			
+			
 			
 			$arrValues = array(
 				'provider' => $provider,
 				'social_id' => $user->getId(),
-				'name' => $user->getNickname(),
+				'name' => $name,
 				'email' => $user->getEmail(),
 				'avatar' => $user->getAvatar(),
 			);
