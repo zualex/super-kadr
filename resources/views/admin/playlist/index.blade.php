@@ -78,66 +78,115 @@
 	
 	
 	<div class="content-block orders">
-	
-		
 		<table class="table-list">
 			<tr>
-				<th colspan="6" style="text-align:center;">Заказы в очереди на генерацию нового файла плейлиста для Экран 1 {{ $data['dateStart1'] }}</th>
+				<th colspan="4" style="text-align:center;">Заказы в очереди на генерацию нового файла плейлиста для Экран 1 {{ $data['dateStart1'] }}</th>
 			</tr>
+			@if(count($data['galleryGeneration_1']) > 0)
+				<tr>
+					<th class="center col-2">ID</th>
+					<th class="col-3" style="display:none">Состояние</th>
+					<th class="center col-3">Изображение</th>
+					<th>Ссылка</th>
+					<th class="col-3">Тариф</th>
+					<th class="center col-btn"  style="display:none"><i class="fa fa-th-list"></i></th>
+				</tr>
+			
+				@foreach($data['galleryGeneration_1'] as $countPlaylist => $arrItem)
+					<tr>
+						<th colspan="4">Набор {{ $countPlaylist+1 }} заказов</th>
+					</tr>
+					@foreach($arrItem as $key => $item)
+						<tr>
+							<td class="center col-2">{{ $item['id'] }}</td>
+							<td class="center col-3" style="display:none">
+								<input id="orders-enable-2" class="toggle" name="enable" type="checkbox">
+								<label for="orders-enable-2"></label>
+							</td>
+							<td class="center col-3"><img class="order-image" src="{{ $data['pathImages'].'/m_'.$item['src'] }}" alt=""></td>
+							<td>{{ $data['folderName'].'\\'.$item['src'] }}</td>
+							<td class="col-3">{{ $data['tarif'][$item['tarif_id']]->name }}</td>
+							<td class="center col-btn"  style="display:none">
+								<div class="droplist-group">
+									<i class="fa fa-ellipsis-v"></i>
+									<div class="droplist" style="display: none">
+										<div>
+											<ul>
+												<li><a><i class="fa pull-left fa-times"></i>Удалить</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+					@endforeach
+				@endforeach
+			@else
 			<tr>
-				<th class="center col-2">ID</th>
-				<th class="col-3">Состояние</th>
-				<th class="center col-3">Изображение</th>
-				<th>Ссылка</th>
-				<th class="col-4">Тариф</th>
-				<th class="center col-btn"><i class="fa fa-th-list"></i></th>
+				<td colspan="4">Нет заказов</th>
 			</tr>
-			<tr id="">
-				<td class="center col-2"></td>
-				<td class="center col-3">
-					<input id="orders-enable-" class="toggle" name="enable" type="checkbox">
-					<label for="orders-enable-"></label>
-				</td>
-				<td class="center col-3"><img class="order-image" src="" alt=""></td>
-				<td></td>
-				<td class="col-4"></td>
-				<td class="center col-btn">
-					<div class="droplist-group">
-						<i class="fa fa-ellipsis-v"></i>
-						<div class="droplist" style="display: none">
-							<div>
-								<ul>
-									<li><a><i class="fa pull-left fa-times"></i>Удалить</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</td>
-			</tr>
-			<tr id="2">
-				<td class="center col-2">2</td>
-				<td class="center col-3">
-					<input id="orders-enable-2" class="toggle" name="enable" type="checkbox">
-					<label for="orders-enable-2"></label>
-				</td>
-				<td class="center col-3"><img class="order-image" src="http://kadr.test32.ru/upload/gallery/thumbs/image501.jpg" alt=""></td>
-				<td>C:\Изображения\Изображения\image501.jpg</td>
-				<td class="col-4">Просто</td>
-				<td class="center col-btn">
-					<div class="droplist-group">
-						<i class="fa fa-ellipsis-v"></i>
-						<div class="droplist" style="display: none">
-							<div>
-								<ul>
-									<li><a><i class="fa pull-left fa-times"></i>Удалить</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</td>
-			</tr>
+			@endif
 		</table>
 	</div>
+	
+	
+	
+	
+	<div class="content-block orders">
+		<table class="table-list">
+			<tr>
+				<th colspan="4" style="text-align:center;">Заказы в очереди на генерацию нового файла плейлиста для Экран 2 {{ $data['dateStart2'] }}</th>
+			</tr>
+			@if(count($data['galleryGeneration_2']) > 0)
+				<tr>
+					<th class="center col-2">ID</th>
+					<th class="col-3" style="display:none">Состояние</th>
+					<th class="center col-3">Изображение</th>
+					<th>Ссылка</th>
+					<th class="col-3">Тариф</th>
+					<th class="center col-btn"  style="display:none"><i class="fa fa-th-list"></i></th>
+				</tr>
+			
+				@foreach($data['galleryGeneration_2'] as $countPlaylist => $arrItem)
+					<tr>
+						<th colspan="4">Набор {{ $countPlaylist+1 }} заказов</th>
+					</tr>
+					@foreach($arrItem as $key => $item)
+						<tr>
+							<td class="center col-2">{{ $item['id'] }}</td>
+							<td class="center col-3" style="display:none">
+								<input id="orders-enable-2" class="toggle" name="enable" type="checkbox">
+								<label for="orders-enable-2"></label>
+							</td>
+							<td class="center col-3"><img class="order-image" src="{{ $data['pathImages'].'/m_'.$item['src'] }}" alt=""></td>
+							<td>{{ $data['folderName'].'\\'.$item['src'] }}</td>
+							<td class="col-3">{{ $data['tarif'][$item['tarif_id']]->name }}</td>
+							<td class="center col-btn"  style="display:none">
+								<div class="droplist-group">
+									<i class="fa fa-ellipsis-v"></i>
+									<div class="droplist" style="display: none">
+										<div>
+											<ul>
+												<li><a><i class="fa pull-left fa-times"></i>Удалить</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+					@endforeach
+				@endforeach
+			@else
+			<tr>
+				<td colspan="4">Нет заказов</th>
+			</tr>
+			@endif
+		</table>
+	</div>
+	
+	
+	
+	
 	<div class="content-block result">
 		<table class="table-list">
 			<tr>

@@ -361,6 +361,7 @@ class Playlist extends Model {
 					"hours" => $item->hours,
 					"interval_sec" => $item->interval_sec,
 					"monitor_id" => $item->monitor_id,
+					"tarif_id" => $item->tarif_id,
 					"sort" => 0,
 					"countPlaylist" => 9999,
 					"init" => 0,
@@ -388,6 +389,7 @@ class Playlist extends Model {
 					$gallery[$item['id']]['hours'] = $item['hours'];
 					$gallery[$item['id']]['interval_sec'] = $item['interval_sec'];
 					$gallery[$item['id']]['monitor_id'] = $item['monitor_id'];
+					$gallery[$item['id']]['tarif_id'] = $item['tarif_id'];
 					
 					$gallery[$item['id']]['sort'] = $sort;
 					$gallery[$item['id']]['countPlaylist'] = $countPlaylist;
@@ -459,6 +461,7 @@ class Playlist extends Model {
 					$arrGallery[$item['id']]['hours'] = $item['hours'];
 					$arrGallery[$item['id']]['interval_sec'] = $item['interval_sec'];
 					$arrGallery[$item['id']]['monitor_id'] = $item['monitor_id'];
+					$arrGallery[$item['id']]['tarif_id'] = $item['tarif_id'];
 					$arrGallery[$item['id']]['sort'] =  $item['sort'];
 					$arrGallery[$item['id']]['countPlaylist'] =  $item['countPlaylist'];
 					$arrGallery[$item['id']]['init'] =  $item['init'];

@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Pay;
 use App\Gallery;
 use App\Playlist;
+use App\Tarif;
 use Session;
 
 class AdminPlaylistController extends Controller {
@@ -17,11 +18,21 @@ class AdminPlaylistController extends Controller {
 	public function index(Playlist $playlistModel)
 	{
 		//$this->testGalleryUpload();
+		$pathImages = $playlistModel->pathImages;
+		$folderName = str_replace('/', '\\', $pathImages);		//Полный путь к папке
+		$pathImages = str_replace(base_path(), '', $pathImages);		//путь для картинок
+		
+		$initPlaylist = $playlistModel->getInitPlaylist();
+		$tarifTemp = Tarif::all();
+		$tarif = array();
+		foreach ($tarifTemp as $key => $item){
+			$tarif[$item['id']] = $item;
+		}
+
 		
 		$playlistModel->getDateNext(1);
 		$arrAddGallery1 = $playlistModel->getArrAddGallery(1);
 		$dateStart1 = $playlistModel->infoPlayist[1]['dateStart'];
-		dd($arrAddGallery1);
 		
 		$playlistModel->getDateNext(2);
 		$arrAddGallery2 = $playlistModel->getArrAddGallery(2);
@@ -29,9 +40,13 @@ class AdminPlaylistController extends Controller {
 
 		
 		$data = array(
-			'initPlaylist' => $playlistModel->getInitPlaylist(),
-			'galleryGeneration_1' => $arrAddGallery1,
-			'dateStart1' => $dateStart1,
+			'pathImages' => $pathImages,					//Путь к картинкам
+			'folderName' => $folderName,					//Путь к картинкам
+			'initPlaylist' => $initPlaylist,						//Исходный плейлист
+			'tarif' => $tarif,											//Массив с тарифами
+			
+			'galleryGeneration_1' => $arrAddGallery1,	//Заказы в очередь для первого экрана
+			'dateStart1' => $dateStart1,						//Дата начала формирования плейлиста
 			'galleryGeneration_2' => $arrAddGallery2,
 			'dateStart2' => $dateStart2,
 		);
