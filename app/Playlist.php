@@ -423,6 +423,7 @@ class Playlist extends Model {
 		$intervalSec = $item['interval_sec'];
 		$countShow = $item['count_show'];
 		
+		
 		$dateStartIter = Carbon::parse($dateStart)->addSeconds(($countPlaylist-1) * $this->timeInit);		//Узнаем дату начала прогона
 		if(Carbon::parse($dateShow)->timestamp <= $dateStartIter->timestamp){									//Если дата показа меньше или равно дате начала прогона то включаем заказ
 			$intervalAll = $countPlaylist * $this->timeInit;													//Узнаем для Итерации общий интервал 
@@ -433,7 +434,8 @@ class Playlist extends Model {
 			$diffCount = $abstractCount - ($tarifCountShow - $countShow);							//Узнаем разницу между сколько должно быть и сколько показалось товаров
 			
 			$useInterval = ($tarifCountShow - $countShow + 1) * $intervalSec; 					//Узнаем используемый интервал
-			$sort = $intervalAll/$useInterval * $diffCount * 100;											//Отношение общего интервала к интервалу показа и умножить коэффициент
+			//$sort = $intervalAll/$useInterval * $diffCount * 100;											//Отношение общего интервала к интервалу показа и умножить коэффициент
+			$sort = ($intervalAll/$useInterval) + $diffCount * 100;										
 		}
 
 		return $sort;
@@ -490,6 +492,7 @@ class Playlist extends Model {
 				}
 							
 				$arrRes[] = array(
+					'id' => $item['id'],
 					'enable' => $item['enable'],
 					'name' => $item['name'],
 					'loop' => $item['loop_xml'],
@@ -506,6 +509,7 @@ class Playlist extends Model {
 			foreach($arrAddGallery as $key1 => $arrItem){
 				foreach($arrItem as $key2 => $item){	
 					$arrRes[] = array(
+						'id' => $item['id'],
 						'enable' => 'True',
 						'name' => $item['src'],
 						'loop' => 0,

@@ -71,13 +71,19 @@
 							</div>
 						</td>
 					</tr>
-				@endforeach
-				
+				@endforeach	
 			</table>
 		@endif
 	</div>
+	
+	
 	<div class="content-block orders">
+	
+		
 		<table class="table-list">
+			<tr>
+				<th colspan="6" style="text-align:center;">Заказы в очереди на генерацию нового файла плейлиста для Экран 1 {{ $data['dateStart1'] }}</th>
+			</tr>
 			<tr>
 				<th class="center col-2">ID</th>
 				<th class="col-3">Состояние</th>

@@ -17,10 +17,23 @@ class AdminPlaylistController extends Controller {
 	public function index(Playlist $playlistModel)
 	{
 		//$this->testGalleryUpload();
+		
+		$playlistModel->getDateNext(1);
+		$arrAddGallery1 = $playlistModel->getArrAddGallery(1);
+		$dateStart1 = $playlistModel->infoPlayist[1]['dateStart'];
+		dd($arrAddGallery1);
+		
+		$playlistModel->getDateNext(2);
+		$arrAddGallery2 = $playlistModel->getArrAddGallery(2);
+		$dateStart2 = $playlistModel->infoPlayist[2]['dateStart'];
+
+		
 		$data = array(
 			'initPlaylist' => $playlistModel->getInitPlaylist(),
-			'galleryGeneration_1' => $playlistModel->getGalleryGeneration(1),
-			'galleryGeneration_2' => $playlistModel->getGalleryGeneration(2),
+			'galleryGeneration_1' => $arrAddGallery1,
+			'dateStart1' => $dateStart1,
+			'galleryGeneration_2' => $arrAddGallery2,
+			'dateStart2' => $dateStart2,
 		);
 		return view('admin.playlist.index')->with('data', $data);
 	}
