@@ -248,9 +248,9 @@ class Gallery extends Model {
 	/*
 	* Список галереии со статусом на модерации
 	*/
-	public function getGalleryModeration(){
+	public function getGalleryModeration($way = 'asc'){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'moderation')->first();
-		$gallery =$this->queryAdminGallery($status_main->id);
+		$gallery =$this->queryAdminGallery($status_main->id, $way);
 
 		return $gallery;
 	}
@@ -258,9 +258,9 @@ class Gallery extends Model {
 	/*
 	* Список галереии со статусом на одобрено
 	*/
-	public function getGallerySuccess(){
+	public function getGallerySuccess($way = 'desc'){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
-		$gallery =$this->queryAdminGallery($status_main->id);
+		$gallery =$this->queryAdminGallery($status_main->id, $way);
 
 		return $gallery;
 	}	
@@ -268,16 +268,16 @@ class Gallery extends Model {
 	/*
 	* Список галереии со статусом на отменено
 	*/
-	public function getGalleryCancel(){
+	public function getGalleryCancel($way = 'desc'){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'cancel')->first();
-		$gallery =$this->queryAdminGallery($status_main->id);
+		$gallery =$this->queryAdminGallery($status_main->id, $way);
 
 		return $gallery;
 	}
 	
-	public function queryAdminGallery($status){
+	public function queryAdminGallery($status, $way = 'desc'){
 		$status_pay = Status::where('type_status', '=', 'pay')->where('caption', '=', 'paid')->first();
-
+		
 		$gallery =$this
 				->select(DB::raw('galleries.*, pays.id as pay_id, pays.price, tarifs.name as tarif_name, tarifs.hours, tarifs.interval_sec, statuses.name as status_name, statuses.caption as status_caption'))
 				->join('statuses', 'statuses.id', '=', 'galleries.status_order')
@@ -285,7 +285,7 @@ class Gallery extends Model {
 				->join('tarifs', 'tarifs.id', '=', 'galleries.tarif_id')
 				->where('galleries.status_main', '=', $status)
 				->where('pays.status_pay', '=', $status_pay->id)
-				->orderBy('galleries.date_show', 'asc')
+				->orderBy('galleries.date_show', $way)
 				->get();
 		return $gallery;
 	}

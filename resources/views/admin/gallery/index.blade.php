@@ -116,17 +116,19 @@
 										<img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt="">
 									</a>
 								</td>
-								<td>Изображение будет показано {{ $value->hours*60*60/$value->interval_sec }} раз в течение {{ $value->hours }} часа<br>Начало показа {{ $value->date_show }}</td>
+								<td>Изображение будет показано {{ $value->count_show }} раз в течение {{ $value->hours }} часа<br>Начало показа {{ $value->date_show }}</td>
 								<td class="col-4">AA{{ $value->pay_id }}</td>
 								<td class="col-4">{{ $value->tarif_name }}</td>
 								<td class="col-5">
-									@if($value->status_caption == 'process')
-										<span class="status execute"><i class="fa pull-left fa-refresh fa-spin"></i>{{ $value->status_name }}</span>
-									@elseif($value->status_caption == 'success')
-										<span class="status ok"><i class="fa pull-left fa-chevron-down"></i>{{ $value->status_name }}</span>
-									@else
-										<span class="status execute">{{ $value->status_name }}</span>
+				
+									@if($value->count_show == $value->hours*60*60/$value->interval_sec)
+										<span class="status execute">В очереди на исполнение</span>
+									@elseif($value->count_show == 0)
+										<span class="status ok"><i class="fa pull-left fa-chevron-down"></i>Выполнена</span>
+									@elseif($value->count_show < $value->hours*60*60/$value->interval_sec)
+										<span class="status execute"><i class="fa pull-left fa-refresh fa-spin"></i>В исполнении</span>
 									@endif
+									
 								</td>
 								<td class="center col-btn">
 									<div class="droplist-group">
