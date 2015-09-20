@@ -209,11 +209,18 @@ class Gallery extends Model {
 		
 		
 		if(count($this->error) == 0){
+			$tarif = Tarif::find($param['tarif']);
+			$count_show = 0;
+			if($tarif){
+				$count_show = $tarif->hours*60*60 / $tarif->interval_sec;
+			}
+		
 			$gallery = new Gallery;
 			$gallery->user_id = Auth::user()->id;
 			$gallery->status_main = $status_main->id;
 			$gallery->status_order = $status_order->id;
 			$gallery->date_show = Carbon::createFromFormat('H:i d.m.Y', $param['dateShow']);
+			$gallery->count_show = $count_show;
 			$gallery->tarif_id = $param['tarif'];
 			$gallery->monitor_id = $param['monitor'];
 			$gallery->save();

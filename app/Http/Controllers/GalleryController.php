@@ -23,7 +23,7 @@ class GalleryController extends Controller {
 
 	
 	public function index(Gallery $galleryModel)
-	{
+	{	
 		$data = array(
 			'gallery' => $galleryModel->galleryAll(),
 			'pathImages' => $galleryModel->pathImages,
@@ -39,7 +39,7 @@ class GalleryController extends Controller {
 	 * @return Response
 	 */
 	public function show(Gallery $galleryModel, Comment $commentModel, User $userModel,  $id)
-	{
+	{	
 		
 		return view('pages.gallery.show')
 			->with('gallery', $galleryModel->getGallery($id))
@@ -51,6 +51,18 @@ class GalleryController extends Controller {
 		
 	public function upload(Gallery $galleryModel)
 	{
+		//Если не авторизован то авторизуемся как анонимы
+		if(!Auth::check()){
+			$user = User::where('email', '=', "anonymous@anonymous.ru")->first();
+			if(!$user){
+				$user = new User;
+				$user->name = "Анонимный пользователь";
+				$user->email = "anonymous@anonymous.ru";
+				$user->save();
+			}
+			Auth::loginUsingId($user->id);
+		}
+	
 		if(Auth::check()){
 			$imgUrl = $_POST['imgUrl'];
 			$imgInitW = $_POST['imgInitW'];			// original sizes
@@ -137,6 +149,15 @@ class GalleryController extends Controller {
 					imagejpeg($final_image, base_path().$output_filename.$type, $jpeg_quality);
 					
 					
+					
+					
+					//Выход из системы для анонимных пользователей
+					if(Auth::user()->email == 'anonymous@anonymous.ru'){
+						Auth::logout();
+					}
+
+					
+					
 					return Response::json( array(
 						"status" => 'success',
 						"url" => $output_filename.$type
@@ -168,6 +189,20 @@ class GalleryController extends Controller {
 	
 	public function create(Gallery $galleryModel, Pay $payModel)
 	{
+	
+		//Если не авторизован то авторизуемся как анонимы
+		if(!Auth::check()){
+			$user = User::where('email', '=', "anonymous@anonymous.ru")->first();
+			if(!$user){
+				$user = new User;
+				$user->name = "Анонимный пользователь";
+				$user->email = "anonymous@anonymous.ru";
+				$user->save();
+			}
+			Auth::loginUsingId($user->id);
+		}
+	
+	
 		$error = "";
 		$paramGallery = array(
 			'monitor' => Request::input('monitor'),
@@ -200,6 +235,12 @@ class GalleryController extends Controller {
 				$pay = "true";
 				$url = route('pay.conditions', $gallery->id);
 			}
+			
+			//Выход из системы для анонимных пользователей
+			if(Auth::user()->email == 'anonymous@anonymous.ru'){
+				Auth::logout();
+			}
+
 					
 			return Response::json( array(
 				"status" => 'success',
@@ -208,6 +249,12 @@ class GalleryController extends Controller {
 				"url" => $url,
 			));
 		}else{
+			//Выход из системы для анонимных пользователей
+			if(Auth::user()->email == 'anonymous@anonymous.ru'){
+				Auth::logout();
+			}
+
+		
 			return Response::json( array(
 				"status" => 'error',
 				"message" => $error,

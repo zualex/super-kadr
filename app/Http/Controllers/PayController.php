@@ -19,10 +19,27 @@ class PayController extends Controller {
 	public function conditions($gallery_id)
 	{
 	
+		//Если не авторизован то авторизуемся как анонимы
+		if(!Auth::check()){
+			$user = User::where('email', '=', "anonymous@anonymous.ru")->first();
+			if(!$user){
+				$user = new User;
+				$user->name = "Анонимный пользователь";
+				$user->email = "anonymous@anonymous.ru";
+				$user->save();
+			}
+			Auth::loginUsingId($user->id);
+		}
+	
 		$gallery = Gallery::where('id', '=', $gallery_id)->first();
 		if($gallery->user_id != Auth::user()->id){
 			Session::flash('message', 'Вы не можете оплатить так как заказ не ваш');
 			 return redirect()->route('main');
+		}
+		
+		//Выход из системы для анонимных пользователей
+		if(Auth::user()->email == 'anonymous@anonymous.ru'){
+			Auth::logout();
 		}
 		
 		return view('pages.pay.conditions')->with('gallery_id', $gallery_id);
@@ -31,6 +48,19 @@ class PayController extends Controller {
 	
 	public function index($gallery_id)
 	{
+	
+		//Если не авторизован то авторизуемся как анонимы
+		if(!Auth::check()){
+			$user = User::where('email', '=', "anonymous@anonymous.ru")->first();
+			if(!$user){
+				$user = new User;
+				$user->name = "Анонимный пользователь";
+				$user->email = "anonymous@anonymous.ru";
+				$user->save();
+			}
+			Auth::loginUsingId($user->id);
+		}
+	
 
 		$gallery = Gallery::where('id', '=', $gallery_id)->first();
 		$pay = Pay::where('gallery_id', '=', $gallery_id)->first();
@@ -71,6 +101,12 @@ class PayController extends Controller {
 			'Culture' => $culture,
 			'Shp_user' => $Shp_user,
 		));
+		
+		
+		//Выход из системы для анонимных пользователей
+		if(Auth::user()->email == 'anonymous@anonymous.ru'){
+			Auth::logout();
+		}
 
 		return Redirect::to($url.'?'.$query);
 	}
@@ -78,6 +114,19 @@ class PayController extends Controller {
 	
 	public function result()
 	{
+		//Если не авторизован то авторизуемся как анонимы
+		if(!Auth::check()){
+			$user = User::where('email', '=', "anonymous@anonymous.ru")->first();
+			if(!$user){
+				$user = new User;
+				$user->name = "Анонимный пользователь";
+				$user->email = "anonymous@anonymous.ru";
+				$user->save();
+			}
+			Auth::loginUsingId($user->id);
+		}
+	
+	
 		$setting = new Setting;
 				
 		$mrh_pass2 = $setting->getPaymentPassword2();
@@ -111,6 +160,12 @@ class PayController extends Controller {
 		fclose($f);
 
 		
+		//Выход из системы для анонимных пользователей
+		if(Auth::user()->email == 'anonymous@anonymous.ru'){
+			Auth::logout();
+		}
+		
+		
 		return "OK$inv_id\n";
 	
 	}
@@ -118,6 +173,20 @@ class PayController extends Controller {
 	
 	public function success()
 	{
+	
+		//Если не авторизован то авторизуемся как анонимы
+		if(!Auth::check()){
+			$user = User::where('email', '=', "anonymous@anonymous.ru")->first();
+			if(!$user){
+				$user = new User;
+				$user->name = "Анонимный пользователь";
+				$user->email = "anonymous@anonymous.ru";
+				$user->save();
+			}
+			Auth::loginUsingId($user->id);
+		}
+		
+		
 		$setting = new Setting;
 		
 		$mrh_pass1 = $setting->getPaymentPassword1();
@@ -147,6 +216,12 @@ class PayController extends Controller {
 		}
 		fclose($f);
 		
+		
+		//Выход из системы для анонимных пользователей
+		if(Auth::user()->email == 'anonymous@anonymous.ru'){
+			Auth::logout();
+		}
+		
 		return view('pages.pay.success')->with('result', $result);
 	}
 	
@@ -154,6 +229,18 @@ class PayController extends Controller {
 	
 	public function fail()
 	{
+		//Если не авторизован то авторизуемся как анонимы
+		if(!Auth::check()){
+			$user = User::where('email', '=', "anonymous@anonymous.ru")->first();
+			if(!$user){
+				$user = new User;
+				$user->name = "Анонимный пользователь";
+				$user->email = "anonymous@anonymous.ru";
+				$user->save();
+			}
+			Auth::loginUsingId($user->id);
+		}
+	
 		$Shp_user = $_REQUEST["Shp_user"];
 		$inv_id = $_REQUEST["InvId"];
 		
@@ -167,6 +254,12 @@ class PayController extends Controller {
 		$pay = Pay::find($inv_id);
 		$pay->status_pay = $status_pay->id;
 		$pay->save();
+		
+		
+		//Выход из системы для анонимных пользователей
+		if(Auth::user()->email == 'anonymous@anonymous.ru'){
+			Auth::logout();
+		}
 		
 		$result = "Вы отказались от оплаты. Заказ# ".$inv_id;
 		return view('pages.pay.fail')->with('result', $result);
