@@ -18,6 +18,7 @@ class AdminPlaylistController extends Controller {
 	public function index(Playlist $playlistModel)
 	{
 		//$this->testGalleryUpload();
+		
 		$pathImages = $playlistModel->pathImages;
 		$folderName = str_replace('/', '\\', $pathImages);		//Полный путь к папке
 		$pathImages = str_replace(base_path(), '', $pathImages);		//путь для картинок

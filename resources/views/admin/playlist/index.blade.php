@@ -187,7 +187,7 @@
 	
 	
 	
-	<div class="content-block result">
+	<div class="content-block result" style="display:none">
 		<table class="table-list">
 			<tr>
 				<th class="center col-2">ID</th>

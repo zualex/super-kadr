@@ -433,13 +433,16 @@ class Playlist extends Model {
 			
 			$diffSec = Carbon::parse($dateShow)->diffInSeconds($dateStartIter);					//Узнаем разницу между датой показа и датой формируемого плейлиста
 			$abstractCount = ceil($diffSec/$intervalSec);														//Узнаем сколько должно было быть показов
-			$diffCount = $abstractCount - ($tarifCountShow - $countShow);							//Узнаем разницу между сколько должно быть и сколько показалось товаров
+			$diffCount = $abstractCount - ($tarifCountShow - $countShow) + 1;							//Узнаем разницу между сколько должно быть и сколько показалось товаров
 			
 			$useInterval = ($tarifCountShow - $countShow + 1) * $intervalSec; 					//Узнаем используемый интервал
 			//$sort = $intervalAll/$useInterval * $diffCount * 100;											//Отношение общего интервала к интервалу показа и умножить коэффициент
-			$sort = ($intervalAll/$useInterval) + $diffCount * 100;										
+			$sort = ($intervalAll/$useInterval) * ($diffCount * 100);										
 		}
-
+		
+		//if($countPlaylist == 4 AND $item['id'] == 3){
+		//	dd($useInterval);
+		//}
 		return $sort;
 	}
 	
