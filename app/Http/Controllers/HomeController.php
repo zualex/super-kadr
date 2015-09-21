@@ -36,11 +36,12 @@ class HomeController extends Controller {
 	 */
 	public function index(User $userModel, Gallery $galleryModel)
 	{
+		
 		$data = array(
 			'mainGallery' => $galleryModel->mainGallery(),
 			'dateContent' => $this->dateContent(),
 			'tarifs' => Tarif::all(),
-			'paramMonitor' => Monitor::all(),
+			'paramMonitor' => Monitor::orderBy('number', 'desc')->get(),
 		);
 		
 		//dd($galleryModel->mainGallery());

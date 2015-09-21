@@ -109,6 +109,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::post('/playlist/isTime/{id}', ['as' => 'admin.playlist.isTime', 'uses' => 'Admin\AdminPlaylistController@isTime']);
 
 
+	/* Экраны */
+	Route::get('/monitor/', ['as' => 'admin.monitor.index', 'uses' => 'Admin\AdminMonitorController@index']);
+	Route::post('/monitor/success/', ['as' => 'admin.monitor.success', 'uses' => 'Admin\AdminMonitorController@success']);
+
+	
 	
 	/* Настройки */
 	Route::get('/setting/', ['as' => 'admin.setting.index', 'uses' => 'Admin\AdminSettingController@index']);
