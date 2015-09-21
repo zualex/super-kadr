@@ -41,7 +41,7 @@ class HomeController extends Controller {
 			'mainGallery' => $galleryModel->mainGallery(),
 			'dateContent' => $this->dateContent(),
 			'tarifs' => Tarif::all(),
-			'paramMonitor' => Monitor::orderBy('number', 'desc')->get(),
+			'paramMonitor' => Monitor::orderBy('number', 'asc')->get(),
 		);
 		
 		//dd($galleryModel->mainGallery());

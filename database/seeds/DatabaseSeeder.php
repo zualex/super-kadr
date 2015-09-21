@@ -40,8 +40,8 @@ class MonitorTableSeeder extends Seeder {
     DB::table('monitors')->delete();
 
     Monitor::create([
-		'id' => '1',
-		'number' => '1',
+		'id' => '2',
+		'number' => '2',
 		'siteWidth' => '480',
 		'siteWidth' => '480',
 		'siteHeight' => '480',
@@ -54,8 +54,8 @@ class MonitorTableSeeder extends Seeder {
 	]);
 	
 	Monitor::create([
-		'id' => '2',
-		'number' => '2',
+		'id' => '1',
+		'number' => '1',
 		'siteWidth' => '740',
 		'siteHeight' => '480',
 		'origWidth' => '2240',
