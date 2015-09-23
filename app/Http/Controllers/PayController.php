@@ -204,20 +204,9 @@ class PayController extends Controller {
 			exit();
 		}
 		
-		$result = "Произошла ошибка";
-		
-		$f=@fopen(base_path()."/public/pay/order.txt","a+") or die("error");
-		while(!feof($f)){
-			$str=fgets($f);
+		$result = "Операция прошла успешно";
 
-			$str_exp = explode(";", $str);
-			if ($str_exp[0]=="order_num :$inv_id"){ 
-				$result = "Операция прошла успешно";
-			}
-		}
-		fclose($f);
-		
-		
+				
 		//Выход из системы для анонимных пользователей
 		if(Auth::user()->email == 'anonymous@anonymous.ru'){
 			Auth::logout();
