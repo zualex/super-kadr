@@ -124,6 +124,7 @@ class Playlist extends Model {
 		$check2 = 0;
 		
 		//Генерация плейлистов
+
 		$this->getDateNext($Monitor_1->id);									//Формирование в $this->infoPlayist информации следующего плейлиста
 		$nowDate = Carbon::now();
 		$dateNowNext = $nowDate->timestamp + $this->infoPlayist[$Monitor_1->id]['allSecond'];
@@ -570,6 +571,9 @@ class Playlist extends Model {
 			}
 			
 			
+			$this->clearFolderBeforeGeneration($monitorId);		//Очщение старых плейлистов и папки images перед генерацией новых плейлистов
+			
+			
 			$xml = '';
 			
 			$xml .= '<?xml version="1.0" encoding="windows-1251"?>
@@ -591,6 +595,8 @@ class Playlist extends Model {
 </tasks>';
 			
 			
+			
+
 			$xml = iconv("UTF-8", "cp1251", $xml);
 			File::put($pathSave, $xml);
 			
@@ -598,6 +604,27 @@ class Playlist extends Model {
 		}
 	}
 	
+	
+	
+	/*
+	* Очщение старых плейлистов и папки images перед генерацией новых плейлистов
+	*/
+	public function clearFolderBeforeGeneration($monitorId){
+		if($monitorId == 1){
+			$path = $this->pathPlaylistMonitor_1;
+		}
+		if($monitorId == 2){
+			$path = $this->pathPlaylistMonitor_2;
+		}
+		
+		$files = File::files($path);
+		File::delete($files);
+		
+		$images = File::files($path.'/'.$this->folderImg);
+		File::delete($images);
+		
+		return 1;		
+	}
 	
 	
 	/*
@@ -690,15 +717,30 @@ class Playlist extends Model {
 		$res = 0;
 		$checkDate = Carbon::parse($this->infoPlayist[$monitorId]['dateStart']);
 		if($checkDate->hour == 0 AND $checkDate->minute == 0 AND $checkDate->second == 0){
-			$this->deleteInitPlaylist($monitorId);
+			$day = sprintf("%02d", $checkDate->day);
+			$month = sprintf("%02d", $checkDate->month);
+			$nameInitFile = 'ПЛ'.$day.$month.$checkDate->year.'.xjob';
+			$nameInitFile = iconv("UTF-8", "cp1251", $nameInitFile);
+
 			if($monitorId == 1){
-				$files = File::files($this->pathPlaylistMonitor_1.'/'.$this->folderInit);
+				$path = $this->pathPlaylistMonitor_1.'/'.$this->folderInit;
 			}
 			if($monitorId == 2){
-				$files = File::files($this->pathPlaylistMonitor_2.'/'.$this->folderInit);
+				$path = $this->pathPlaylistMonitor_2.'/'.$this->folderInit;
 			}
-			foreach($files as $key => $file){
-				$this->saveFileInDB($file, $monitorId);
+			
+			$pathFileInit = $path.'/'.$nameInitFile;
+			if (File::exists($pathFileInit)){
+				$this->deleteInitPlaylist($monitorId);
+				$this->saveFileInDB($pathFileInit, $monitorId);
+			}
+
+
+			foreach(File::files($path) as $key => $file){
+				if($pathFileInit != $file){
+					File::delete($file);
+				}
+				
 			}
 			$res = 1;
 		}
