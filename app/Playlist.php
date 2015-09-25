@@ -124,7 +124,7 @@ class Playlist extends Model {
 		$check2 = 0;
 		
 		//Генерация плейлистов
-
+		
 		$this->getDateNext($Monitor_1->id);									//Формирование в $this->infoPlayist информации следующего плейлиста
 		$nowDate = Carbon::now();
 		$dateNowNext = $nowDate->timestamp + $this->infoPlayist[$Monitor_1->id]['allSecond'];
@@ -563,10 +563,10 @@ class Playlist extends Model {
 			$namePlaylist = 'ПЛ'.$dateStart->format('YmdHis').'.xml';
 			$namePlaylist = iconv("UTF-8", "cp1251", $namePlaylist);
 			
-			if($monitorId == 1){
+			if($this->getNumber($monitorId) == 1){
 				$pathSave = $this->pathPlaylistMonitor_1.'/'.$namePlaylist;
 			}
-			if($monitorId == 2){
+			if($this->getNumber($monitorId) == 2){
 				$pathSave = $this->pathPlaylistMonitor_2.'/'.$namePlaylist;
 			}
 			
@@ -610,10 +610,10 @@ class Playlist extends Model {
 	* Очщение старых плейлистов и папки images перед генерацией новых плейлистов
 	*/
 	public function clearFolderBeforeGeneration($monitorId){
-		if($monitorId == 1){
+		if($this->getNumber($monitorId) == 1){
 			$path = $this->pathPlaylistMonitor_1;
 		}
-		if($monitorId == 2){
+		if($this->getNumber($monitorId) == 2){
 			$path = $this->pathPlaylistMonitor_2;
 		}
 		
@@ -633,10 +633,10 @@ class Playlist extends Model {
 	public function savePlaylistImg($monitorId, $item){
 		$pathStart = $this->pathImages.'/o_'.$item['name'];
 		$pathSave = '';
-		if($monitorId == 1){
+		if($this->getNumber($monitorId) == 1){
 			$pathSave = $this->pathPlaylistMonitor_1.'/'.$this->folderImg.'/'.$item['name'];
 		}
-		if($monitorId == 2){
+		if($this->getNumber($monitorId) == 2){
 			$pathSave = $this->pathPlaylistMonitor_2.'/'.$this->folderImg.'/'.$item['name'];
 		}
 		$w = $this->imgSize[$monitorId]['w'];
@@ -716,16 +716,18 @@ class Playlist extends Model {
 	public function checkGenerateInitPlaylist($monitorId){
 		$res = 0;
 		$checkDate = Carbon::parse($this->infoPlayist[$monitorId]['dateStart']);
+
 		if($checkDate->hour == 0 AND $checkDate->minute == 0 AND $checkDate->second == 0){
 			$day = sprintf("%02d", $checkDate->day);
 			$month = sprintf("%02d", $checkDate->month);
 			$nameInitFile = 'ПЛ'.$day.$month.$checkDate->year.'.xjob';
 			$nameInitFile = iconv("UTF-8", "cp1251", $nameInitFile);
+			
 
-			if($monitorId == 1){
+			if($this->getNumber($monitorId) == 1){
 				$path = $this->pathPlaylistMonitor_1.'/'.$this->folderInit;
 			}
-			if($monitorId == 2){
+			if($this->getNumber($monitorId) == 2){
 				$path = $this->pathPlaylistMonitor_2.'/'.$this->folderInit;
 			}
 			
@@ -775,7 +777,19 @@ class Playlist extends Model {
 	}
 			
 		
-		
+	
+	
+	/*
+	* Получение номера экрана по id
+	*/
+	public function getNumber($monitorId) {
+		$res = '';
+		$Monitor_1 = Monitor::where('id', '=', $monitorId)->first();
+		if($Monitor_1){
+			$res = $Monitor_1->number;
+		}
+		return $res;
+	}
 	
 	/*
 	* сортировка массив

@@ -10,6 +10,7 @@ use App\Pay;
 use App\Gallery;
 use App\Playlist;
 use App\Tarif;
+use App\Monitor;
 use Session;
 
 class AdminPlaylistController extends Controller {
@@ -18,6 +19,9 @@ class AdminPlaylistController extends Controller {
 	public function index(Playlist $playlistModel)
 	{
 		//$this->testGalleryUpload();
+		$Monitor_1 = Monitor::where('number', '=', 1)->first();
+		$Monitor_2 = Monitor::where('number', '=', 2)->first();
+		
 		
 		$pathImages = $playlistModel->pathImages;
 		$folderName = str_replace('/', '\\', $pathImages);		//Полный путь к папке
@@ -31,14 +35,14 @@ class AdminPlaylistController extends Controller {
 		}
 
 		
-		$playlistModel->getDateNext(1);
-		$arrAddGallery1 = $playlistModel->getArrAddGallery(1);
-		$dateStart1 = $playlistModel->infoPlayist[1]['dateStart'];
+		$playlistModel->getDateNext($Monitor_1->id);
+		$arrAddGallery1 = $playlistModel->getArrAddGallery($Monitor_1->id);
+		$dateStart1 = $playlistModel->infoPlayist[$Monitor_1->id]['dateStart'];
 
 		
-		$playlistModel->getDateNext(2);
-		$arrAddGallery2 = $playlistModel->getArrAddGallery(2);
-		$dateStart2 = $playlistModel->infoPlayist[2]['dateStart'];
+		$playlistModel->getDateNext($Monitor_2->id);
+		$arrAddGallery2 = $playlistModel->getArrAddGallery($Monitor_2->id);
+		$dateStart2 = $playlistModel->infoPlayist[$Monitor_2->id]['dateStart'];
 
 		
 		$data = array(
