@@ -744,6 +744,7 @@ class Playlist extends Model {
 				}
 				
 			}
+			$this->getDateNext($monitorId);	
 			$res = 1;
 		}
 		return $res;
