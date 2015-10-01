@@ -67,55 +67,57 @@ class AuthController extends Controller {
 
 	public function getSocialAuthCallback(User $postUser, $provider=null)
 	{
-		
-		if($user = $this->socialite->with($provider)->user()){
-			
-
-			$name = $user->getNickname();
-			if($provider == 'vkontakte'){
-				if($user->email != ''){$name = $user->email;}
-				if($user->name != ''){$name = $user->name;}
-			}
-			
-			if($provider == 'facebook'){
-				if($user->email != ''){$name = $user->email;}
-				if($user->name != ''){$name = $user->name;}
-			}
-			
-			if($provider == 'twitter'){
-				if($user->email != ''){$name = $user->email;}
-				if($user->name != ''){$name = $user->name;}
-			}
-			
-			if($provider == 'odnoklassniki'){
-				if($user->email != ''){$name = $user->email;}
-				if($user->name != ''){$name = $user->name;}
-			}
-
-			
-			
-			
-			$arrValues = array(
-				'provider' => $provider,
-				'social_id' => $user->getId(),
-				'name' => $name,
-				'email' => $user->getEmail(),
-				'avatar' => $user->getAvatar(),
-			);
-			
-			$userId = $postUser->socialAuth($arrValues);
-			if($userId){Auth::loginUsingId($userId);}
-			
-			if(count($postUser->errors) > 0){	
-				return redirect()->back()->withErrors($postUser->errors);
-			}else{
-				return redirect()->back();
-			}
-
-			
-		}else{
-			return 'something went wrong';
+		try
+		{
+			$user = $this->socialite->with($provider)->user();
 		}
+		catch(\Exception $e)
+		{
+			return redirect()->route('main');
+		}
+		
+
+			
+			
+		$name = $user->getNickname();
+		if($provider == 'vkontakte'){
+			if($user->email != ''){$name = $user->email;}
+			if($user->name != ''){$name = $user->name;}
+		}
+		
+		if($provider == 'facebook'){
+			if($user->email != ''){$name = $user->email;}
+			if($user->name != ''){$name = $user->name;}
+		}
+		
+		if($provider == 'twitter'){
+			if($user->email != ''){$name = $user->email;}
+			if($user->name != ''){$name = $user->name;}
+		}
+		
+		if($provider == 'odnoklassniki'){
+			if($user->email != ''){$name = $user->email;}
+			if($user->name != ''){$name = $user->name;}
+		}
+
+		
+		$arrValues = array(
+			'provider' => $provider,
+			'social_id' => $user->getId(),
+			'name' => $name,
+			'email' => $user->getEmail(),
+			'avatar' => $user->getAvatar(),
+		);
+		
+		$userId = $postUser->socialAuth($arrValues);
+		if($userId){Auth::loginUsingId($userId);}
+		
+		if(count($postUser->errors) > 0){	
+			return redirect()->back()->withErrors($postUser->errors);
+		}else{
+			return redirect()->back();
+		}
+
 	}
 
 	
