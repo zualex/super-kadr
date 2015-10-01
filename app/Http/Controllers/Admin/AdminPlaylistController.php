@@ -19,10 +19,6 @@ class AdminPlaylistController extends Controller {
 	public function index(Playlist $playlistModel)
 	{
 		//$this->testGalleryUpload();
-		$Monitor_1 = Monitor::where('number', '=', 1)->first();
-		$Monitor_2 = Monitor::where('number', '=', 2)->first();
-		
-		
 		$pathImages = $playlistModel->pathImages;
 		$folderName = str_replace('/', '\\', $pathImages);		//Полный путь к папке
 		$pathImages = str_replace(base_path(), '', $pathImages);		//путь для картинок
@@ -34,27 +30,17 @@ class AdminPlaylistController extends Controller {
 			$tarif[$item['id']] = $item;
 		}
 
-		
-		$playlistModel->getDateNext($Monitor_1->id);
-		$arrAddGallery1 = $playlistModel->getArrAddGallery($Monitor_1->id);
-		$dateStart1 = $playlistModel->infoPlayist[$Monitor_1->id]['dateStart'];
-
-		
-		$playlistModel->getDateNext($Monitor_2->id);
-		$arrAddGallery2 = $playlistModel->getArrAddGallery($Monitor_2->id);
-		$dateStart2 = $playlistModel->infoPlayist[$Monitor_2->id]['dateStart'];
-
-		
+			
 		$data = array(
 			'pathImages' => $pathImages,					//Путь к картинкам
 			'folderName' => $folderName,					//Путь к картинкам
 			'initPlaylist' => $initPlaylist,						//Исходный плейлист
 			'tarif' => $tarif,											//Массив с тарифами
 			
-			'galleryGeneration_1' => $arrAddGallery1,	//Заказы в очередь для первого экрана
-			'dateStart1' => $dateStart1,						//Дата начала формирования плейлиста
-			'galleryGeneration_2' => $arrAddGallery2,
-			'dateStart2' => $dateStart2,
+			'galleryGeneration_1' => array(),	//Заказы в очередь для первого экрана
+			'dateStart1' => '0',						//Дата начала формирования плейлиста
+			'galleryGeneration_2' => array(),
+			'dateStart2' => '0',
 		);
 		return view('admin.playlist.index')->with('data', $data);
 	}
@@ -65,6 +51,15 @@ class AdminPlaylistController extends Controller {
 		$playlist = new Playlist;
 		return $playlist->initFile();
 	}
+	
+	
+	public function initGenerate()
+	{
+		$playlist = new Playlist;
+		return $playlist->initGenerate();
+	}
+	
+	
 	
 	
 	// удаление записи
