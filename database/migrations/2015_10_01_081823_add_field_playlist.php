@@ -16,6 +16,10 @@ class AddFieldPlaylist extends Migration {
 		{
 			$table->integer('idblock')->default(0)->index();
 		});
+		Schema::table('playlist_times', function($table)
+		{
+			$table->integer('idblock')->default(0)->index();
+		});
 	}
 
 	/**
@@ -28,6 +32,12 @@ class AddFieldPlaylist extends Migration {
 		Schema::table('playlists', function($table)
 		{
 			$table->dropIndex('playlists_idblock_index');
+			$table->dropColumn('idblock');
+		});
+		
+		Schema::table('playlist_times', function($table)
+		{
+			$table->dropIndex('playlist_times_idblock_index');
 			$table->dropColumn('idblock');
 		});
 	}
