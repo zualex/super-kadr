@@ -86,13 +86,391 @@ class Playlist extends Model {
 		$res1 = 0;
 		$res2 = 0;
 		
-		$res1 = $this->timePlaylist;
+		$res1 = $this->startGenerate(1);
+		$res2 = $this->startGenerate(2);
 		
 		return $res1.' - '.$res2;
 	}
 	
 	
 	
+	/*
+	* startGenerate - начала генерации плейлиста
+	*/
+	public function startGenerate($monitorNumber){
+		$res = 0;
+		
+		$monitorId = $this->getId($monitorNumber);					//Получение id экрана по его номеру
+		$info = $this->getInfoPlaylist($monitorId);					//Получение даты начала, даты конце и idblock для генерации плейлиста
+		
+		$dateStart = $info['dateStart'];
+		$dateEnd = $info['dateEnd'];
+		$idblock = $info['idblock'];
+		$maxIdblock = $info['maxIdblock'];
+		$arrRes = array();
+		$arrGalleryAll = $this->getGalleryDateShow($monitorId, $dateEnd);		//Получение галерей которые попадут в генерируемый плейлист	
+		
+		
+		/* Если максимальный idblock плейлиста меньше нуля то генерацим не будет */
+		if($maxIdblock > 0){
+			for($countNowBlock = 1; $countNowBlock <= $this->countBlock; $countNowBlock++){
+				$idblock++;
+				if($idblock > $maxIdblock){$idblock = 1;}
+
+				/* Исходный плейлист */
+				$playlist = $this->getPlaylistForGenerate($monitorId, $idblock);														//получение одного блока из исходного плейлиста
+				$playlistTime =  $this->getTime($playlist);																						//Получение общего времени исходного плейлиста
+				
+				
+				/* Заказы */
+				$param = array(
+					'dateStart' => $dateStart,
+					'dateEnd' => $dateEnd,
+					'countNowBlock' => $countNowBlock,
+					'playlistTime' => $playlistTime,
+				);
+				$arrAddGallery = $this->getArrAddGallery($monitorId, $param, $arrGalleryAll);				//Получение списка добавляемых заказов для данного плейлиста	
+				$arrGalleryAll = $this->countShowMinus($arrGalleryAll, $arrAddGallery);							//Уменьшение из общего списка кол-ва показов на 1
+				
+				
+				/* Дополнительные ролики */
+				$galleryTime = $this->getTime($arrAddGallery);
+				$timeDopVideo = $this->timeBlock - $playlistTime - $galleryTime;
+				if($timeDopVideo > 0){
+					$arrDopVideo = $this->getDopVideo($timeDopVideo);
+				}
+				
+				$arrRes[$countNowBlock] = $this->getMergeArray($playlist, $arrAddGallery, $arrDopVideo, $countNowBlock);			//объединение исходного плейлиста с закзазами
+			}
+		}		
+		
+		dd($arrRes);
+		
+		return $arrRes;
+	}
+	
+	
+	
+	/*
+	* getInfoPlaylist - Получение даты начала, даты конце и idblock для генерации плейлиста
+	*
+	*	dateStart 		- 	дата начала плейлиста
+	*	dateEnd 		-  	дата конца плейлиста
+	*	idblock 			-  	idblock плейлиста
+	*	maxIdblock 	-  	максимальный idblock плейлиста
+	*
+	*/
+	public function getInfoPlaylist($monitorId){
+		$res = array();
+		$dateStart = '';
+		$dateEnd = '';
+		$idblock = 0;
+		$maxIdblock = $this->getMaxIdblock($monitorId);		
+		
+		$playlistTime = PlaylistTime::where('monitor_id', '=', $monitorId)
+			->orderBy('dateEnd', 'desc')
+			->first();
+			
+		if($playlistTime){
+			$dateStart = $playlistTime->dateEnd;		
+			$idblock = $playlistTime->idblock;
+		}else{
+			$nowDate = Carbon::now();
+			//Раскомментировать !!!
+			//$dateStart = $nowDate->hour(0)->minute(0)->second(0)->toDateTimeString();
+			$dateStart = $nowDate->toDateTimeString();
+		}
+		
+		$dateEnd = Carbon::parse($dateStart)->addSeconds($this->timePlaylist)->toDateTimeString();
+		
+		$res = array(
+			'dateStart' => $dateStart,
+			'dateEnd' => $dateEnd,
+			'idblock' => $idblock,
+			'maxIdblock' => $maxIdblock,
+		);
+		
+		return $res;
+	}
+	
+	
+	
+	/*
+	* getMaxIdblock - получение максимального idblock
+	*/
+	public function getMaxIdblock($monitorId){
+		$res = DB::table('playlists')->max('idblock');
+		if(!$res){$res = 0;}
+		return $res;
+	}
+
+	
+	
+	/*
+	*	getPlaylistForGenerate - получение одного блока из исходного плейлиста
+	*/
+	public function getPlaylistForGenerate($monitorId, $idblock){
+		$playlist = $this
+			->with('monitor')
+			->where('type', '=', '0')
+			->where('enable', '=', 1)
+			->where('is_time', '=', 1)
+			->where('monitor_id', '=', $monitorId)
+			->where('idblock', '=', $idblock)
+			->orderBy('sort', 'asc')
+			->get();
+			
+		return $playlist;
+	}
+	
+
+	
+	
+	/*
+	* getArrAddGallery - Получение списка добавляемых заказов для данного плейлиста	
+	*
+	*	dateStart 				- 	дата начала плейлиста
+	*	dateEnd 				-  	дата конца плейлиста
+	*	countNowBlock 		-  	какой блок по счету
+	*	playlistTime 			-  	общее время исходного плейлиста
+	*
+	*/
+	public function getArrAddGallery($monitorId, $param, $arrGalleryAll){
+		$dateStart = $param['dateStart'];
+		$dateEnd = $param['dateEnd'];
+		$countNowBlock = $param['countNowBlock'];
+		$playlistTime = $param['playlistTime'];
+		
+		$arrGallery = $this->getGalleryIterPlaylist($arrGalleryAll, $dateStart, $countNowBlock, $playlistTime);		//Получение заказов для определенного логического блока
+		
+		return $arrGallery;
+	}
+	
+	
+	
+	/*
+	* getGalleryDateShow - Получение галерей которые попадут в генерируемый плейлист
+	*/
+	public function getGalleryDateShow($monitorId = '', $dateEnd = ''){
+		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
+		$gallery = Gallery::select(DB::raw('galleries.*, tarifs.hours, tarifs.interval_sec'))
+			->join('tarifs', 'tarifs.id', '=', 'galleries.tarif_id')
+			->where('status_main', '=', $status_main->id)
+			->where('count_show', '>', '0')
+			->where('monitor_id', '=', $monitorId)
+			->where('date_show', '<=', $dateEnd)
+			->orderBy('date_show', 'asc')
+			->get();
+		
+
+		$arrGallery = array();
+		if(count($gallery) > 0){
+			foreach($gallery as $key => $item){				
+				$arrGallery[$item->id] = array(
+					"id" => $item->id,
+					"src" => $item->src,
+					"count_show" => $item->count_show,
+					"date_show" => $item->date_show,
+					"hours" => $item->hours,
+					"interval_sec" => $item->interval_sec,
+					"monitor_id" => $item->monitor_id,
+					"tarif_id" => $item->tarif_id,
+					"time" => $this->timeGallery,
+					"loop_xml" => 0,
+					"block" => 9999,
+					"sort" => 0,
+					"init" => 0,
+				);
+			}
+		}	
+		return $arrGallery;
+	}
+	
+	
+	
+	/*
+	* getTime - Получение общего времени
+	*/
+	public function getTime($array){
+		$res = 0;
+		if(count($array) > 0){
+			foreach($array as $key => $item){
+				$res += $item['time'] * ($item['loop_xml'] + 1);
+			}
+		}
+		return $res;
+	}
+	
+	
+	
+	/*
+	* getGalleryIterPlaylist - Получение заказов для определенного логического блока
+	*/
+	public function getGalleryIterPlaylist($arrGallery, $dateStart, $countNowBlock, $playlistTime){
+		$gallery = array();
+		foreach($arrGallery as $key => $item){
+			$sort = $this->getSort($item, $dateStart, $countNowBlock, $playlistTime);
+			if($sort > 0  AND $item['count_show'] > 0){
+				$gallery[$item['id']]['id'] = $item['id'];
+				$gallery[$item['id']]['src'] = $item['src'];
+				$gallery[$item['id']]['count_show'] = $item['count_show'];
+				$gallery[$item['id']]['date_show'] = $item['date_show'];
+				$gallery[$item['id']]['hours'] = $item['hours'];
+				$gallery[$item['id']]['interval_sec'] = $item['interval_sec'];
+				$gallery[$item['id']]['monitor_id'] = $item['monitor_id'];
+				$gallery[$item['id']]['tarif_id'] = $item['tarif_id'];
+				$gallery[$item['id']]['time'] = $item['time'];
+				$gallery[$item['id']]['loop_xml'] = $item['loop_xml'];
+				$gallery[$item['id']]['block'] = $countNowBlock;
+				
+				$gallery[$item['id']]['sort'] = $sort;
+				$gallery[$item['id']]['init'] = 0;
+			}
+		}		
+		
+		$gallery = $this->array_orderby($gallery, 'sort', SORT_DESC);
+		$galleryTime = 0;
+		foreach($gallery as $key => $item){
+			$galleryTime += $item['time'] * ($item['loop_xml'] + 1);
+			if($galleryTime > $this->timeBlock - $playlistTime){
+				unset($gallery[$key]);
+			}
+		}
+		return $gallery;
+	}
+	
+	
+	
+
+	/*
+	* getSort - Вычисление коэффициента вероятности показа галлереи
+	*/
+	public function getSort($item, $dateStart, $countNowBlock, $playlistTime){
+		$sort = 0;
+		
+		$dateShow = $item['date_show'];
+		$hours = $item['hours'];
+		$intervalSec = $item['interval_sec'];
+		$countShow = $item['count_show'];
+		
+		$dateStartIter = Carbon::parse($dateStart)->addSeconds($playlistTime);				//Узнаем дату начала прогона
+		if(Carbon::parse($dateShow)->timestamp <= $dateStartIter->timestamp){			//Если дата показа меньше или равно дате начала прогона то включаем заказ
+			$intervalAll = $countNowBlock * $this->timeBlock;												//Узнаем для Итерации общий интервал 
+			$tarifCountShow = $hours*60*60/$intervalSec;													//Узнаем сколько по тарифу должно быть показов
+			
+			$diffSec = Carbon::parse($dateShow)->diffInSeconds($dateStartIter);					//Узнаем разницу между датой показа и датой формируемого плейлиста
+			$abstractCount = ceil($diffSec/$intervalSec);														//Узнаем сколько должно было быть показов
+			$diffCount = $abstractCount - ($tarifCountShow - $countShow);							//Узнаем разницу между сколько должно быть и сколько показалось товаров
+
+			$useInterval = ($tarifCountShow - $countShow + 1) * $intervalSec; 					//Узнаем используемый интервал
+			$sort = ($intervalAll/$useInterval) * ($diffCount * 100);	
+		}
+		return $sort;
+	}
+	
+	
+	
+
+	/*
+	*	countShowMinus - Уменьшение кол-ва показов на 1
+	*/
+	public function countShowMinus($arrGallery, $arrTemp){
+		if(count($arrTemp) > 0){
+			foreach($arrTemp as $key => $item){
+				$newCountShow = $item['count_show'] - 1;
+		
+				if($newCountShow >= 0){
+					$arrGallery[$item['id']]['id'] = $item['id'];
+					$arrGallery[$item['id']]['src'] = $item['src'];
+					$arrGallery[$item['id']]['count_show'] =	$newCountShow;		//Сохраняем новое значение
+					$arrGallery[$item['id']]['date_show'] = $item['date_show'];
+					$arrGallery[$item['id']]['hours'] = $item['hours'];
+					$arrGallery[$item['id']]['interval_sec'] = $item['interval_sec'];
+					$arrGallery[$item['id']]['monitor_id'] = $item['monitor_id'];
+					$arrGallery[$item['id']]['tarif_id'] = $item['tarif_id'];
+					$arrGallery[$item['id']]['time'] =  $item['time'];
+					$arrGallery[$item['id']]['loop_xml'] =  $item['loop_xml'];
+					$arrGallery[$item['id']]['block'] =  $item['block'];
+					$arrGallery[$item['id']]['sort'] =  $item['sort'];
+					$arrGallery[$item['id']]['init'] =  $item['init'];
+				}
+			}
+		}
+		return $arrGallery;
+	}
+
+	
+	
+	/*
+	* getDopVideo - Получение списко дополнительных роликов
+	*/
+	public function getDopVideo($timeDopVideo){
+		//Тут нужно дописать
+		return array();
+	}
+
+	
+	
+	
+	/*
+	* getMergeArray - объединение исходного плейлиста с закзазами
+	*/
+	public function getMergeArray($playlist, $arrAddGallery, $arrDopVideo, $countNowBlock){
+		$arrRes = array();
+		if(count($playlist) > 0){
+			foreach($playlist as $key => $item){
+				if($item['enable'] == 1){
+					$item['enable'] = 'True';
+				}else{
+					$item['enable'] = 'False';
+				}
+				if($item['is_time'] == 1){
+					$item['is_time'] = 'True';
+				}else{
+					$item['is_time'] = 'False';
+				}
+							
+				$arrRes[] = array(
+					'id' => $item['id'],
+					'enable' => $item['enable'],
+					'name' => $item['name'],
+					'loop' => $item['loop_xml'],
+					'loop_xml' => $item['loop_xml'],
+					'IsTime' => $item['is_time'],
+					'time' => $item['time'],
+					'sort' => $key,
+					'block' => $countNowBlock,
+					'init' => 1
+				);		
+			}
+		}
+		
+		if(count($arrAddGallery) > 0){
+			foreach($arrAddGallery as $key => $item){	
+				$arrRes[] = array(
+					'id' => $item['id'],
+					'enable' => 'True',
+					'name' => $item['src'],
+					'loop' => 0,
+					'loop_xml' => 0,
+					'IsTime' => 'True',
+					'time' => $this->timeGallery,
+					'sort' => $item['sort'],
+					'block' => $countNowBlock,
+					'init' => 0
+				);	
+			}	
+		}
+		
+		if(count($arrDopVideo) > 0){
+			//Тут нужно дописать
+		}
+		
+		
+		$arrRes = $this->array_orderby($arrRes, 'block', SORT_ASC, 'init', SORT_DESC, 'sort', SORT_DESC);
+		
+		return $arrRes;
+	}
 	
 	
 	/*

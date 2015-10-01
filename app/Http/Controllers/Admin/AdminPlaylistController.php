@@ -152,7 +152,7 @@ class AdminPlaylistController extends Controller {
 			$Gallery->count_show =  $tarif[$tarif_id];
 			$Gallery->date_show =  $date_show;
 			$Gallery->tarif_id =  $tarif_id;
-			$Gallery->monitor_id =  1;
+			$Gallery->monitor_id =  2;
 			$Gallery->save();
 			
 			$Pay = new Pay;
