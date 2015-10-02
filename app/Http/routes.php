@@ -107,6 +107,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::get('/playlist/delete/{id}', ['as' => 'admin.playlist.delete', 'uses' => 'Admin\AdminPlaylistController@delete']);
 	Route::post('/playlist/enable/{id}', ['as' => 'admin.playlist.enable', 'uses' => 'Admin\AdminPlaylistController@enable']);
 	Route::post('/playlist/isTime/{id}', ['as' => 'admin.playlist.isTime', 'uses' => 'Admin\AdminPlaylistController@isTime']);
+	Route::post('/playlist/saveExtraVideo/', ['as' => 'admin.playlist.saveExtraVideo', 'uses' => 'Admin\AdminPlaylistController@saveExtraVideo']);
 
 
 	/* Экраны */

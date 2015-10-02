@@ -15,6 +15,7 @@
 		<ul>
 			<li class="active">Экран 1</li>
 			<li>Экран 2</li>
+			<li>Добавочные ролики</li>
 		</ul>
 	</div>
 		
@@ -301,7 +302,28 @@
 	</section>
 	
 	
-	
+	<section style="padding: 10px 20px">
+		<form id="form-admin" role="form" method="POST" >
+			<input type="hidden" name="_token" value="{{ csrf_token() }}">
+						
+			@for($i=1;$i<=5;$i++)
+				<div class="inline-block" style="border-bottom: 1px solid #CDCDCD;padding-bottom: 10px;">
+					<div class="line-title"><span>Ролик {{ $i }}</span></div>
+					<div class="line-value">
+						<input class="inputbox" type="text" name="path{{ $i }}" value="" placeholder="Путь до ролика">
+						<input style="margin-top:10px" class="inputbox" type="text" name="time{{ $i }}" value="" placeholder="Продолжительность">
+					</div>
+				</div>
+			@endfor
+			<div class="inline-block" style="border-bottom: 1px solid #CDCDCD;padding-bottom: 10px;">
+					<div class="line-title"></div>
+					<div class="line-value">
+						<a href="#" class="btn add savesettings" onclick="actionAll('{{ route('admin.playlist.saveExtraVideo') }}')"><i class="fa pull-left fa-floppy-o"></i>Сохранить</a>
+					</div>
+			</div>
+			
+		</form>
+	</section>
 	
 	
 </div>
