@@ -31,12 +31,36 @@ class AdminPlaylistController extends Controller {
 			$tarif[$item['id']] = $item;
 		}
 
-			
+		
+		$extraVideo = array();
+		$PlaylistExtraVideo = PlaylistExtraVideo::all();
+		if(count($PlaylistExtraVideo) >= 5){
+			foreach($PlaylistExtraVideo as $key => $item){
+				$extraVideo[$item->id] = array(
+					'path'=>$item->path,
+					'time'=>$item->time,
+				);
+			}
+		}else{
+			$this->initExtraVideo();
+			$PlaylistExtraVideo = PlaylistExtraVideo::all();
+			foreach($PlaylistExtraVideo as $key => $item){
+				$extraVideo[$item->id] = array(
+					'path'=>$item->path,
+					'time'=>$item->time,
+				);
+			}
+		}
+
+		
+		
 		$data = array(
 			'pathImages' => $pathImages,					//Путь к картинкам
 			'folderName' => $folderName,					//Путь к картинкам
 			'initPlaylist' => $initPlaylist,						//Исходный плейлист
 			'tarif' => $tarif,											//Массив с тарифами
+			
+			'extraVideo' => $extraVideo,						//Массив с доп роликами
 			
 			'galleryGeneration_1' => array(),	//Заказы в очередь для первого экрана
 			'dateStart1' => '0',						//Дата начала формирования плейлиста
@@ -222,7 +246,6 @@ class AdminPlaylistController extends Controller {
 			if(count($PlaylistExtraVideo) == 0){$PlaylistExtraVideo = new PlaylistExtraVideo;}
 			$PlaylistExtraVideo->path = $path1;
 			$PlaylistExtraVideo->time = $time1;
-			$PlaylistExtraVideo->sort = 10;
 			$PlaylistExtraVideo->save();
 			
 			
@@ -230,7 +253,6 @@ class AdminPlaylistController extends Controller {
 			if(count($PlaylistExtraVideo) == 0){$PlaylistExtraVideo = new PlaylistExtraVideo;}
 			$PlaylistExtraVideo->path = $path2;
 			$PlaylistExtraVideo->time = $time2;
-			$PlaylistExtraVideo->sort = 20;
 			$PlaylistExtraVideo->save();
 			
 			
@@ -238,7 +260,6 @@ class AdminPlaylistController extends Controller {
 			if(count($PlaylistExtraVideo) == 0){$PlaylistExtraVideo = new PlaylistExtraVideo;}
 			$PlaylistExtraVideo->path = $path3;
 			$PlaylistExtraVideo->time = $time3;
-			$PlaylistExtraVideo->sort = 30;
 			$PlaylistExtraVideo->save();
 			
 			
@@ -246,7 +267,6 @@ class AdminPlaylistController extends Controller {
 			if(count($PlaylistExtraVideo) == 0){$PlaylistExtraVideo = new PlaylistExtraVideo;}
 			$PlaylistExtraVideo->path = $path4;
 			$PlaylistExtraVideo->time = $time4;
-			$PlaylistExtraVideo->sort = 40;
 			$PlaylistExtraVideo->save();
 			
 			
@@ -254,7 +274,6 @@ class AdminPlaylistController extends Controller {
 			if(count($PlaylistExtraVideo) == 0){$PlaylistExtraVideo = new PlaylistExtraVideo;}
 			$PlaylistExtraVideo->path = $path5;
 			$PlaylistExtraVideo->time = $time5;
-			$PlaylistExtraVideo->sort = 50;
 			$PlaylistExtraVideo->save();
 			
 			
@@ -271,6 +290,59 @@ class AdminPlaylistController extends Controller {
 		}
 
 		return Response::json($res);
+	}
+	
+	
+	
+	public function initExtraVideo(){
+		$PlaylistExtraVideo = PlaylistExtraVideo::where('id', '=', 1)->first();
+		if(count($PlaylistExtraVideo) == 0){
+			$PlaylistExtraVideo = new PlaylistExtraVideo;
+			$PlaylistExtraVideo->id = 1;
+			$PlaylistExtraVideo->path = '';
+			$PlaylistExtraVideo->time = '';
+			$PlaylistExtraVideo->save();
+		}
+		
+		
+		$PlaylistExtraVideo = PlaylistExtraVideo::where('id', '=', 2)->first();
+		if(count($PlaylistExtraVideo) == 0){
+			$PlaylistExtraVideo = new PlaylistExtraVideo;
+			$PlaylistExtraVideo->id = 2;
+			$PlaylistExtraVideo->path = '';
+			$PlaylistExtraVideo->time = '';
+			$PlaylistExtraVideo->save();
+		}
+		
+		
+		$PlaylistExtraVideo = PlaylistExtraVideo::where('id', '=', 3)->first();
+		if(count($PlaylistExtraVideo) == 0){
+			$PlaylistExtraVideo = new PlaylistExtraVideo;
+			$PlaylistExtraVideo->id = 3;
+			$PlaylistExtraVideo->path = '';
+			$PlaylistExtraVideo->time = '';
+			$PlaylistExtraVideo->save();
+		}
+		
+		
+		$PlaylistExtraVideo = PlaylistExtraVideo::where('id', '=', 4)->first();
+		if(count($PlaylistExtraVideo) == 0){
+			$PlaylistExtraVideo = new PlaylistExtraVideo;
+			$PlaylistExtraVideo->id = 4;
+			$PlaylistExtraVideo->path = '';
+			$PlaylistExtraVideo->time = '';
+			$PlaylistExtraVideo->save();
+		}
+		
+		
+		$PlaylistExtraVideo = PlaylistExtraVideo::where('id', '=', 5)->first();
+		if(count($PlaylistExtraVideo) == 0){
+			$PlaylistExtraVideo = new PlaylistExtraVideo;
+			$PlaylistExtraVideo->id = 5;
+			$PlaylistExtraVideo->path = '';
+			$PlaylistExtraVideo->time = '';
+			$PlaylistExtraVideo->save();
+		}
 	}
 	
 

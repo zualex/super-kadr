@@ -17,7 +17,6 @@ class CreatePlaylistExtraVideosTable extends Migration {
 			$table->increments('id');
 			$table->string('path');
 			$table->integer('time')->default(0);
-			$table->integer('sort')->default(0);
 			$table->timestamps();
 		});
 	}
