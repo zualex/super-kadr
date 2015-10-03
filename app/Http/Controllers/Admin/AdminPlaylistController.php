@@ -74,7 +74,7 @@ class AdminPlaylistController extends Controller {
 
 			'playlistFinaly1' => $playlistFinaly1,	//Заказы в очередь для первого экрана
 			'dateStart1' => $dateStart1,						//Дата начала формирования плейлиста
-			'galleryGeneration_2' => array(),
+
 			'playlistFinaly2' => $playlistFinaly2,
 			'dateStart2' => $dateStart2,
 		);

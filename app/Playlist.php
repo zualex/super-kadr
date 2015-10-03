@@ -101,9 +101,7 @@ class Playlist extends Model {
 			$dateStart = $info['dateStart'];
 			if(count($playlistFinaly1) == 0){break;}
 		}
-		dd($this->getGenerateArray(1));
-		
-		
+
 		
 		$info = $this->getInfoPlaylist($this->getId(2));
 		$dateStart = $info['dateStart'];
