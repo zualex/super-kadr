@@ -101,6 +101,7 @@ class Playlist extends Model {
 			$dateStart = $info['dateStart'];
 			if(count($playlistFinaly1) == 0){break;}
 		}
+		dd($this->getGenerateArray(1));
 		
 		
 		
@@ -141,6 +142,7 @@ class Playlist extends Model {
 		$arrRes = array();
 		$arrGalleryAll = $this->getGalleryDateShow($monitorId, $dateEnd);		//Получение галерей которые попадут в генерируемый плейлист	
 		
+		
 
 		$arrTempGallery = array();
 		/* Если максимальный idblock плейлиста меньше нуля то генерацим не будет */
@@ -148,6 +150,7 @@ class Playlist extends Model {
 			for($countNowBlock = 1; $countNowBlock <= $this->countBlock; $countNowBlock++){
 				$idblock++;
 				if($idblock > $maxIdblock){$idblock = 1;}
+				
 
 				
 				/* Исходный плейлист */
@@ -159,12 +162,12 @@ class Playlist extends Model {
 				$param = array(
 					'dateStart' => $dateStart,
 					'dateEnd' => $dateEnd,
-					'countNowBlock' => $countNowBlock,
+					'countNowBlock' => $idblock,
 					'playlistTime' => $playlistTime,
 				);
 				$arrAddGallery = $this->getArrAddGallery($monitorId, $param, $arrGalleryAll);				//Получение списка добавляемых заказов для данного плейлиста	
 				$arrGalleryAll = $this->countShowMinus($arrGalleryAll, $arrAddGallery);							//Уменьшение из общего списка кол-ва показов на 1
-				$arrTempGallery[$countNowBlock] = $arrAddGallery;
+				$arrTempGallery[$idblock] = $arrAddGallery;
 				
 				/* Дополнительные ролики */
 				$arrDopVideo = array();
@@ -175,13 +178,13 @@ class Playlist extends Model {
 					$arrDopVideo = $this->getDopVideo($timeDopVideo, $PlaylistExtraVideo);
 				}
 				
-				$arrRes[$countNowBlock] = $this->getMergeArray($playlist, $arrAddGallery, $arrDopVideo, $countNowBlock);			//объединение исходного плейлиста с закзазами
+				$arrRes[$idblock] = $this->getMergeArray($playlist, $arrAddGallery, $arrDopVideo, $idblock);			//объединение исходного плейлиста с закзазами
 			}
 		}
-		
+
 		$res = array();
 		if(count($arrRes) > 0){
-			foreach($arrRes as $countNowBlock => $arr){
+			foreach($arrRes as $idblock => $arr){
 				foreach($arr as $key => $item){
 					$res[] = $item;
 				}	 
@@ -530,7 +533,9 @@ class Playlist extends Model {
 					'time' => $this->timeGallery,
 					'sort' => $item['sort'],
 					'block' => $countNowBlock,
-					'init' => 0
+					'init' => 0,
+					
+					'tarif_id' => $item['tarif_id'],
 				);	
 			}	
 		}

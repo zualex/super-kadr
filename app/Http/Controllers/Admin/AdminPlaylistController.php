@@ -53,6 +53,15 @@ class AdminPlaylistController extends Controller {
 		}
 
 		
+		$info = $playlistModel->getInfoPlaylist($playlistModel->getId(1));
+		$dateStart1 = $info['dateStart'];
+		$playlistFinaly1 = $playlistModel->getGenerateArray(1);
+		
+		$info = $playlistModel->getInfoPlaylist($playlistModel->getId(2));
+		$dateStart2 = $info['dateStart'];
+		$playlistFinaly2 = $playlistModel->getGenerateArray(2);
+		
+		//dd($playlistFinaly1);
 		
 		$data = array(
 			'pathImages' => $pathImages,					//Путь к картинкам
@@ -62,10 +71,12 @@ class AdminPlaylistController extends Controller {
 			
 			'extraVideo' => $extraVideo,						//Массив с доп роликами
 			
-			'galleryGeneration_1' => array(),	//Заказы в очередь для первого экрана
-			'dateStart1' => '0',						//Дата начала формирования плейлиста
+
+			'playlistFinaly1' => $playlistFinaly1,	//Заказы в очередь для первого экрана
+			'dateStart1' => $dateStart1,						//Дата начала формирования плейлиста
 			'galleryGeneration_2' => array(),
-			'dateStart2' => '0',
+			'playlistFinaly2' => $playlistFinaly2,
+			'dateStart2' => $dateStart2,
 		);
 		return view('admin.playlist.index')->with('data', $data);
 	}
