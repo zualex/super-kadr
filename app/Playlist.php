@@ -9,6 +9,7 @@ use App\Monitor;
 use App\Gallery;
 use App\Pay;
 use App\PlaylistTime;
+use App\PlaylistExtraVideo;
 use File;
 use DB;
 
@@ -86,8 +87,8 @@ class Playlist extends Model {
 		$res1 = 0;
 		$res2 = 0;
 		
-		$res1 = $this->startGenerate(1);
-		$res2 = $this->startGenerate(2);
+		$playlistFinaly1 = $this->getGenerateArray(1);
+		$playlistFinaly2 = $this->getGenerateArray(2);
 		
 		return $res1.' - '.$res2;
 	}
@@ -95,9 +96,9 @@ class Playlist extends Model {
 	
 	
 	/*
-	* startGenerate - начала генерации плейлиста
+	* getGenerateArray - Получение массива для с данными для генерации плейлиста
 	*/
-	public function startGenerate($monitorNumber){
+	public function getGenerateArray($monitorNumber){
 		$res = 0;
 		
 		$monitorId = $this->getId($monitorNumber);					//Получение id экрана по его номеру
@@ -117,6 +118,7 @@ class Playlist extends Model {
 				$idblock++;
 				if($idblock > $maxIdblock){$idblock = 1;}
 
+				
 				/* Исходный плейлист */
 				$playlist = $this->getPlaylistForGenerate($monitorId, $idblock);														//получение одного блока из исходного плейлиста
 				$playlistTime =  $this->getTime($playlist);																						//Получение общего времени исходного плейлиста
@@ -134,18 +136,18 @@ class Playlist extends Model {
 				
 				
 				/* Дополнительные ролики */
+				$arrDopVideo = array();
 				$galleryTime = $this->getTime($arrAddGallery);
 				$timeDopVideo = $this->timeBlock - $playlistTime - $galleryTime;
 				if($timeDopVideo > 0){
-					$arrDopVideo = $this->getDopVideo($timeDopVideo);
+					$PlaylistExtraVideo = PlaylistExtraVideo::all();	
+					$arrDopVideo = $this->getDopVideo($timeDopVideo, $PlaylistExtraVideo);
 				}
 				
 				$arrRes[$countNowBlock] = $this->getMergeArray($playlist, $arrAddGallery, $arrDopVideo, $countNowBlock);			//объединение исходного плейлиста с закзазами
 			}
 		}		
-		
-		dd($arrRes);
-		
+			
 		return $arrRes;
 	}
 	
@@ -404,9 +406,38 @@ class Playlist extends Model {
 	/*
 	* getDopVideo - Получение списко дополнительных роликов
 	*/
-	public function getDopVideo($timeDopVideo){
-		//Тут нужно дописать
-		return array();
+	public function getDopVideo($timeDopVideo, $PlaylistExtraVideo){
+		$arrRes = array();
+		$timeLeft = $timeDopVideo;
+				
+		if(count($PlaylistExtraVideo) > 0){
+			while($timeLeft !== false){
+				foreach($PlaylistExtraVideo as $key => $item){
+					$path = $item->path;
+					$time = $item->time;
+					if($timeLeft - $time > 0){
+						$timeLeft -= $time;
+					}else{
+						$time = $timeLeft;		//Обрезаем ролик если нет оставшегося времени
+						$timeLeft = false;				//Условие выхода из цикла
+					}
+					
+					if($time !== false AND $time > 0){
+						$arrRes[] = array(
+							'id' => $item->id,
+							'path' => $path,
+							'time' => $time,
+						);
+					}
+	
+					if($timeLeft == $timeDopVideo){	//Если оставшееся время не изменилось то выходим из цикла
+						$timeLeft = false;						//Условие выхода из цикла
+					}
+				}
+			}
+		}
+
+		return $arrRes;
 	}
 
 	
@@ -429,7 +460,8 @@ class Playlist extends Model {
 				}else{
 					$item['is_time'] = 'False';
 				}
-							
+				
+				$sort = 1000 - $key;		//обратная сортровка для коректной сортроваки объединенного массива
 				$arrRes[] = array(
 					'id' => $item['id'],
 					'enable' => $item['enable'],
@@ -438,7 +470,7 @@ class Playlist extends Model {
 					'loop_xml' => $item['loop_xml'],
 					'IsTime' => $item['is_time'],
 					'time' => $item['time'],
-					'sort' => $key,
+					'sort' => $sort,
 					'block' => $countNowBlock,
 					'init' => 1
 				);		
@@ -463,7 +495,21 @@ class Playlist extends Model {
 		}
 		
 		if(count($arrDopVideo) > 0){
-			//Тут нужно дописать
+			foreach($arrDopVideo as $key => $item){
+				$sort = 1000 - $key;					//обратная сортровка для коректной сортроваки объединенного массива
+				$arrRes[] = array(
+					'id' => 'video_'.$item['id'],
+					'enable' => 'True',
+					'name' => $item['path'],
+					'loop' => 0,
+					'loop_xml' => 0,
+					'IsTime' => 'True',
+					'time' => $item['time'],
+					'sort' => $sort ,
+					'block' => $countNowBlock,
+					'init' => -1
+				);
+			}
 		}
 		
 		
