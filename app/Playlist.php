@@ -90,6 +90,9 @@ class Playlist extends Model {
 		$playlistFinaly1 = $this->getGenerateArray(1);
 		$playlistFinaly2 = $this->getGenerateArray(2);
 		
+		$res1 = $this->savePlaylist(1, $playlistFinaly1);
+		$res2 = $this->savePlaylist(2, $playlistFinaly2);
+		
 		return $res1.' - '.$res2;
 	}
 	
@@ -97,12 +100,13 @@ class Playlist extends Model {
 	
 	/*
 	* getGenerateArray - Получение массива для с данными для генерации плейлиста
+	* offset - смещение, если 1 то масив сформируется для следующего плейлиста
 	*/
-	public function getGenerateArray($monitorNumber){
+	public function getGenerateArray($monitorNumber, $offset = 0){
 		$res = 0;
 		
 		$monitorId = $this->getId($monitorNumber);					//Получение id экрана по его номеру
-		$info = $this->getInfoPlaylist($monitorId);					//Получение даты начала, даты конце и idblock для генерации плейлиста
+		$info = $this->getInfoPlaylist($monitorId, $offset);					//Получение даты начала, даты конце и idblock для генерации плейлиста
 		
 		$dateStart = $info['dateStart'];
 		$dateEnd = $info['dateEnd'];
@@ -111,7 +115,8 @@ class Playlist extends Model {
 		$arrRes = array();
 		$arrGalleryAll = $this->getGalleryDateShow($monitorId, $dateEnd);		//Получение галерей которые попадут в генерируемый плейлист	
 		
-		
+
+		$arrTempGallery = array();
 		/* Если максимальный idblock плейлиста меньше нуля то генерацим не будет */
 		if($maxIdblock > 0){
 			for($countNowBlock = 1; $countNowBlock <= $this->countBlock; $countNowBlock++){
@@ -133,7 +138,7 @@ class Playlist extends Model {
 				);
 				$arrAddGallery = $this->getArrAddGallery($monitorId, $param, $arrGalleryAll);				//Получение списка добавляемых заказов для данного плейлиста	
 				$arrGalleryAll = $this->countShowMinus($arrGalleryAll, $arrAddGallery);							//Уменьшение из общего списка кол-ва показов на 1
-				
+				$arrTempGallery[$countNowBlock] = $arrAddGallery;
 				
 				/* Дополнительные ролики */
 				$arrDopVideo = array();
@@ -146,9 +151,20 @@ class Playlist extends Model {
 				
 				$arrRes[$countNowBlock] = $this->getMergeArray($playlist, $arrAddGallery, $arrDopVideo, $countNowBlock);			//объединение исходного плейлиста с закзазами
 			}
-		}		
+		}
+		//dd($arrRes);
+		
+		$res = array();
+		if(count($arrRes) > 0){
+			foreach($arrRes as $countNowBlock => $arr){
+				foreach($arr as $key => $item){
+					$res[] = $item;
+				}	 
+			}
+		}
 			
-		return $arrRes;
+
+		return $res;
 	}
 	
 	
@@ -162,7 +178,7 @@ class Playlist extends Model {
 	*	maxIdblock 	-  	максимальный idblock плейлиста
 	*
 	*/
-	public function getInfoPlaylist($monitorId){
+	public function getInfoPlaylist($monitorId, $offset){
 		$res = array();
 		$dateStart = '';
 		$dateEnd = '';
@@ -178,13 +194,13 @@ class Playlist extends Model {
 			$idblock = $playlistTime->idblock;
 		}else{
 			$nowDate = Carbon::now();
-			//Раскомментировать !!!
-			//$dateStart = $nowDate->hour(0)->minute(0)->second(0)->toDateTimeString();
-			$dateStart = $nowDate->toDateTimeString();
+			$dateStart = $nowDate->hour(0)->minute(0)->second(0)->toDateTimeString();
 		}
 		
+		$dateStart = Carbon::parse($dateStart)->addSeconds($offset * $this->timePlaylist)->toDateTimeString();		//дата начала со смещением
 		$dateEnd = Carbon::parse($dateStart)->addSeconds($this->timePlaylist)->toDateTimeString();
 		
+
 		$res = array(
 			'dateStart' => $dateStart,
 			'dateEnd' => $dateEnd,
@@ -512,11 +528,188 @@ class Playlist extends Model {
 			}
 		}
 		
-		
+
 		$arrRes = $this->array_orderby($arrRes, 'block', SORT_ASC, 'init', SORT_DESC, 'sort', SORT_DESC);
 		
 		return $arrRes;
 	}
+	
+	
+	
+	/*
+	* savePlaylist - сохранение плейлиста
+	*/
+	public function savePlaylist($monitorNumber, $playlistFinaly, $offset = 0){
+		$res = 0;
+		
+		$monitorId = $this->getId($monitorNumber);					//Получение id экрана по его номеру
+		$info = $this->getInfoPlaylist($monitorId, $offset);					//Получение даты начала, даты конце и idblock для генерации плейлиста
+		$dateStart = $info['dateStart'];
+		$dateEnd = $info['dateEnd'];
+		$idblock = $info['idblock'];
+		$maxIdblock = $info['maxIdblock'];
+		
+		$lastIdblock = $idblock + $this->countBlock;
+		if($lastIdblock > $maxIdblock){$lastIdblock -= $maxIdblock;}
+
+		
+		
+		if(count($playlistFinaly) > 0){
+			$res = 1;
+			$this->savePlaylistWithGalleryXml($monitorNumber, $playlistFinaly, $dateStart);		//Сохранение плейлиста в xml
+			$this->setGalleryCountShow($playlistFinaly);															//Обновление в заказах CountShow
+			$this->setPlaylistTime($monitorId, $dateStart, $dateEnd, $lastIdblock);										//Сохранение в базу данных инф. о плейлистах
+		}
+		
+		dd($playlistFinaly);
+		
+		return $res;
+	}
+	
+	
+	
+	/*
+	*	savePlaylistWithGalleryXml - Сохранение плейлиста
+	*/
+	public function savePlaylistWithGalleryXml($monitorNumber = '', $arrRes = array(), $dateStart){
+		if($monitorNumber != '' AND count($arrRes) > 0){			
+			$dateStart = Carbon::parse($dateStart);
+			$namePlaylist = 'ПЛ'.$dateStart->format('YmdHis').'.xml';
+			$namePlaylist = iconv("UTF-8", "cp1251", $namePlaylist);
+			
+			if($monitorNumber == 1){
+				$pathSave = $this->pathPlaylistMonitor_1.'/'.$namePlaylist;
+			}
+			if($monitorNumber == 2){
+				$pathSave = $this->pathPlaylistMonitor_2.'/'.$namePlaylist;
+			}
+			$this->clearFolderBeforeGeneration($monitorNumber);		//Очщение старых плейлистов и папки images перед генерацией новых плейлистов
+			
+			
+			$xml = '';
+			
+			$xml .= '<?xml version="1.0" encoding="windows-1251"?>
+<!--Nata-Info Ltd. NISheduler.Sheduler playlist-->
+<tasks>
+	<collection base="C:\Ролики\Ролики\">';
+			
+			foreach($arrRes as $key => $item){
+				if($item['init'] == 0){
+					$item['name'] = $this->savePlaylistImg($monitorNumber, $item);		//сохранение картинки для плейлиста		
+				}
+				
+				
+				$xml .= '<item enable="'.$item['enable'].'" name="'.$item['name'].'" loop="'.$item['loop'].'" IsTime="'.$item['IsTime'].'" time="'.$item['time'].'"></item>
+';				
+			}
+	
+			$xml .= '	</collection>
+</tasks>';
+			
+			
+			$xml = iconv("UTF-8", "cp1251", $xml);
+			File::put($pathSave, $xml);
+	
+			return $pathSave;
+		}
+	}
+	
+	
+	/*
+	* Очщение старых плейлистов и папки images перед генерацией новых плейлистов
+	*/
+	public function clearFolderBeforeGeneration($monitorNumber){
+		if($monitorNumber == 1){
+			$path = $this->pathPlaylistMonitor_1;
+		}
+		if($monitorNumber == 2){
+			$path = $this->pathPlaylistMonitor_2;
+		}
+		
+		$files = File::files($path);
+		File::delete($files);
+		
+		$images = File::files($path.'/'.$this->folderImg);
+		File::delete($images);
+		
+		return 1;		
+	}
+
+	
+	/*
+	* savePlaylistImg - сохранение картинки для плейлиста
+	*/
+	public function savePlaylistImg($monitorNumber, $item){
+		$pathStart = $this->pathImages.'/o_'.$item['name'];
+		$pathSave = '';
+		if($monitorNumber == 1){
+			$pathSave = $this->pathPlaylistMonitor_1.'/'.$this->folderImg.'/'.$item['name'];
+		}
+		if($monitorNumber == 2){
+			$pathSave = $this->pathPlaylistMonitor_2.'/'.$this->folderImg.'/'.$item['name'];
+		}
+		$w = $this->imgSize[$monitorNumber]['w'];
+		$h = $this->imgSize[$monitorNumber]['h'];
+		
+		if(!File::exists($pathSave)){
+			Image::make($pathStart)->resize($w, $h)->save($pathSave);
+		}
+		
+		
+		$pathSave = str_replace('/', '\\', $pathSave);
+		return $pathSave;
+	}
+	
+	
+	
+	/*
+	*	setGalleryCountShow - Обновление в заказах CountShow
+	*/
+	public function setGalleryCountShow($arrRes){
+		if(count($arrRes) > 0){
+			foreach($arrRes as $key => $item){
+				if($item['init'] == 0){
+					$gallery = Gallery::find($item['id']);
+					if($gallery){
+						$newCount = $gallery->count_show - 1;
+						if($newCount < 0){$newCount = 0;}
+						$gallery->count_show = $newCount;
+						$gallery->save();
+					}
+				}
+			}
+		}
+		return 1;
+	}
+	
+	
+	
+	/*
+	* setPlaylistTime - Сохранение в базу данных инф. о плейлистах
+	*/
+	public function setPlaylistTime($monitorId = '', $dateStart = '', $dateEnd = '', $idblock){
+		$playlistTime = false;
+		
+		if($monitorId != '' AND $dateStart != '' AND $dateEnd != ''){
+			//Проверям есть ли в базе данная запись
+			$playlistTimeExist = PlaylistTime::where('monitor_id', '=', $monitorId)
+				->where('dateStart', '=', $dateStart)
+				->where('dateEnd', '=', $dateEnd)
+				->first();
+				
+
+			if(!$playlistTimeExist){
+				$playlistTime = new PlaylistTime;
+				$playlistTime->monitor_id = $monitorId;
+				$playlistTime->dateStart = $dateStart;
+				$playlistTime->dateEnd = $dateEnd;
+				$playlistTime->idblock = $idblock;
+				$playlistTime->save();
+			}
+		}
+		return $playlistTime;
+	}
+	
 	
 	
 	/*
