@@ -87,11 +87,37 @@ class Playlist extends Model {
 		$res1 = 0;
 		$res2 = 0;
 		
-		$playlistFinaly1 = $this->getGenerateArray(1);
-		$playlistFinaly2 = $this->getGenerateArray(2);
 		
-		$res1 = $this->savePlaylist(1, $playlistFinaly1);
-		$res2 = $this->savePlaylist(2, $playlistFinaly2);
+		
+		$info = $this->getInfoPlaylist($this->getId(1));
+		$dateStart = $info['dateStart'];
+		$nowDate = Carbon::now();
+		$dateNowNext = $nowDate->timestamp + $this->timePlaylist;
+		while($dateNowNext >= Carbon::parse($dateStart)->timestamp){
+			$playlistFinaly1 = $this->getGenerateArray(1);
+			$res1 = $this->savePlaylist(1, $playlistFinaly1);
+			
+			$info = $this->getInfoPlaylist($this->getId(1));
+			$dateStart = $info['dateStart'];
+			if(count($playlistFinaly1) == 0){break;}
+		}
+		
+		
+		
+		$info = $this->getInfoPlaylist($this->getId(2));
+		$dateStart = $info['dateStart'];
+		$nowDate = Carbon::now();
+		$dateNowNext = $nowDate->timestamp + $this->timePlaylist;
+		while($dateNowNext >= Carbon::parse($dateStart)->timestamp){
+			$playlistFinaly2 = $this->getGenerateArray(2);
+			$res2 = $this->savePlaylist(2, $playlistFinaly2);
+			
+			$info = $this->getInfoPlaylist($this->getId(2));
+			$dateStart = $info['dateStart'];
+			if(count($playlistFinaly2) == 0){break;}
+			
+		}
+		
 		
 		return $res1.' - '.$res2;
 	}
@@ -144,7 +170,7 @@ class Playlist extends Model {
 				$arrDopVideo = array();
 				$galleryTime = $this->getTime($arrAddGallery);
 				$timeDopVideo = $this->timeBlock - $playlistTime - $galleryTime;
-				if($timeDopVideo > 0){
+				if($timeDopVideo > 0 AND count($playlist) > 0){
 					$PlaylistExtraVideo = PlaylistExtraVideo::all();	
 					$arrDopVideo = $this->getDopVideo($timeDopVideo, $PlaylistExtraVideo);
 				}
@@ -152,7 +178,6 @@ class Playlist extends Model {
 				$arrRes[$countNowBlock] = $this->getMergeArray($playlist, $arrAddGallery, $arrDopVideo, $countNowBlock);			//объединение исходного плейлиста с закзазами
 			}
 		}
-		//dd($arrRes);
 		
 		$res = array();
 		if(count($arrRes) > 0){
@@ -178,7 +203,7 @@ class Playlist extends Model {
 	*	maxIdblock 	-  	максимальный idblock плейлиста
 	*
 	*/
-	public function getInfoPlaylist($monitorId, $offset){
+	public function getInfoPlaylist($monitorId, $offset = 0){
 		$res = array();
 		$dateStart = '';
 		$dateEnd = '';
@@ -561,7 +586,6 @@ class Playlist extends Model {
 			$this->setPlaylistTime($monitorId, $dateStart, $dateEnd, $lastIdblock);										//Сохранение в базу данных инф. о плейлистах
 		}
 		
-		dd($playlistFinaly);
 		
 		return $res;
 	}
