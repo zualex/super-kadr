@@ -356,5 +356,10 @@ class AdminPlaylistController extends Controller {
 		}
 	}
 	
+	
+	public function test(Playlist $playlistModel)
+	{
+		return $playlistModel->availabilityDate(1, 1, '05.10.2015');
+	}
 
 }

@@ -943,4 +943,150 @@ class Playlist extends Model {
 		return array_pop($args);
 	}
 
+	
+	
+	
+	
+	/*
+	* availabilityDate - проверка доступности даты в зависимости от выбранного тарифа, выбранного экрана и выбранного дня
+	*/
+	public function availabilityDate($tarif_id = '', $monitorNumber = '', $dateDay = ''){
+		$arrDateGallery = $this->getArrDateGallery($tarif_id, $monitorNumber, $dateDay);			//массив показов заказов по часам
+		$arrDatePlaylist = $this->getArrDateInitPlaylist($monitorNumber, $dateDay);					//массив исходных плейлистов по часам
+		$arrDate = $this->mergeArrDate($arrDateGallery, $arrDatePlaylist);									//Объединение двух массивов
+		
+		/*
+		* Осталось проверить массив на то что кол-во минут не превыщает 60 минут
+		*/
+		dd($arrDate);
+
+		return $tarif_id.' - '.$dateDay;
+	}
+	
+	
+	
+	
+	/*
+	* getArrDateGallery - массив показов заказов по часам
+	*/
+	public function getArrDateGallery($tarif_id = '', $monitorNumber = '', $dateDay = ''){
+		$dateShow = Carbon::parse($dateDay)->toDateTimeString();
+		$dateEnd = Carbon::parse($dateDay)->addDay(1)->toDateTimeString();
+		
+		/* Получаем список галерей которые показываются в течение выбранного дня */
+		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
+		$gallery = Gallery::select(DB::raw('galleries.*, tarifs.hours, tarifs.interval_sec'))
+			->join('tarifs', 'tarifs.id', '=', 'galleries.tarif_id')
+			->join('monitors', 'monitors.id', '=', 'galleries.monitor_id')
+			->where('status_main', '=', $status_main->id)
+			->where('count_show', '>', '0')
+			->where('monitors.number', '=', $monitorNumber)
+			->where('date_show', '<=', $dateEnd)
+			->orderBy('date_show', 'asc')
+			->get();
+		
+		$arrDateGallery = array();
+		if(count($gallery) > 0){
+			foreach($gallery as $key => $item){
+				/* Получаем дату первого показа */
+				$dateItem = Carbon::parse($item['date_show']);
+				$timeBlockMinute = $this->timeBlock/60;
+				$addMinute = 5 - $dateItem->minute%$timeBlockMinute;
+				
+				$dateItem->addMinute($addMinute)->second(0);
+				$dateSave = $dateItem->format('Y.m.d H').':00';
+
+				if(array_key_exists($dateSave, $arrDateGallery)){
+					$arrDateGallery[$dateSave] += $this->timeGallery;
+				}else{
+					$arrDateGallery[$dateSave] = $this->timeGallery;
+				}
+				
+				for($i = 1; $i < $item['count_show']; $i++){
+					$dateItem->addSeconds($item['interval_sec']);
+					$dateSave = $dateItem->format('Y.m.d H').':00';
+					
+					if(array_key_exists($dateSave, $arrDateGallery)){
+						$arrDateGallery[$dateSave] += $this->timeGallery;
+					}else{
+						$arrDateGallery[$dateSave] = $this->timeGallery;
+					}
+				}
+			}
+		}
+		ksort($arrDateGallery);
+		
+		return $arrDateGallery;
+	}
+	
+	
+	/*
+	* getArrDateInitPlaylist - массив исходных плейлистов по часам
+	*/
+	public function getArrDateInitPlaylist($monitorNumber = '', $dateDay = ''){
+		$arrRes = array();
+		$dateShow = Carbon::parse($dateDay)->hour(0)->minute(0)->second(0);
+		$nowDate = Carbon::now()->hour(0)->minute(0)->second(0);
+		$nextDay = $dateShow->day + 1;
+		
+		if($dateShow->toDateTimeString() == $nowDate->toDateTimeString()){
+			$monitorId = $this->getId($monitorNumber);
+			$playlist = $this
+				->with('monitor')
+				->where('type', '=', '0')
+				->where('enable', '=', 1)
+				->where('is_time', '=', 1)
+				->where('monitor_id', '=', $monitorId)
+				->orderBy('sort', 'asc')
+				->get();
+			
+			
+			$last_idblock = '';
+			if(count($playlist) > 0){
+				$i = 0;
+				while($nextDay != $dateShow->day){
+					$i++;
+					foreach($playlist as $key => $item){
+						if($last_idblock != '' AND $last_idblock != $item['idblock']){
+							$dateShow->addSeconds($this->timeBlock);
+							if($nextDay == $dateShow->day){break;}
+						}					
+						$dateSave = $dateShow->format('Y.m.d H').':00';
+						$time = $item['time'] * ($item['loop_xml'] + 1);
+						
+						if(array_key_exists($dateSave, $arrRes)){
+							$arrRes[$dateSave] += $time;
+						}else{
+							$arrRes[$dateSave] = $time;
+						}
+						
+						
+						$last_idblock = $item['idblock'];
+					}
+				}
+			}
+		}
+		
+		return $arrRes;
+	}
+	
+	
+	/*
+	* mergeArrDate - Объединение двух массивов
+	*/
+	public function mergeArrDate($arrDateGallery, $arrDatePlaylist){
+		$arrRes = array();
+		if(count($arrDateGallery) > 0){
+			foreach($arrDateGallery as $key => $item){
+				$arrRes[$key] = $item;
+				if(array_key_exists($key, $arrDatePlaylist)){
+					$arrRes[$key] += $arrDatePlaylist[$key];
+				}
+			}
+		}
+		
+		return $arrRes;
+	}
+
+	
 }
