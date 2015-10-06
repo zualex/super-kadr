@@ -129,7 +129,7 @@ class HomeController extends Controller {
 		for ($j = 0; $j < 15; $j++){
 			$times = '';
 			$date = date("d-m-Y", time() + $j * 24 * 60 * 60);
-			$content_date .= '<div class="tab-head day"><div><span class="label-h1">'.day_of_week($N + $j).'</span><span class="label-h2">'.date("j", strtotime($date)).' '.month(date("n", strtotime($date))).'</span></div></div>';
+			$content_date .= '<div class="tab-head day" data-dateday="'.$date.'" onclick="availabilityDate(\''.$date.'\')"><div><span class="label-h1">'.day_of_week($N + $j).'</span><span class="label-h2">'.date("j", strtotime($date)).' '.month(date("n", strtotime($date))).'</span></div></div>';
 			for ($i = 0; $i < 24; $i++){
 				$t = str_pad($i, 2, '0', STR_PAD_LEFT).':00';
 				$time = date("$t d.m.Y", strtotime($date));

@@ -136,5 +136,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 
 Route::get('/cron/playlist/initfile', ['as' => 'cron.playlist.initfile', 'uses' => 'Admin\AdminPlaylistController@initFile']);				//Загрузка исходных файлов в БД
 Route::get('/cron/playlist/initgenerate', ['as' => 'cron.playlist.initgenerate', 'uses' => 'Admin\AdminPlaylistController@initGenerate']);				//Генерация плейлистов
-Route::get('/test', ['uses' => 'Admin\AdminPlaylistController@test']);				
+Route::get('/json/checkdate', ['as' => 'playlist.checkdate', 'uses' => 'Admin\AdminPlaylistController@checkdate']);				
 

@@ -357,9 +357,14 @@ class AdminPlaylistController extends Controller {
 	}
 	
 	
-	public function test(Playlist $playlistModel)
+	public function checkdate(Playlist $playlistModel)
 	{
-		return $playlistModel->availabilityDate(1, 1, '05.10.2015');
+		$tarif_id = Request::input('tarif_id');
+		$monitor_id = Request::input('monitor_id');
+		$dateDay = Request::input('dateDay');
+		
+		//return $playlistModel->availabilityDate(1, 1, '06.10.2015');
+		return $playlistModel->availabilityDate($tarif_id, $monitor_id, $dateDay);
 	}
 
 }

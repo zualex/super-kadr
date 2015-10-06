@@ -7,11 +7,13 @@ use Carbon\Carbon;
 use SoapBox\Formatter\Formatter;
 use App\Monitor;
 use App\Gallery;
+use App\Tarif;
 use App\Pay;
 use App\PlaylistTime;
 use App\PlaylistExtraVideo;
 use File;
 use DB;
+use Response;
 
 class Playlist extends Model {
 
@@ -950,17 +952,15 @@ class Playlist extends Model {
 	/*
 	* availabilityDate - проверка доступности даты в зависимости от выбранного тарифа, выбранного экрана и выбранного дня
 	*/
-	public function availabilityDate($tarif_id = '', $monitorNumber = '', $dateDay = ''){
-		$arrDateGallery = $this->getArrDateGallery($tarif_id, $monitorNumber, $dateDay);			//массив показов заказов по часам
-		$arrDatePlaylist = $this->getArrDateInitPlaylist($monitorNumber, $dateDay);					//массив исходных плейлистов по часам
+	public function availabilityDate($tarif_id = '', $monitor_id = '', $dateDay = ''){
+		$arrDateGallery = $this->getArrDateGallery($tarif_id, $monitor_id, $dateDay);					//массив показов заказов по часам
+		$arrDatePlaylist = $this->getArrDateInitPlaylist($monitor_id, $dateDay);							//массив исходных плейлистов по часам
 		$arrDate = $this->mergeArrDate($arrDateGallery, $arrDatePlaylist);									//Объединение двух массивов
+		$arrDate = $this->checkArrAvailability($arrDate, $tarif_id);												//проверерка массива на то что даты доступны
 		
-		/*
-		* Осталось проверить массив на то что кол-во минут не превыщает 60 минут
-		*/
-		dd($arrDate);
-
-		return $tarif_id.' - '.$dateDay;
+		return Response::json( array(
+			"dates" => $arrDate
+		));
 	}
 	
 	
@@ -969,7 +969,7 @@ class Playlist extends Model {
 	/*
 	* getArrDateGallery - массив показов заказов по часам
 	*/
-	public function getArrDateGallery($tarif_id = '', $monitorNumber = '', $dateDay = ''){
+	public function getArrDateGallery($tarif_id = '', $monitor_id = '', $dateDay = ''){
 		$dateShow = Carbon::parse($dateDay)->toDateTimeString();
 		$dateEnd = Carbon::parse($dateDay)->addDay(1)->toDateTimeString();
 		
@@ -977,10 +977,9 @@ class Playlist extends Model {
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 		$gallery = Gallery::select(DB::raw('galleries.*, tarifs.hours, tarifs.interval_sec'))
 			->join('tarifs', 'tarifs.id', '=', 'galleries.tarif_id')
-			->join('monitors', 'monitors.id', '=', 'galleries.monitor_id')
 			->where('status_main', '=', $status_main->id)
 			->where('count_show', '>', '0')
-			->where('monitors.number', '=', $monitorNumber)
+			->where('monitor_id', '=', $monitor_id)
 			->where('date_show', '<=', $dateEnd)
 			->orderBy('date_show', 'asc')
 			->get();
@@ -994,7 +993,7 @@ class Playlist extends Model {
 				$addMinute = 5 - $dateItem->minute%$timeBlockMinute;
 				
 				$dateItem->addMinute($addMinute)->second(0);
-				$dateSave = $dateItem->format('Y.m.d H').':00';
+				$dateSave = $dateItem->format('d.m.Y H').':00';
 
 				if(array_key_exists($dateSave, $arrDateGallery)){
 					$arrDateGallery[$dateSave] += $this->timeGallery;
@@ -1004,7 +1003,7 @@ class Playlist extends Model {
 				
 				for($i = 1; $i < $item['count_show']; $i++){
 					$dateItem->addSeconds($item['interval_sec']);
-					$dateSave = $dateItem->format('Y.m.d H').':00';
+					$dateSave = $dateItem->format('d.m.Y H').':00';
 					
 					if(array_key_exists($dateSave, $arrDateGallery)){
 						$arrDateGallery[$dateSave] += $this->timeGallery;
@@ -1023,20 +1022,20 @@ class Playlist extends Model {
 	/*
 	* getArrDateInitPlaylist - массив исходных плейлистов по часам
 	*/
-	public function getArrDateInitPlaylist($monitorNumber = '', $dateDay = ''){
+	public function getArrDateInitPlaylist($monitor_id = '', $dateDay = ''){
 		$arrRes = array();
 		$dateShow = Carbon::parse($dateDay)->hour(0)->minute(0)->second(0);
 		$nowDate = Carbon::now()->hour(0)->minute(0)->second(0);
 		$nextDay = $dateShow->day + 1;
 		
+		
 		if($dateShow->toDateTimeString() == $nowDate->toDateTimeString()){
-			$monitorId = $this->getId($monitorNumber);
 			$playlist = $this
 				->with('monitor')
 				->where('type', '=', '0')
 				->where('enable', '=', 1)
 				->where('is_time', '=', 1)
-				->where('monitor_id', '=', $monitorId)
+				->where('monitor_id', '=', $monitor_id)
 				->orderBy('sort', 'asc')
 				->get();
 			
@@ -1051,7 +1050,7 @@ class Playlist extends Model {
 							$dateShow->addSeconds($this->timeBlock);
 							if($nextDay == $dateShow->day){break;}
 						}					
-						$dateSave = $dateShow->format('Y.m.d H').':00';
+						$dateSave = $dateShow->format('d.m.Y H').':00';
 						$time = $item['time'] * ($item['loop_xml'] + 1);
 						
 						if(array_key_exists($dateSave, $arrRes)){
@@ -1064,6 +1063,12 @@ class Playlist extends Model {
 						$last_idblock = $item['idblock'];
 					}
 				}
+			}
+		}{
+			while($nextDay != $dateShow->day){
+				$dateSave = $dateShow->format('d.m.Y H').':00';
+				$arrRes[$dateSave] = 35*60;				//Так как плейлиста нет то по умолчанию на 1 час идет 35 минут плейлистов
+				$dateShow->addHours(1);
 			}
 		}
 		
@@ -1089,4 +1094,47 @@ class Playlist extends Model {
 	}
 
 	
+	/*
+	* checkArrAvailability - проверерка массива на то что даты доступны
+	* возвращает массив с датами которые не доступны для выбранного тарифа
+	*/
+	public function checkArrAvailability($arrDate, $tarif_id){
+		$arrResAll = array();
+		$arrRes = array();
+		$hour = 60*60;
+		$tarif = Tarif::find($tarif_id);
+	
+		if(count($arrDate) > 0 AND count($tarif) > 0){
+			foreach($arrDate as $date => $seconds){
+				$countInHour = $hour/$tarif['interval_sec'];			//Кол-во показов в течении часа
+				$timeGallery = $countInHour*$this->timeGallery;	//Кол-во секунд в течении часа
+				$allTime = $timeGallery + $seconds;
+				
+				$check = 0;
+				if($allTime <= $hour){
+					$check = 1;
+				}
+				$arrResAll[$date] = array(
+					'check' => $check,									//1-дата доступна, 0 - дата недоступна
+					'useTime' => $seconds,							//Сколько сейчас используется секунд
+					'timeGallery' => $timeGallery,				//Сколько нужно для галереи
+				);
+				
+				if($check == 0){
+					$arrRes[$date] = $check;
+				}
+			}
+		}
+			
+		return $arrRes;
+	}
+	
 }
+
+
+
+
+
+
+
+

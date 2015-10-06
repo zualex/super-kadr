@@ -242,6 +242,7 @@ $(document).ready( function () {
 		var tariff = cnt;
 		
 		$('.tariffs').attr('data-tariff', tariff);
+		availabilityDate('', tariff);
 
 	}
 	
@@ -265,6 +266,7 @@ $(document).ready( function () {
 		newMonitor = $(this).val();
 		$('.tariffs').attr('data-monitor', newMonitor);
 		croppic.options.cropData.monitor = newMonitor;
+		availabilityDate('', '', newMonitor);
 		
 		// Для того чтобы нормально отображалась картинка при смене экранов
 		var newW = $('#objW_'+newMonitor).val()/1;
@@ -440,3 +442,53 @@ function showComment(url){
 		}
 	});
 }
+
+
+
+
+/*
+*	Проверка доступности даты
+*/
+function availabilityDate(dateDay, tarif_id, monitor_id){
+	var dateShow =$('.tariffs').attr('data-dateShow');
+	if(!tarif_id){
+		var tarif_id = $('.tariffs').attr('data-tariff');
+	}
+	if(!monitor_id){
+		var monitor_id = $('.tariffs').attr('data-monitor');
+	}
+	
+	if(!dateDay){
+		var dateDay = $('.tab-head.day.active').attr('data-dateday');
+	}
+	
+
+	$.ajax({
+		url: '/json/checkdate', 
+		dataType: "html",
+		type: 'GET',
+		data: {
+			'_token' : $('meta[name="csrf-token"]').attr('content'),
+			'tarif_id' : tarif_id,
+			'monitor_id' : monitor_id,
+			'dateDay' : dateDay
+		},
+		success: function(data){
+			$('.time-item.jsDeny').removeClass('deny').removeClass('jsDeny').addClass('active');
+			var data = $.parseJSON(data);
+			for (var dateHide in data.dates) {
+				dateHideArr = dateHide.split(' ');
+				dateHide = dateHideArr[1]+' '+dateHideArr[0];
+				$('.time-item[data-time="'+dateHide+'"]').removeClass('active').removeClass('select').addClass('deny jsDeny');
+				if(dateShow == dateHide){
+					$('.tariffs').attr('data-dateShow', '');
+				}
+			}
+		},
+		error: function(){
+			alert('Произошла ошибка');
+		}
+	});
+}
+
+
