@@ -32,6 +32,7 @@ routes.php
 AdminPlaylistController.php
 \public\assets\superkadr\js/script.js
 HomeController.php
+\resources\views\admin\playlist\dopVideo.blade.php
 
 
 
