@@ -94,7 +94,8 @@ class Playlist extends Model {
 		$info = $this->getInfoPlaylist($this->getId(1));
 		$dateStart = $info['dateStart'];
 		$nowDate = Carbon::now();
-		$dateNowNext = $nowDate->timestamp + $this->timePlaylist;
+		//$dateNowNext = $nowDate->timestamp + $this->timePlaylist;
+		$dateNowNext = $nowDate->timestamp;
 		while($dateNowNext >= Carbon::parse($dateStart)->timestamp){
 			$playlistFinaly1 = $this->getGenerateArray(1);
 			$res1 = $this->savePlaylist(1, $playlistFinaly1);
@@ -108,7 +109,8 @@ class Playlist extends Model {
 		$info = $this->getInfoPlaylist($this->getId(2));
 		$dateStart = $info['dateStart'];
 		$nowDate = Carbon::now();
-		$dateNowNext = $nowDate->timestamp + $this->timePlaylist;
+		//$dateNowNext = $nowDate->timestamp + $this->timePlaylist;
+		$dateNowNext = $nowDate->timestamp;
 		while($dateNowNext >= Carbon::parse($dateStart)->timestamp){
 			$playlistFinaly2 = $this->getGenerateArray(2);
 			$res2 = $this->savePlaylist(2, $playlistFinaly2);
@@ -116,7 +118,6 @@ class Playlist extends Model {
 			$info = $this->getInfoPlaylist($this->getId(2));
 			$dateStart = $info['dateStart'];
 			if(count($playlistFinaly2) == 0){break;}
-			
 		}
 		
 		
@@ -163,11 +164,13 @@ class Playlist extends Model {
 					'dateStart' => $dateStart,
 					'dateEnd' => $dateEnd,
 					'countNowBlock' => $idblock,
+					'iter' => $countNowBlock,
 					'playlistTime' => $playlistTime,
 				);
 				$arrAddGallery = $this->getArrAddGallery($monitorId, $param, $arrGalleryAll);				//Получение списка добавляемых заказов для данного плейлиста	
 				$arrGalleryAll = $this->countShowMinus($arrGalleryAll, $arrAddGallery);							//Уменьшение из общего списка кол-ва показов на 1
 				$arrTempGallery[$idblock] = $arrAddGallery;
+				
 				
 				/* Дополнительные ролики */
 				$arrDopVideo = array();
@@ -285,9 +288,10 @@ class Playlist extends Model {
 		$dateStart = $param['dateStart'];
 		$dateEnd = $param['dateEnd'];
 		$countNowBlock = $param['countNowBlock'];
+		$iter = $param['iter'];
 		$playlistTime = $param['playlistTime'];
-		
-		$arrGallery = $this->getGalleryIterPlaylist($arrGalleryAll, $dateStart, $countNowBlock, $playlistTime);		//Получение заказов для определенного логического блока
+				
+		$arrGallery = $this->getGalleryIterPlaylist($arrGalleryAll, $dateStart, $countNowBlock, $playlistTime, $iter);		//Получение заказов для определенного логического блока
 		
 		return $arrGallery;
 	}
@@ -352,10 +356,10 @@ class Playlist extends Model {
 	/*
 	* getGalleryIterPlaylist - Получение заказов для определенного логического блока
 	*/
-	public function getGalleryIterPlaylist($arrGallery, $dateStart, $countNowBlock, $playlistTime){
+	public function getGalleryIterPlaylist($arrGallery, $dateStart, $countNowBlock, $playlistTime, $iter){
 		$gallery = array();
 		foreach($arrGallery as $key => $item){
-			$sort = $this->getSort($item, $dateStart, $countNowBlock, $playlistTime);
+			$sort = $this->getSort($item, $dateStart, $iter, $playlistTime);
 			if($sort > 0  AND $item['count_show'] > 0){
 				$gallery[$item['id']]['id'] = $item['id'];
 				$gallery[$item['id']]['src'] = $item['src'];
@@ -382,6 +386,7 @@ class Playlist extends Model {
 				unset($gallery[$key]);
 			}
 		}
+		
 		return $gallery;
 	}
 	
@@ -399,18 +404,19 @@ class Playlist extends Model {
 		$intervalSec = $item['interval_sec'];
 		$countShow = $item['count_show'];
 		
-		$dateStartIter = Carbon::parse($dateStart)->addSeconds($playlistTime);				//Узнаем дату начала прогона
+		$intervalAll = $countNowBlock * $this->timeBlock;													//Узнаем для Итерации общий интервал 
+		$dateStartIter = Carbon::parse($dateStart)->addSeconds($playlistTime+($intervalAll - $this->timeBlock));				//Узнаем дату начала прогона
 		if(Carbon::parse($dateShow)->timestamp <= $dateStartIter->timestamp){			//Если дата показа меньше или равно дате начала прогона то включаем заказ
-			$intervalAll = $countNowBlock * $this->timeBlock;												//Узнаем для Итерации общий интервал 
 			$tarifCountShow = $hours*60*60/$intervalSec;													//Узнаем сколько по тарифу должно быть показов
 			
 			$diffSec = Carbon::parse($dateShow)->diffInSeconds($dateStartIter);					//Узнаем разницу между датой показа и датой формируемого плейлиста
 			$abstractCount = ceil($diffSec/$intervalSec);														//Узнаем сколько должно было быть показов
 			$diffCount = $abstractCount - ($tarifCountShow - $countShow);							//Узнаем разницу между сколько должно быть и сколько показалось товаров
 
-			$useInterval = ($tarifCountShow - $countShow + 1) * $intervalSec; 					//Узнаем используемый интервал
+			$useInterval = abs(($tarifCountShow - $countShow + 1) * $intervalSec); 					//Узнаем используемый интервал
 			$sort = ($intervalAll/$useInterval) * ($diffCount * 100);	
 		}
+		
 		return $sort;
 	}
 	
