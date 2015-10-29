@@ -6,7 +6,7 @@
 <meta name="description" content="{{ $mainSetting['description'] }}" />
 <meta name="keywords" content="{{ $mainSetting['keywords'] }}" />
 {!! HTML::script('/assets/superkadr/js/jquery.js') !!}
-<link rel="shortcut icon" href="images/favicon.ico" />
+<link rel="shortcut icon" href="/public/img/favicon.ico" />
 
 {!! HTML::style('/assets/superkadr/css/style.css') !!}
 {!! HTML::style('/assets/superkadr/css/fonts.css') !!}
@@ -44,6 +44,7 @@ $(function(){
 			<div class="description"><span>Моментальное размещение фото на светодиодных экранах!</span></div>
 			<div class="screen left">
 				<div class="image"></div>
+				<div class="status online"><i class="fa pull-left fa-circle"></i><span>онлайн трансляция</span></div>
 				<div class="info">
 					<div class="title"><span>Экран 1</span></div>
 					<div class="text"><span>Советский район, ул.Красноармейская (магазин М-ВИДЕО)</span></div>
@@ -51,6 +52,7 @@ $(function(){
 			</div>
 			<div class="screen right">
 				<div class="image"></div>
+				<div class="status offline"><i class="fa pull-left fa-circle"></i><span>онлайн трансляция</span></div>
 				<div class="info">
 					<div class="title"><span>Экран 2</span></div>
 					<div class="text"><span>Бежицкий район, ул.Ульянова (ТЦ "Тимошковых")</span></div>
@@ -66,10 +68,10 @@ $(function(){
 			<div class="menu">
 				<ul>
 				
-					<li class="{{ Route::is('main') ? 'active' : '' }}"><a href="{{ route('main') }}">Главная</a></li>
-					<li class="{{ Route::is('gallery') ? 'active' : '' }} {{ Route::is('gallery.show') ? 'active' : '' }}"><a href="{{ route('gallery') }}">Галерея</a></li>
-					<li class="{{ Route::is('conditions') ? 'active' : '' }}"><a href="{{ route('conditions') }}">Условия</a></li>
-					<li class="{{ Route::is('contacts') ? 'active' : '' }}"><a href="{{ route('contacts') }}">Контакты</a></li>
+					<li class="{{ Route::is('main') ? 'active' : '' }}"><a href="{{ route('main') }}">главная</a></li>
+					<li class="{{ Route::is('gallery') ? 'active' : '' }} {{ Route::is('gallery.show') ? 'active' : '' }}"><a href="{{ route('gallery') }}">галерея</a></li>
+					<li class="{{ Route::is('conditions') ? 'active' : '' }}"><a href="{{ route('conditions') }}">условия</a></li>
+					<li class="{{ Route::is('contacts') ? 'active' : '' }}"><a href="{{ route('contacts') }}">контакты</a></li>
 				</ul>
 			</div>
 			<div id="login">

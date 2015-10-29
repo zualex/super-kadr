@@ -19,13 +19,11 @@ use App\User;
 use App\Setting;
 
 
-
 class GalleryController extends Controller {
 
 	
 	public function index(Gallery $galleryModel)
 	{	
-
 		$data = array(
 			'gallery' => $galleryModel->galleryAll(),
 			'pathImages' => $galleryModel->pathImages,
@@ -53,10 +51,8 @@ class GalleryController extends Controller {
 		
 	public function upload(Gallery $galleryModel)
 	{
-		$flagGuest = 0;
 		//Если не авторизован то авторизуемся как анонимы
 		if(!Auth::check()){
-			$flagGuest = 1;
 			$user = User::where('email', '=', "anonymous@anonymous.ru")->first();
 			if(!$user){
 				$user = new User;
@@ -99,25 +95,10 @@ class GalleryController extends Controller {
 			if($imgW <= 10000 and $imgH <= 10000 and $imgInitW <= 10000 and $imgInitH <= 10000){
 				
 				$dirFile = $galleryModel->pathImages . "/temp/".Auth::user()->id;
-				if (!file_exists(base_path().$dirFile)) {mkdir(base_path().$dirFile, 0755, true);}					//Создание папки если нет
+				if (!file_exists(base_path().$dirFile)) {mkdir(base_path().$dirFile, 0755, true);}		//Создание папки если нет
+				array_map('unlink', glob(base_path().$dirFile."/*"));																//Удаление всех файлов для определенного пользователя
 				
-				
-				if($flagGuest == 1){
-					array_map('unlink', glob(base_path().$dirFile."/".Session::get('_token')."*"));					//Удаление файла
-					
-					
-					$files = glob(base_path().$dirFile."/*");
-					$now   = time();
-					foreach ($files as $file)
-					if (is_file($file))
-						if ($now - filemtime($file) >= 60 * 60 * 24 * 2) // 2 days
-							unlink($file);
-					
-					$output_filename = $dirFile."/".Session::get('_token');
-				}else{
-					array_map('unlink', glob(base_path().$dirFile."/*"));															//Удаление всех файлов для определенного пользователя
-					$output_filename = $dirFile."/croppedImg_".rand();
-				}
+				$output_filename = $dirFile."/croppedImg_".rand();
 				
 				$what = getimagesize($imgUrl);
 				switch(strtolower($what['mime']))
@@ -131,7 +112,7 @@ class GalleryController extends Controller {
 						$img_r = imagecreatefromjpeg($imgUrl);
 						$source_image = imagecreatefromjpeg($imgUrl);
 						error_log("jpg");
-						$type = '.jpeg';
+						$type = '.jpg';
 						break;
 					case 'image/gif':
 						$img_r = imagecreatefromgif($imgUrl);
@@ -208,11 +189,9 @@ class GalleryController extends Controller {
 	
 	public function create(Gallery $galleryModel, Pay $payModel)
 	{
-		
-		$flagGuest = 0;
+	
 		//Если не авторизован то авторизуемся как анонимы
 		if(!Auth::check()){
-			$flagGuest = 1;
 			$user = User::where('email', '=', "anonymous@anonymous.ru")->first();
 			if(!$user){
 				$user = new User;
@@ -230,7 +209,6 @@ class GalleryController extends Controller {
 			'image' => Request::input('image'),
 			'tarif' => Request::input('tarif'),
 			'dateShow' => Request::input('dateShow'),
-			'flagGuest' => $flagGuest,
 		);		
 		//Создание галереи
 		$gallery = $galleryModel->createGallery($paramGallery);

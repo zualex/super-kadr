@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--Nata-Info Ltd. NISheduler.Sheduler playlist-->
+<tasks>
+	<collection base="C:\Ролики\Ролики\"><item enable="1" name="C:\Ролики\Ролики\Разное\280_Frau-class.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\БКС\280_BKS_2.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Allegrova.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Куров\280_Kurov_2.bmp" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Дом торжеств\280_Dom-torjestv_2.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Свет\280_Svet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Мираторг\280_Miratorg_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Сквирел\280_Squirel.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Duet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Medsi.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Objava.bmp" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Артель\280_Artel_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Русские окна\280_Rus-okna_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Аквамир\280_Aquamir.avi" loop="0" IsTime="1" time="13"></item>
+<item enable="1" name="C:\Ролики\Ролики\Тимашки\280_Zastava.avi" loop="0" IsTime="1" time="20"></item>
+<item enable="1" name="C:\Ролики\Курс\280_KURS_Avtokrat_1.bmp" loop="0" IsTime="1" time="8"></item>
+<item enable="1" name="C:\Ролики\Ролики\Куров\280_Kurov_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Дом торжеств\280_Dom-torjestv_1.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Свет\280_Svet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Partizan.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Такси Сатурн\280_Taxi-Saturn_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Поздравления\9May\280_9May15_3.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\БМЗ\280_BMZ_1.avi" loop="0" IsTime="1" time="13"></item>
+<item enable="1" name="C:\Ролики\Ролики\БМК\280_BMK_1.avi" loop="0" IsTime="1" time="20"></item>
+<item enable="1" name="C:\Ролики\Ролики\Боярд\280_Boyard_1.bmp" loop="0" IsTime="1" time="8"></item>
+<item enable="1" name="C:\Ролики\Ролики\БКС\280_BKS_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\БМЗ\280_BMZ_1.avi" loop="0" IsTime="1" time="13"></item>
+<item enable="1" name="C:\Ролики\Ролики\БМК\280_BMK_2.avi" loop="0" IsTime="1" time="20"></item>
+<item enable="1" name="C:\Ролики\Ролики\Боярд\280_Boyard_1.bmp" loop="0" IsTime="1" time="8"></item>
+<item enable="1" name="C:\Ролики\Ролики\БКС\280_BKS_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Miss-bryansk.bmp" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Allegrova.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Радио\280_Radio-Vanya.avi" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Куров\280_Kurov_4.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Дом торжеств\280_Dom-torjestv_4.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Свет\280_Svet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Мираторг\280_Miratorg_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Поздравления\9May\280_9May15_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Сквирел\280_Squirel.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Duet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Medsi.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Артель\280_Artel_2.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Русские окна\280_Rus-okna_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Аквамир\280_Aquamir.avi" loop="0" IsTime="1" time="13"></item>
+<item enable="1" name="C:\Ролики\Ролики\Академия бильярда\280_Academ-billiard_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Куров\280_Kurov_3.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Дом торжеств\280_Dom-torjestv_3.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Свет\280_Svet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Такси Сатурн\280_Taxi-Saturn_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Поздравления\9May\280_9May15_3.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\БМЗ\280_BMZ_2.avi" loop="0" IsTime="1" time="13"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Karat.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Idea-site.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Дом торжеств\280_Dom-torjestv_1.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Свет\280_Svet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Такси Сатурн\280_Taxi-Saturn_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Поздравления\9May\280_9May15_3.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\БМЗ\280_BMZ_2.avi" loop="0" IsTime="1" time="13"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Karat.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Frau-class.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\БКС\280_BKS_2.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Allegrova.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Куров\280_Kurov_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Дом торжеств\280_Dom-torjestv_6.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Свет\280_Svet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Поздравления\9May\280_Pobeda-70.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Мираторг\280_Miratorg_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Сквирел\280_Squirel.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Duet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Medsi.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Objava.bmp" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Артель\280_Artel_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Русские окна\280_Rus-okna_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Аквамир\280_Aquamir.avi" loop="0" IsTime="1" time="13"></item>
+<item enable="1" name="C:\Ролики\Ролики\Тимашки\280_Zastava.avi" loop="0" IsTime="1" time="20"></item>
+<item enable="1" name="C:\Ролики\Курс\280_KURS_Avtokrat_2.bmp" loop="0" IsTime="1" time="8"></item>
+<item enable="1" name="C:\Ролики\Ролики\Куров\280_Kurov_5.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Дом торжеств\280_Dom-torjestv_5.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Свет\280_Svet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Partizan.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Такси Сатурн\280_Taxi-Saturn_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Поздравления\9May\280_9May15_3.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="1" name="C:\Ролики\Курс\280_KURS_Avtokrat_3.bmp" loop="0" IsTime="1" time="8"></item>
+<item enable="1" name="C:\Ролики\Ролики\Куров\280_Kurov_4.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Дом торжеств\280_Dom-torjestv_3.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Свет\280_Svet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Partizan.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Такси Сатурн\280_Taxi-Saturn_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Поздравления\9May\280_9May15_3.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\БМЗ\280_BMZ_1.avi" loop="0" IsTime="1" time="13"></item>
+<item enable="1" name="C:\Ролики\Ролики\БМК\280_BMK_1.avi" loop="0" IsTime="1" time="20"></item>
+<item enable="1" name="C:\Ролики\Ролики\Боярд\280_Boyard_1.bmp" loop="0" IsTime="1" time="8"></item>
+<item enable="1" name="C:\Ролики\Ролики\БКС\280_BKS_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Miss-bryansk.bmp" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Allegrova.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Радио\280_Radio-Vanya2.avi" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Куров\280_Kurov_3.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Дом торжеств\280_Dom-torjestv_2.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Свет\280_Svet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Мираторг\280_Miratorg_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Поздравления\9May\280_9May15_2.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Сквирел\280_Squirel.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Duet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Medsi.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Артель\280_Artel_2.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Русские окна\280_Rus-okna_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Аквамир\280_Aquamir.avi" loop="0" IsTime="1" time="13"></item>
+<item enable="1" name="C:\Ролики\Ролики\Академия бильярда\280_Academ-billiard_2.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Куров\280_Kurov_2.bmp" loop="0" IsTime="1" time="15"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Duet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Артель\280_Artel_2.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Русские окна\280_Rus-okna_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Аквамир\280_Aquamir.avi" loop="0" IsTime="1" time="13"></item>
+<item enable="1" name="C:\Ролики\Ролики\Академия бильярда\280_Academ-billiard_3.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Куров\280_Kurov_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Дом торжеств\280_Dom-torjestv_5.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Свет\280_Svet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Такси Сатурн\280_Taxi-Saturn_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Поздравления\9May\280_9May15_3.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\БМЗ\280_BMZ_2.avi" loop="0" IsTime="1" time="13"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Karat.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Idea-site.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Frau-class.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\БКС\280_BKS_2.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Allegrova.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Куров\280_Kurov_5.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Дом торжеств\280_Dom-torjestv_4.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Свет\280_Svet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Мираторг\280_Miratorg_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Сквирел\280_Squirel.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Duet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Medsi.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Objava.bmp" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Артель\280_Artel_1.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Русские окна\280_Rus-okna_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Аквамир\280_Aquamir.avi" loop="0" IsTime="1" time="13"></item>
+<item enable="1" name="C:\Ролики\Ролики\Тимашки\280_Zastava.avi" loop="0" IsTime="1" time="20"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Miss-bryansk.bmp" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Разное\280_Allegrova.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="1" name="C:\Ролики\Ролики\Радио\280_Radio-Vanya.avi" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Куров\280_Kurov_5.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Дом торжеств\280_Dom-torjestv_6.bmp" loop="0" IsTime="1" time="5"></item>
+<item enable="1" name="C:\Ролики\Ролики\Свет\280_Svet.avi" loop="0" IsTime="1" time="7"></item>
+<item enable="1" name="C:\Ролики\Ролики\Мираторг\280_Miratorg_1.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Поздравления\9May\280_9May15_2.avi" loop="0" IsTime="1" time="15"></item>
+<item enable="1" name="C:\Ролики\Ролики\Сквирел\280_Squirel.avi" loop="0" IsTime="1" time="10"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+<item enable="True" name="1.jpeg" loop="0" IsTime="True" time="5"></item>
+	</collection>
+</tasks>

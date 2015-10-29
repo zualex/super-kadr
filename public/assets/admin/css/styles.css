@@ -147,11 +147,11 @@ button{border:0;outline:none;}
 .export-block {padding: 10px 20px;}
 
 .table-list{width:100%;border-collapse: collapse;border-spacing: 0;}
-.table-list th, .table-list td{padding:10px;text-align:left;vertical-align: top;}
+.table-list th, .table-list td{padding:10px;text-align:left;vertical-align: top;position:relative;}
 .table-list th{background-color:#7f8c8d;color:#fff;font-family:'SegoeUIBold';font-weight:normal;}
 .table-list tr:nth-child(odd){background-color:#ecf0f1;}
 .table-list .center{text-align:center;}
-.table-list .col-1{width:30px;}
+.table-list .col-1{width:10px;padding: 0;}
 .table-list .col-2{width:80px;}
 .table-list .col-3{width:100px;}
 .table-list .col-4{width:200px;}
@@ -498,3 +498,27 @@ img.order-image {display:block;max-width:100%;}
 	-moz-transition: All 0.5s ease;
 	-o-transition: All 0.5s ease;
 }
+
+/*--Цветовой идентификатор логического блока--*/
+
+.light{position:absolute;top:0;left:0;right:0;bottom:0;}
+.light.c-1{background-color:#F64747;}
+.light.c-2{background-color:#1abc9c;}
+.light.c-3{background-color:#2ecc71;}
+.light.c-4{background-color:#3498db;}
+.light.c-5{background-color:#9b59b6;}
+.light.c-6{background-color:#34495e;}
+.light.c-7{background-color:#16a085;}
+.light.c-8{background-color:#27ae60;}
+.light.c-9{background-color:#2980b9;}
+.light.c-10{background-color:#8e44ad;}
+.light.c-11{background-color:#2c3e50;}
+.light.c-12{background-color:#f1c40f;}
+.light.c-13{background-color:#e67e22;}
+.light.c-14{background-color:#e74c3c;}
+.light.c-15{background-color:#95a5a6;}
+.light.c-16{background-color:#f39c12;}
+.light.c-17{background-color:#d35400;}
+.light.c-18{background-color:#c0392b;}
+.light.c-19{background-color:#F5AB35;}
+.light.c-20{background-color:#F27935;}

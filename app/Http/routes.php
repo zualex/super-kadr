@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -10,9 +9,6 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
-
-
 /*
 * Pages
 */
@@ -21,28 +17,20 @@ Route::get('/gallery', ['as' => 'gallery', 'uses' => 'GalleryController@index'])
 Route::get('/gallery/{id}', ['as' => 'gallery.show', 'uses' => 'GalleryController@show']);	//Детальная страница галереи
 Route::get('/conditions', ['as' => 'conditions', function(){ return view('pages.conditions.index'); }]);	//Страница Услуги
 Route::get('/contacts', ['as' => 'contacts', function(){ return view('pages.contacts.index'); }]);			//Страница Контакты
-
 Route::get('/dev', ['as' => 'dev', function(){ return view('dev'); }]);	//Станица при отключении сайта
-
-
 /*
 * Actions
 */
 Route::post('/croppic_upload', ['as' => 'gallery.upload', 'uses' => 'GalleryController@upload']);		//Загрузка изображения croppic
 Route::post('/gallery_create', ['as' => 'gallery.create', 'uses' => 'GalleryController@create']);		//Создание галереи
 Route::post('/gallery_like', ['as' => 'gallery.like', 'uses' => 'GalleryController@like']);					//Лайк
-
 Route::get('/comment/{gallery_id}', ['as' => 'comment.index', 'uses' => 'CommentController@index']);				//Вывод комментариев
 Route::post('/comment/save', ['as' => 'comment.save', 'uses' => 'CommentController@save']);					//Сохранение комментария
-
-
 Route::get('/pay/conditions/{gallery_id}', ['as' => 'pay.conditions', 'uses' => 'PayController@conditions']);		//Принятие условий перед оплатой
 Route::get('/pay/index/{gallery_id}', ['as' => 'pay.index','uses' => 'PayController@index']);			//Отправка данных для оплаты
 Route::get('/pay/result', ['as' => 'pay.result', 'uses' => 'PayController@result']);			//Result Url
 Route::get('/pay/success', ['as' => 'pay.success', 'uses' => 'PayController@success']);	//Success Url
 Route::get('/pay/fail', ['as' => 'pay.fail','uses' => 'PayController@fail']);						//Fail Url
-
-
 /*
 * Auth admin
 */
@@ -50,9 +38,6 @@ Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
-
-
-
 /*
 * Social Auth
 */
@@ -64,14 +49,10 @@ Route::get('/login/callback/{provider?}',[
     'uses' => 'Auth\AuthController@getSocialAuthCallback',
     'as'   => 'auth.getSocialAuthCallback'
 ]);
-
-
-
 /*
 * Admin panel
 */
 Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
-
 	Route::get('/', ['as' => 'admin', 'uses' => 'Admin\AdminController@index']);
 	
 	/* Смена пароля */
@@ -89,8 +70,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::post('/gallery/moderation/all/', ['as' => 'admin.gallery.moderation_all', 'uses' => 'Admin\AdminGalleryController@moderationAll']);
 	Route::post('/gallery/delete/all/', ['as' => 'admin.gallery.delete_all', 'uses' => 'Admin\AdminGalleryController@deleteAll']);
 	
-
-
 	
 	/* Транзакции */
 	Route::get('/pay/', ['as' => 'admin.pay.index', 'uses' => 'Admin\AdminPayController@index']);
@@ -100,7 +79,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::post('/gallery/wait/all/', ['as' => 'admin.pay.wait_all', 'uses' => 'Admin\AdminPayController@waitAll']);
 	Route::post('/gallery/cancel/all/', ['as' => 'admin.pay.cancel_all', 'uses' => 'Admin\AdminPayController@cancelAll']);
 	Route::post('/gallery/hide/all/', ['as' => 'admin.pay.hide_all', 'uses' => 'Admin\AdminPayController@hideAll']);
-
 	
 	/* Плейлисты */
 	Route::get('/playlist/', ['as' => 'admin.playlist.index', 'uses' => 'Admin\AdminPlaylistController@index']);
@@ -109,12 +87,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::post('/playlist/isTime/{id}', ['as' => 'admin.playlist.isTime', 'uses' => 'Admin\AdminPlaylistController@isTime']);
 	Route::post('/playlist/saveExtraVideo/', ['as' => 'admin.playlist.saveExtraVideo', 'uses' => 'Admin\AdminPlaylistController@saveExtraVideo']);
 	Route::get('/playlist/deleteExtraVideo/{id}', ['as' => 'admin.playlist.deleteExtraVideo', 'uses' => 'Admin\AdminPlaylistController@deleteExtraVideo']);
-
-
 	/* Экраны */
 	Route::get('/monitor/', ['as' => 'admin.monitor.index', 'uses' => 'Admin\AdminMonitorController@index']);
 	Route::post('/monitor/success/', ['as' => 'admin.monitor.success', 'uses' => 'Admin\AdminMonitorController@success']);
-
 	
 	
 	/* Настройки */
@@ -132,10 +107,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 		'destroy' => 'admin.users.destroy',
 	)));*/
 });
-
-
-
 Route::get('/cron/playlist/initfile', ['as' => 'cron.playlist.initfile', 'uses' => 'Admin\AdminPlaylistController@initFile']);				//Загрузка исходных файлов в БД
 Route::get('/cron/playlist/initgenerate', ['as' => 'cron.playlist.initgenerate', 'uses' => 'Admin\AdminPlaylistController@initGenerate']);				//Генерация плейлистов
-Route::get('/json/checkdate', ['as' => 'playlist.checkdate', 'uses' => 'Admin\AdminPlaylistController@checkdate']);				
-
+Route::get('/json/checkdate', ['as' => 'playlist.checkdate', 'uses' => 'Admin\AdminPlaylistController@checkdate']);

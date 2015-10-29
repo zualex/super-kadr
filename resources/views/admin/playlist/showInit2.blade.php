@@ -2,6 +2,7 @@
 	@if(count($data['initPlaylist']) > 0)
 		<table class="table-list">
 			<tr>
+				<th class="col-1"></th>
 				<th class="center col-2">ID</th>
 				<th class="center col-2">ID блока</th>
 				<th class="col-3">Состояние</th>
@@ -16,9 +17,9 @@
 			@foreach($data['initPlaylist'] as $key => $value)
 				@if($value->monitor->number == 2)
 				<tr>
+					<td class="col-1"><div class="light c-{{ $value->idblock }}"></div></td>
 					<td class="center col-2">{{ $value->id }}</td>
 					<td class="center col-2">{{ $value->idblock }}</td>
-					
 					<td class="center col-3">
 						@if($value->enable == 1)
 							<input id="original-enable-{{ $value->id }}" class="toggle" name="enable" type="checkbox" value="1" checked onchange="saveFieldCheckbox(this, '{{ route('admin.playlist.enable', $value->id) }}')">

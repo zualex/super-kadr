@@ -6,6 +6,7 @@
 	{!! HTML::style('/assets/admin/css/styles.css') !!}
 	{!! HTML::style('/assets/admin/css/fonts.css') !!}
 	
+	<link rel="shortcut icon" href="/public/img/favicon.ico" />
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>

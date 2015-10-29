@@ -1,17 +1,11 @@
 <?php namespace App\Http\Controllers;
-
 use Auth;
-
 use App\User;
 use App\Gallery;
 use App\Tarif;
 use App\Monitor;
 use Carbon\Carbon;
-
-
-
 class HomeController extends Controller {
-
 	/*
 	|--------------------------------------------------------------------------
 	| Home Controller
@@ -22,13 +16,11 @@ class HomeController extends Controller {
 	| controller as you wish. It is just here to get your app started!
 	|
 	*/
-
 	/**
 	 * Create a new controller instance.
 	 *
 	 * @return void
 	 */
-
 	/**
 	 * Show the application dashboard to the user.
 	 *
@@ -46,7 +38,6 @@ class HomeController extends Controller {
 		
 		//dd($galleryModel->mainGallery());
 		return view('home')->with('data', $data);
-
 	}
 	
 	public function dateContent(){
@@ -54,25 +45,25 @@ class HomeController extends Controller {
 		function day_of_week($day) {
 			switch ($day) {
 				case ($day == 1 || $day == 8 || $day == 15):
-					$return = "Понедельник";
+					$return = "понедельник";
 					break;
 				case ($day == 2 || $day == 9 || $day == 16):
-					$return = "Вторник";
+					$return = "вторник";
 					break;
 				case ($day == 3 || $day == 10 || $day == 17):
-					$return = "Среда";
+					$return = "среда";
 					break;
 				case ($day == 4 || $day == 11 || $day == 18):
-					$return = "Четверг";
+					$return = "четверг";
 					break;
 				case ($day == 5 || $day == 12 || $day == 19):
-					$return = "Пятница";
+					$return = "пятница";
 					break;
 				case ($day == 6 || $day == 13 || $day == 20):
-					$return = "Суббота";
+					$return = "суббота";
 					break;
 				case ($day == 7 || $day == 14 || $day == 21):
-					$return = "Воскресенье";
+					$return = "воскресенье";
 					break;		
 			}
 			return $return;
@@ -122,7 +113,6 @@ class HomeController extends Controller {
 		$content_date ='';
 		$content_time ='';
 		$i = 0;
-
 		$N = date('N');
 		$ii = 0;
 		$date = time();
@@ -134,7 +124,7 @@ class HomeController extends Controller {
 				$t = str_pad($i, 2, '0', STR_PAD_LEFT).':00';
 				$time = date("$t d.m.Y", strtotime($date));
 				$stime = strtotime($time);
-				if ($stime < time() + 60 * 60)$status = ' deny';
+				if ($stime < time() + 30 * 60)$status = ' deny';
 				else $status = ' active';
 				$times .= '<span class="time-item'.$status.'" data-time="'.$time.'" data-time2="'.strtotime($time).'">'.$t.'</span>';
 			}
@@ -144,5 +134,4 @@ class HomeController extends Controller {
 		return $content;
 	}
 	
-
 }

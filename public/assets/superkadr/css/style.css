@@ -30,13 +30,17 @@ h1, h2, h3, h4, h5, h6, p, blockquote, pre, dl, dd, ol, ul, form, fieldset, lege
 
 header{background-color:#3E50B4;}
 header>div{width:1200px;margin:0 auto;padding: 20px 0;}
-header>div .description{margin-bottom: 20px;font-family: 'SegoeUIBold';text-transform:uppercase; color:#fff;font-size:2.43em;text-align:center;}
-header>div .screen{width:360px;height:230px;background-color:#fff;position:relative;padding:5px 10px;}
+header>div .description{margin-bottom: 20px;font-family: 'SegoeUIBold';text-transform:uppercase; color:#fff;font-size:2em;text-align:center;}
+header>div .screen{width:360px;height:230px;background-color:#fff;position:relative;padding:5px;}
 header>div .screen.left{float:left;}
 header>div .screen.right{float:right;}
 header>div .screen .image{background-color:#000;height:100%;}
+header>div .screen .status {position: absolute;font-size: 2em;top: 10px;right: 10px;background-color: rgba(255,255,255,0.3);padding: 3px 10px;}
+header>div .screen .status.online i {color: #39AD67;}
+header>div .screen .status.offline i {color: #FE5252;}
+header>div .screen .status span {color: #FFF;}
 header>div .screen .info{background-color: #FE5252;position:absolute;bottom:-10px;width:50%;left:50%;margin-left:-90px;padding:10px;color:#fff;text-align:center;}
-header>div .screen .info .title{font-family:'SegoeUIBold';text-transform:uppercase;}
+header>div .screen .info .title{font-family:'SegoeUIBold';text-transform:uppercase;max-height: 9001em;}
 header>div .screen .info .text{}
 header>div .logo{margin: 0 360px;padding:0 20px;}
 header>div .logo img{display:block;width:100%;}
@@ -108,56 +112,64 @@ header>div .logo img{display:block;width:100%;}
 .wrapper #slider .slider .controls .nav-left{left: -10px;border-radius: 4px 0 0 4px;}
 .wrapper #slider .slider .controls .nav-right{right: -10px;text-align: right;border-radius: 0 4px 4px 0;}
 
+.wrapper #howwork{position:relative;}
 .wrapper #howwork:before {position: absolute;content: '';display: block;top: 42%;height: 50px;background-color: rgba(62, 80, 180, 0.45);left: 0;right: 0;}
+.wrapper #howwork .header{height:52px;}
 .wrapper #howwork .body{padding-left: 30px;padding-right: 30px;}
 .wrapper #howwork .step{width:calc(100%/4);float:left;padding:0 20px;position:relative;}
-.wrapper #howwork .step:after{font-family:'FontAwesome';content:'\f061';position:absolute;display:block;height:40px;top: 62px;right:-10%;width:50px;color:#3E50B4;font-size:2.75em;}
+.wrapper #howwork .step:after{font-family:'FontAwesome';content:'\f061';position:absolute;display:block;height:40px;top: 75px;right:-10%;width:50px;color:#3E50B4;font-size:2.75em;}
 .wrapper #howwork .step:last-child:after{content:none;}
-.wrapper #howwork .step .image{position:relative;width:150px;height: 150px; margin:0 auto;background-color:#3E50B4;border: 5px solid #2F3E9D;border-radius: 50%;}
+.wrapper #howwork .step .image{position:relative;width:180px;height: 180px; margin:0 auto;background-color:#3E50B4;border: 5px solid #2F3E9D;border-radius: 50%;}
 .wrapper #howwork .step .image>div{position:absolute;top:0;left:0;right:0;bottom:0;background-repeat: no-repeat;background-position:center;background-size:60%;}
 .wrapper #howwork .step .title{margin-top:10px;text-align:center;padding:0 15px;}
 .wrapper #howwork .step .title span{font-family:'SegoeUIBold';font-size: 1.5em;}
 
 .wrapper #try{padding:20px 0;}
-.wrapper #try>.body .text{text-align:center;color:#fff;font-size:1.5em;}
+.wrapper #try>.body .text{text-align:center;color:#fff;font-size:2em;}
 
 .wrapper #upload{background-image:url(/img/citybg.png);background-size:cover;background-position:center center;background-repeat:no-repeat;}
 .wrapper #upload .body{padding: 40px 0 20px;}
-.wrapper #upload .body .monitor {/*width: 760px;height: 520px;*/margin: 0 auto;border-radius: 10px;border: 20px solid #fff;background-color: #364DCA;position: relative;}
-.wrapper #upload .body .monitor #croppic {/*width: 720px;height: 480px;*/position:relative;overflow: hidden;}
+.wrapper #upload .body .monitor {margin: 0 auto;border-radius: 10px;border: 20px solid #fff;background-color: #364DCA;position: relative;}
+.wrapper #upload .body .monitor #croppic {position:relative;overflow: hidden;}
 .wrapper #upload .body .monitor #upload-btn {position: absolute;top: 43%;left:0;right:0;}
-.wrapper #upload .body .monitor #upload-btn>div{display:table;margin:0 auto;cursor:pointer;}
-.wrapper #upload .body .monitor #upload-btn>div *{color:#fff;font-size:3em;}
-.wrapper #upload .body .monitor #upload-btn>div span{text-transform:uppercase;}
+.wrapper #upload .body .monitor #upload-btn>div{text-align: center;padding: 0 25px;cursor:pointer;}
+.wrapper #upload .body .monitor #upload-btn>.description{margin-top: 10px;}
+.wrapper #upload .body .monitor #upload-btn>.description>span{font-size:1.4em;color:#fff;}
+.wrapper #upload .body .monitor #upload-btn>.upload *{color:#fff;font-size:3em;}
+.wrapper #upload .body .monitor #upload-btn>.upload span{text-transform:uppercase;font-family:'SegoeUIBold';}
 .wrapper #upload .body .stand{height:130px;width:300px;margin:0 auto;position:relative;}
 .wrapper #upload .body .stand:before{content:'';display:block;position:absolute;top:0;bottom:0;left:130px;border:20px solid #fff;}
 .wrapper #upload .body .stand:after{content:'';display:block;position:absolute;bottom:0;left:0;right:0;height:15px;background-color:#fff;border-radius:10px;}
+.wrapper #upload .body .monitor-select{margin: 0 auto 20px;width: 60%;}
+.wrapper #upload .body .monitor-select .select{width: calc(50% - 20px);float: left;background-color:#3E50B4;color:#fff;text-align: center;line-height: 50px;font-size: 2em;font-family:'SegoeUIBold';text-transform:uppercase;cursor:pointer;}
+.wrapper #upload .body .monitor-select .select.active{background-color:#39AD67;}
+.wrapper #upload .body .monitor-select .select:nth-child(2n){margin-left: 40px;}
 
-.wrapper #schedule>.body{padding:40px 20px;}
-.wrapper #schedule>.body .tariffs{position:relative;}
-.wrapper #schedule>.body .tariffs:after{content:'';display:table;clear:both;}
-.wrapper #schedule>.body .tariff{background-color:#C4C9E7;float:left;width:calc((100% - 60px)/3);margin-right:30px;position:relative;}
-.wrapper #schedule>.body .tariff:last-child{margin-right:0;}
-.wrapper #schedule>.body .tariff .header{background-color:#3E50B4;padding: 15px 0;text-align:center;}
-.wrapper #schedule>.body .tariff .header span{color:#fff;font-size:1.3em;}
-.wrapper #schedule>.body .tariff .header .title{display:block;text-align:center;text-transform:uppercase;font-family:'SegoeUIBold';font-size:1.5em;}
-.wrapper #schedule>.body .tariff .info{text-align:center;padding-top: 35px;}
-.wrapper #schedule>.body .tariff .info span{color:#2F3D9E;}
-.wrapper #schedule>.body .tariff .info .views-num{font-size:2.5em;}
-.wrapper #schedule>.body .tariff .info num{font-weight:bold;}
-.wrapper #schedule>.body .tariff .info .duration{font-size:1.6em;}
-.wrapper #schedule>.body .tariff .info .price{font-size:2.2em;font-family:'SegoeUIBold';margin: 15px 0 20px;}
-.wrapper #schedule>.body .tariffs .button{background-color:#FE5252;}
-.wrapper #schedule>.body .tariffs .button .select{position:relative;height: 67px;display:block;padding:15px 0;text-align:center;font-size:2em;color:#fff;font-family:'SegoeUIBold';text-transform:uppercase;cursor:pointer;}
-.wrapper #schedule>.body .monitor{margin: 20px auto;width:calc((100% - 60px)/2);}
-.wrapper #schedule>.body .monitor select{width:100%;border:0;outline:none;background-color:#3E50B4;color:#fff;height: 60px;padding-left: 220px;font-size: 1.6em;font-family:'SegoeUIBold';text-transform:uppercase;}
+.wrapper #tariffs>.body{padding:20px 0;}
+.wrapper #tariffs>.body .tariffs{position:relative;margin-bottom: 20px;}
+.wrapper #tariffs>.body .tariffs:after{content:'';display:table;clear:both;}
+.wrapper #tariffs>.body .tariff{cursor:pointer;background-color:#C4C9E7;float:left;width:calc((100% - 90px)/3);margin: 15px;position:relative;}
+.wrapper #tariffs>.body .tariff:last-child{margin-right:0;}
+.wrapper #tariffs>.body .tariff .header{background-color:#3E50B4;padding: 5px 0;text-align:center;}
+.wrapper #tariffs>.body .tariff .header span{color:#fff;font-size: 2em;}
+.wrapper #tariffs>.body .tariff .header .title{display:block;text-align:center;text-transform:uppercase;font-family:'SegoeUIBold';font-size: 2em;}
+.wrapper #tariffs>.body .tariff .info{text-align:center;padding-top: 35px;}
+.wrapper #tariffs>.body .tariff .info span{color:#2F3D9E;}
+.wrapper #tariffs>.body .tariff .info .views-num{font-size: 3em;}
+.wrapper #tariffs>.body .tariff .info num{font-weight:bold;}
+.wrapper #tariffs>.body .tariff .info .duration{font-size: 2em;}
+.wrapper #tariffs>.body .tariff .info .price{font-size: 2em;font-family:'SegoeUIBold';margin: 15px 0 20px;}
+.wrapper #tariffs>.body .tariff .button{}
+.wrapper #tariffs>.body .tariff .button .select{position:relative;height: 67px;background-color:#FE5252;line-height:67px;display:block;text-align:center;font-size: 2em;color:#fff;font-family:'SegoeUIBold';text-transform:uppercase;}
+.wrapper #tariffs>.body .tariff:hover .button .select, .wrapper #tariffs>.body .tariff.active .button .select{text-decoration:underline;background-color:#39AD67;}
+.wrapper #tariffs>.body .tariff:hover .header, .wrapper #tariffs>.body .tariff.active .header{background-color:#39AD67;}
 
-.wrapper #schedule>.body .schedule-block{background-color:#BFBFBF;}
-.wrapper #schedule>.body .schedule-block .content>.header{padding:10px 20px;background-color:#3E50B4;}
-.wrapper #schedule>.body .schedule-block .content>.header span{color:#fff;font-size:1.3em;}
-.wrapper #schedule>.body .schedule-block .time-list{padding: 20px 20px 0;}
-.wrapper #schedule>.body .schedule-block .pay{background-color:#FE5252;}
-.wrapper #schedule>.body .schedule-block .pay a{position:relative;height: 67px;display:block;padding:15px 0;text-align:center;font-size:2em;color:#fff;font-family:'SegoeUIBold';text-transform:uppercase;}
+.wrapper #schedule>.body .schedule-block{background-color: #3E50B4;}
+.wrapper #schedule>.body .schedule-block .content>.header{padding:10px 20px;background-color:#3E50B4;text-align:center;}
+.wrapper #schedule>.body .schedule-block .content>.header span{color:#fff;font-size: 2em;}
+.wrapper #schedule>.body .schedule-block .time-list{padding: 20px;}
+.wrapper #schedule>.body .pay{background-color:#FE5252;display:table;margin: 30px auto;padding:0 40px;}
+.wrapper #schedule>.body .pay a{position:relative;height: 67px;display:block;padding:15px 0;text-align:center;font-size:2em;color:#fff;font-family:'SegoeUIBold';text-transform:uppercase;}
 
 .wrapper #social{}
 .wrapper #social>.body{padding: 20px 0 40px;}
@@ -166,9 +178,8 @@ header>div .logo img{display:block;width:100%;}
 .wrapper #partners{background-color: #FE5252;}
 
 .wrapper #Container-Gallery .content{padding: 20px 0;}
-.wrapper #Container-Gallery .item{float:left;width:calc((100% - 40px)/3);margin:20px 20px 0 0;background-color: #3E50B4;}
+.wrapper #Container-Gallery .item{float:left;width:calc(100%/3 - 20px);margin:20px 10px 0;background-color: #3E50B4;}
 .wrapper #Container-Gallery .item:first-child, .wrapper #Container-Gallery .item:nth-child(2), .wrapper #Container-Gallery .item:nth-child(3){margin-top:0 !important;}
-.wrapper #Container-Gallery .item:nth-child(3n){margin:20px 0 0 0;}
 .wrapper #Container-Gallery .item .image{background-position:center center;background-size:cover;background-repeat:no-repeat;height:240px;}
 .wrapper #Container-Gallery .item .info{padding:5px}
 .wrapper #Container-Gallery .item .info>div{color:#fff;padding: 0 5px;font-size:1.1em;cursor:pointer;}
@@ -247,7 +258,7 @@ header>div .logo img{display:block;width:100%;}
 .wrapper #contacts .body .logo{width: 330px; margin:0 auto;}
 .wrapper #contacts .body .logo img{max-width: 100%;display:block;margin:0 auto;}
 .wrapper #contacts .body .phone{text-align:center;}
-.wrapper #contacts .body .phone>span{font-family:'SegoeUIBold';font-size: 3em;color:#fff;}
+.wrapper #contacts .body .phone>span{font-family:'SegoeUIBold';font-size: 2em;color:#fff;}
 .wrapper #contacts .body .info{width: 500px; text-align:center;margin:20px auto 0;}
 .wrapper #contacts .body .info>span{font-family:'SegoeUIRegular';font-size: 2em;color:#fff;}
 
@@ -261,26 +272,35 @@ footer .sirene>a{color:#333;}
 .icon.social.in:hover{color:#125688 !important;}
 .icon.social.gg:hover{color:#E62D16 !important;}
 
-.tabs {-moz-user-select: none;-khtml-user-select: none;user-select: none;-webkit-user-select:none;-ms-user-select: none;-o-user-select: none;margin-bottom: 20px;}
+.tabs {-moz-user-select: none;-khtml-user-select: none;user-select: none;-webkit-user-select:none;-ms-user-select: none;-o-user-select: none;}
 .tabs:after{content:'';display:table;clear:both;}
 .tabs .tab-head{width:calc(100%/5);text-align:center;display: block;float:left;padding: 5px;color:#fff;cursor: pointer;}
-.tabs .tab-head>div{border:2px solid #fff;padding: 5px;}
-.tabs .tab-head>div>span{display:block;text-transform:uppercase;font-family: SegoeUIBold;}
+.tabs .tab-head>div{border:2px solid #fff;padding: 5px;font-size: 1.4em;}
+.tabs .tab-head>div>.label-h1{display:block;font-family: SegoeUIBold;}
+.tabs .tab-head>div>.label-h2{display:block;text-transform:uppercase;font-family: SegoeUIBold;}
 .quest .schedule .content .date-list .day{width:150px;float:left;}
 .quest .schedule .content .date-list .day>span{display:block;color:#fff;text-transform:uppercase;}
-.tabs .tab-head.active>div, .tabs .tab-head:hover>div{border: 2px solid #3E50B4;color:#3E50B4;}
+.tabs .tab-head.active>div, .tabs .tab-head:hover>div{background-color: #2ecc71;color: #FFFFFF;}
 .tab-block .box-content .time-item{width: calc((100%/8) - 10px);margin: 10px 0 0 10px;cursor:pointer;float:left;text-align:center;display:block;cursor:pointer;line-height: 50px;font-size: 2em;}
 .tab-block .box-content .time-item.deny{color:#777;background:none;cursor:default;}
-.tab-block .box-content .time-item.active{border-radius: 4px;background-color:#2ecc71;color:#fff;}
-.tab-block .box-content .time-item.active:hover{background-color:#3E50B4;color:#fff;}
+.tab-block .box-content .time-item.active{border-radius: 4px;background-color: #3E50B4;color:#fff;}
+.tab-block .box-content .time-item.active:hover{background-color: #2ecc71;color:#fff;}
 
-.tab-block section{display:none;padding: 0 10px 10px 0;background-color: #fff;margin-bottom: 20px;}
+.tab-block section{margin-top:20px;display:none;padding: 0 10px 10px 0;background-color: #E6E6E6;}
 .tab-block section:after{content:'';display:table;clear:both;}
 
+.wrapper{}
+.wrapper .block{}
+.wrapper .block>.body{}
+.wrapper .block>.body .text.status{font-size: 2em;}
+.wrapper .block>.body .conditions{width: 100% !important;height: 500px;resize:vertical;overflow:auto;padding: 15px;border: 1px solid #eee;background-color:#ddd;}
+.wrapper .block>.body .conditions ul, .wrapper .block>.body .conditions ol{padding-left: 25px;}
+.wrapper .block>.body form label{display: block;padding: 15px 20px;background-color: #3E50B4;color: #fff;font-size: 2em;vertical-align: middle;text-align: center;cursor:pointer;}
+.wrapper .block>.body form label>input{width: 30px;height:30px;vertical-align: middle;}
+.wrapper .block>.body form input[type="submit"]{display: block;-webkit-appearance: none;background-color: #FE5252;border:0;outline:none;height: 67px;padding: 15px 40px;margin: 30px auto;text-align: center;font-size: 2em;color: #fff;font-family: 'SegoeUIBold';text-transform: uppercase;cursor:pointer;}
 
-
-
-
+.wrapper .block>.body>.text{padding: 0 40px;font-size: 1.5em;}
+.wrapper .block>.body>.text>#map{margin: 10px 0;height: 400px;}
 /*
 *	Extra styles
 */
@@ -292,8 +312,8 @@ footer .sirene>a{color:#333;}
 }
 
 .tab-block .box-content .time-item.active.select{
-	background-color: #3E50B4;
-    color: #fff;
+	background-color: #2ecc71;
+	color: #fff;
 }
 #croppic .img img{
 	max-width: 100%;

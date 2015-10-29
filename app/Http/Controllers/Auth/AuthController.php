@@ -1,19 +1,15 @@
 <?php namespace App\Http\Controllers\Auth;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-
 use Socialize;
 use Illuminate\Http\Request;
 use App\AuthenticateUser;
 use Laravel\Socialite\Contracts\Factory as Socialite;
  
-
 use App\User;
 use Auth;
-
 class AuthController extends Controller {
 	
 	
@@ -29,9 +25,7 @@ class AuthController extends Controller {
 	| a simple trait to add these behaviors. Why don't you explore it?
 	|
 	*/
-
 	use AuthenticatesAndRegistersUsers;
-
 	/**
 	 * Create a new authentication controller instance.
 	 *
@@ -45,15 +39,12 @@ class AuthController extends Controller {
 		$this->registrar = $registrar;
 		
 		$this->socialite = $socialite;
-
 		$this->middleware('guest', ['except' => 'getLogout']);
 	}
-
 	
 	
 	public function getRegister(){return redirect()->route('main');}
 	public function postRegister(){return redirect()->route('main');}
-
 	
 	
 	
@@ -63,8 +54,6 @@ class AuthController extends Controller {
 	   if(!config("services.$provider")) abort('404'); //just to handle providers that doesn't exist
 	   return $this->socialite->with($provider)->redirect();
 	}
-
-
 	public function getSocialAuthCallback(User $postUser, $provider=null)
 	{
 		try
@@ -76,7 +65,6 @@ class AuthController extends Controller {
 			return redirect()->route('main');
 		}
 		
-
 			
 			
 		$name = $user->getNickname();
@@ -99,7 +87,6 @@ class AuthController extends Controller {
 			if($user->email != ''){$name = $user->email;}
 			if($user->name != ''){$name = $user->name;}
 		}
-
 		
 		$arrValues = array(
 			'provider' => $provider,
@@ -117,13 +104,7 @@ class AuthController extends Controller {
 		}else{
 			return redirect()->back();
 		}
-
 	}
-
 	
 	
 }
-
-
-
-

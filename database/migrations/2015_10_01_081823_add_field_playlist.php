@@ -1,10 +1,7 @@
 <?php
-
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
 class AddFieldPlaylist extends Migration {
-
 	/**
 	 * Run the migrations.
 	 *
@@ -21,7 +18,6 @@ class AddFieldPlaylist extends Migration {
 			$table->integer('idblock')->default(0)->index();
 		});
 	}
-
 	/**
 	 * Reverse the migrations.
 	 *
@@ -41,5 +37,4 @@ class AddFieldPlaylist extends Migration {
 			$table->dropColumn('idblock');
 		});
 	}
-
 }

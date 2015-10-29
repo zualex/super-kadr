@@ -29,14 +29,14 @@
 		
 <div class="playlists tab-block">
 	<section  class="visible">
-		@include('admin.playlist.showInit1')
 		@include('admin.playlist.showGallery1')
+		@include('admin.playlist.showInit1')
 	</section>
 	
 	
 	<section >
-		@include('admin.playlist.showInit2')
 		@include('admin.playlist.showGallery2')
+		@include('admin.playlist.showInit2')
 	</section>
 
 	

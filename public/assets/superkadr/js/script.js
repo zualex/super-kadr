@@ -237,7 +237,11 @@ $(document).ready( function () {
 	/*
 	*	Переключение тарифов
 	*/
-	$('.tariffs').on('click', '.tariff .select', function() {changeTarif($(this).attr('tariff-id'))});
+	$('.tariffs').on('click', '.tariff', function() {
+		changeTarif($(this).find('.select').attr('tariff-id'));
+		$('.tariffs .tariff').removeClass('active').find('.select span').text('Выбрать');
+		$(this).addClass('active').find('.select span').text('Ваш выбор');
+	});
 	function changeTarif(cnt){
 		var tariff = cnt;
 		
@@ -250,31 +254,35 @@ $(document).ready( function () {
 	/*
 	*	Инициализируем первый монитор
 	*/
-	var nowMonitor = $('.monitor select').val();
-	$('#monitor-change-class').addClass('activeMonitor_'+nowMonitor);
+	$('.monitor-select .select:first').addClass('active');
+	var nowMonitor = $('.monitor-select .select:first').attr('data-monitor');
+	var Cwidth = $('.monitor-select .select:first').attr('data-width')/1;
+	var Cheight = $('.monitor-select .select:first').attr('data-height')/1;
+	$('#monitor-change-class').width(Cwidth).height(Cheight);
+	$('.cropImgWrapper').find('img').css({ "top": "0px", "left": "0px" });
 	$('.tariffs').attr('data-monitor', nowMonitor);
 	croppic.options.cropData.monitor = nowMonitor;
-	croppic.objW = $('#objW_'+nowMonitor).val()/1;
-	croppic.objH = $('#objH_'+nowMonitor).val()/1;
-
+	croppic.objW = Cwidth;
+	croppic.objH = Cheight;
 	
 	/*
 	*	Переключение экранов
 	*/
-	$('.monitor select').change(function() {
-		oldMonitor = $('.tariffs').attr('data-monitor');
-		newMonitor = $(this).val();
+	$('.monitor-select .select').click(function() {
+		$(this).parents('.monitor-select').find('.select').removeClass('active');
+		$(this).addClass('active');
+		var newMonitor = $(this).attr('data-monitor');
 		$('.tariffs').attr('data-monitor', newMonitor);
 		croppic.options.cropData.monitor = newMonitor;
 		availabilityDate('', '', newMonitor);
 		
 		// Для того чтобы нормально отображалась картинка при смене экранов
-		var newW = $('#objW_'+newMonitor).val()/1;
-		var newH = $('#objH_'+newMonitor).val()/1;
+		var newW = $(this).attr('data-width')/1;
+		var newH = $(this).attr('data-height')/1;
 		croppic.objW = newW;
 		croppic.objH = newH;
-		$('.cropImgWrapper').width(newW);
-		$('.cropImgWrapper').height(newH);
+		$('#croppic').width(newW).height(newH);
+		$('.cropImgWrapper').width(newW).height(newH);
 		$('.cropImgWrapper').find('img').css({ "top": "0px", "left": "0px" });
 
 		
@@ -284,8 +292,7 @@ $(document).ready( function () {
 			scrollTop: $("#monitor-change-class").offset().top - 100
 		}, 500);
 		setTimeout(function() {
-			$('#monitor-change-class').removeClass('activeMonitor_'+oldMonitor);
-			$('#monitor-change-class').addClass('activeMonitor_'+newMonitor);
+			$('#monitor-change-class').width(newW).height(newH);
 		}, 300);
 	});
 	
@@ -490,5 +497,3 @@ function availabilityDate(dateDay, tarif_id, monitor_id){
 		}
 	});
 }
-
-

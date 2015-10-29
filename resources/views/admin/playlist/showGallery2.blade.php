@@ -1,10 +1,11 @@
 	<div class="content-block orders">
 		<table class="table-list">
 			<tr>
-				<th colspan="5" style="text-align:center;">Заказы в очереди на генерацию нового файла плейлиста {{ $data['dateStart2'] }}</th>
+				<th colspan="6" style="text-align:center;">Заказы в очереди на генерацию нового файла плейлиста {{ $data['dateStart2'] }}</th>
 			</tr>
 			@if(count($data['playlistFinaly2']) > 0)
 				<tr>
+					<th class="col-1"></th>
 					<th class="center col-2">ID</th>
 					<th class="center col-2">ID блока</th>
 					<th class="col-3" style="display:none">Состояние</th>
@@ -17,6 +18,7 @@
 				@foreach($data['playlistFinaly2'] as $key => $item)
 					@if($item['init'] == 0)
 						<tr>
+							<td class="col-1"><div class="light c-{{ $item['block'] }}"></div></td>
 							<td class="center col-2">{{ $item['id'] }}</td>
 							<td class="center col-2">{{ $item['block'] }}</td>
 							<td class="center col-3" style="display:none">

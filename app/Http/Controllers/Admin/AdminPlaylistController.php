@@ -1,8 +1,6 @@
 <?php namespace App\Http\Controllers\Admin;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use Request;
 use Response;
 use Carbon\Carbon;
@@ -13,10 +11,7 @@ use App\Tarif;
 use App\Monitor;
 use App\PlaylistExtraVideo;
 use Session;
-
 class AdminPlaylistController extends Controller {
-
-
 	public function index(Playlist $playlistModel)
 	{
 		//$this->testGalleryUpload();
@@ -30,7 +25,6 @@ class AdminPlaylistController extends Controller {
 		foreach ($tarifTemp as $key => $item){
 			$tarif[$item['id']] = $item;
 		}
-
 		
 		$extraVideo = array();
 		$PlaylistExtraVideo = PlaylistExtraVideo::all();
@@ -52,7 +46,6 @@ class AdminPlaylistController extends Controller {
 			}
 		}
 		
-
 		
 		$info = $playlistModel->getInfoPlaylist($playlistModel->getId(1));
 		$dateStart1 = $info['dateStart'];
@@ -72,16 +65,13 @@ class AdminPlaylistController extends Controller {
 			
 			'extraVideo' => $extraVideo,						//Массив с доп роликами
 			
-
 			'playlistFinaly1' => $playlistFinaly1,	//Заказы в очередь для первого экрана
 			'dateStart1' => $dateStart1,						//Дата начала формирования плейлиста
-
 			'playlistFinaly2' => $playlistFinaly2,
 			'dateStart2' => $dateStart2,
 		);
 		return view('admin.playlist.index')->with('data', $data);
 	}
-
 	
 	public function initFile()
 	{
@@ -127,7 +117,6 @@ class AdminPlaylistController extends Controller {
 				"message" => 'Произошла ошибка. Изменения не сохранены'
 			);
 		}
-
 		
 		return Response::json($res);
 	}
@@ -151,7 +140,6 @@ class AdminPlaylistController extends Controller {
 				"message" => 'Произошла ошибка. Изменения не сохранены'
 			);
 		}
-
 		
 		return Response::json($res);
 	}
@@ -174,7 +162,6 @@ class AdminPlaylistController extends Controller {
 			'2' => 20,
 			'3' => 48 
 		);
-
 		for($i = 1; $i <= 50; $i++){
 			$id = $i;
 			$date_show = $nowDate->addMinutes(5)->toDateTimeString();
@@ -213,7 +200,6 @@ class AdminPlaylistController extends Controller {
 		$resAll = Request::except('_token');
 		$result = 1;
 		
-
 		foreach($resAll['path'] as $id => $value){
 			$PlaylistExtraVideo = PlaylistExtraVideo::where('id', '=', $id)->first();
 			if(count($PlaylistExtraVideo) == 0){$PlaylistExtraVideo = new PlaylistExtraVideo;}
@@ -223,17 +209,13 @@ class AdminPlaylistController extends Controller {
 		}
 		
 		
-
 		
 		
-
 		Session::flash('message', 'Настройки сохранены');
 		$res = array(
 			"status" => 'success',
 			"message" => 'Настройки сохранены'
 		);
-
-
 		return Response::json($res);
 	}
 	
@@ -309,5 +291,4 @@ class AdminPlaylistController extends Controller {
 		//return $playlistModel->availabilityDate(1, 1, '06.10.2015');
 		return $playlistModel->availabilityDate($tarif_id, $monitor_id, $dateDay);
 	}
-
 }

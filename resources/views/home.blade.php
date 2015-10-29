@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-<div id="slider" class="block color-1">
+		<div id="slider" class="block color-1">
 			<div class="header"><span>Самое популярное в галерее</span></div>
 			<div class="body clear">
 				<div class="slider" id="slider1">
@@ -47,31 +47,23 @@
 			</div>
 		</div>
 		<div id="try" class="block color-2">
-			<div class="header"><span>Разместите и вы свое фото!</span></div>
-			<div class="body clear">
-				<div class="text">
-					<span>Выберите файл изображения на своем устройстве и оптимизируйте его размер для отображения на экране при помощи формы ниже.</span>
-				</div>
-			</div>
+			<div class="header"><span>1. Выберите экран</span></div>
 		</div>
 		<div id="upload" class="block">
-			<div class="body clear">
-				<style>
+			<div class="body clear">			
+				
+				<div class="monitor-select clear">						
 					@foreach($data['paramMonitor'] as $key => $value)
-						.activeMonitor_{{ $value['id'] }}{
-							width:  {{ $value['siteWidth']+40 }}px;
-							height: {{ $value['siteHeight']+40 }}px;	
-						}
-						.activeMonitor_{{ $value['id'] }} #croppic{
-							width:  {{ $value['siteWidth'] }}px;
-							height: {{ $value['siteHeight'] }}px;	
-						}
-					@endforeach	
-				</style>
+						 <div class="select" data-monitor="{{ $value['id'] }}" data-width="{{ $value['siteWidth'] }}" data-height="{{ $value['siteHeight'] }}"><span>Экран {{ $value['number'] }}</span></div>
+					@endforeach
+				</div>
 				
 				<div id="monitor-change-class" class="monitor">
 					<div id="croppic"></div>
-					<div id="upload-btn"><div><i class="fa pull-left fa-camera"></i><span>Загрузи фото</span></div></div>
+					<div id="upload-btn">
+						<div class="upload"><i class="fa pull-left fa-camera"></i><span>Загрузи фото</span></div>
+						<div class="description"><span>Выберите картинку или фото на своем устройстве и оптимизируйте их размер для корректного отображения на экране.</span></div>
+					</div>
 				</div>
 				<div class="stand"></div>
 				
@@ -99,7 +91,8 @@
 				</script>
 			</div>
 		</div>
-		<div id="schedule" class="block color-1">
+		<div id="tariffs" class="block color-1">
+			<div class="header"><span>2. Выберите тариф</span></div>
 			<div class="body clear">
 				<div class="tariffs" data-url = "{{ route('gallery.create') }}" data-tariff = "" data-monitor = "" data-dateShow = "" data-image = "">
 					@foreach($data['tarifs'] as $key => $value)
@@ -120,21 +113,13 @@
 					</div>
 					@endforeach
 				</div>
-				<div class="monitor">
-					@foreach($data['paramMonitor'] as $key => $value)
-						<input type="hidden" name="objW_{{ $value['id'] }}" id="objW_{{ $value['id'] }}" value="{{ $value['siteWidth'] }}">
-						<input type="hidden" name="objH_{{ $value['id'] }}" id="objH_{{ $value['id'] }}" value="{{ $value['siteHeight'] }}">
-					@endforeach	
-						
-					<select name="monitor">
-						@foreach($data['paramMonitor'] as $key => $value)
-							 <option value="{{ $value['id'] }}">Экран {{ $value['number'] }}</option>
-						@endforeach	
-					</select>
-				</div>
+			</div>
+		</div>
+		<div id="schedule" class="block color-1">
+			<div class="header"><span>3. Выберите дату и время начала показа</span></div>
+			<div class="body clear">
 				<div class="schedule-block">
 					<div class="content">
-						<div class="header"><span>Выберите дату и время начала показа</span></div>
 						<div class="time-list">
 							<div class="dates">
 								<span class="item" ></span>
@@ -144,10 +129,9 @@
 							</div>
 						</div>
 					</div>
-					
-					<div class="pay">
-						<a href="#" title="Оплатить заказ" onclick="paySite(this);return false;"><i class="fa pull-left fa-credit-card"></i><span>Оплатить</a>
-					</div>
+				</div>
+				<div class="pay">
+					<a href="#" title="Оплатить заказ" onclick="paySite(this);return false;"><i class="fa pull-left fa-credit-card"></i><span>Оплатить</a>
 				</div>
 			</div>
 		</div>
@@ -188,7 +172,7 @@
 				<div class="logo">
 					<a href="{{ route('main') }}" title="Супер Кадр"><img src="/img/logo.png" alt=""></a>
 				</div>
-				<div class="phone"><span>8 (555) 555-55-55</span></div>
+				<div class="phone"><span>8 (910) 333-37-48</span></div>
 				<div class="info"><span>По всем вопросам, связанным с работой сайта обращайтесь по телефону.</span></div>
 			</div>
 		</div>

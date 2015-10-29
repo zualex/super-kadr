@@ -1,11 +1,10 @@
 <?php namespace App;
-
 use Illuminate\Database\Eloquent\Model;
-
 use Image;
 use Carbon\Carbon;
 use SoapBox\Formatter\Formatter;
 use App\Monitor;
+use App\Setting;
 use App\Gallery;
 use App\Tarif;
 use App\Pay;
@@ -14,9 +13,7 @@ use App\PlaylistExtraVideo;
 use File;
 use DB;
 use Response;
-
 class Playlist extends Model {
-
 	public $pathPlaylistMonitor_1;	//плейлисты для Экрана 1
 	public $pathPlaylistMonitor_2;	//плейлисты для Экрана 2
 	public $folderInit;						//папка исходного плейлиста
@@ -94,8 +91,8 @@ class Playlist extends Model {
 		$info = $this->getInfoPlaylist($this->getId(1));
 		$dateStart = $info['dateStart'];
 		$nowDate = Carbon::now();
-		//$dateNowNext = $nowDate->timestamp + $this->timePlaylist;
-		$dateNowNext = $nowDate->timestamp;
+		$dateNowNext = $nowDate->timestamp + $this->timePlaylist;
+		//$dateNowNext = $nowDate->timestamp;
 		while($dateNowNext >= Carbon::parse($dateStart)->timestamp){
 			$playlistFinaly1 = $this->getGenerateArray(1);
 			$res1 = $this->savePlaylist(1, $playlistFinaly1);
@@ -104,13 +101,12 @@ class Playlist extends Model {
 			$dateStart = $info['dateStart'];
 			if(count($playlistFinaly1) == 0){break;}
 		}
-
 		
 		$info = $this->getInfoPlaylist($this->getId(2));
 		$dateStart = $info['dateStart'];
 		$nowDate = Carbon::now();
-		//$dateNowNext = $nowDate->timestamp + $this->timePlaylist;
-		$dateNowNext = $nowDate->timestamp;
+		$dateNowNext = $nowDate->timestamp + $this->timePlaylist;
+		//$dateNowNext = $nowDate->timestamp;
 		while($dateNowNext >= Carbon::parse($dateStart)->timestamp){
 			$playlistFinaly2 = $this->getGenerateArray(2);
 			$res2 = $this->savePlaylist(2, $playlistFinaly2);
@@ -144,7 +140,6 @@ class Playlist extends Model {
 		$arrGalleryAll = $this->getGalleryDateShow($monitorId, $dateEnd);		//Получение галерей которые попадут в генерируемый плейлист	
 		
 		
-
 		$arrTempGallery = array();
 		/* Если максимальный idblock плейлиста меньше нуля то генерацим не будет */
 		if($maxIdblock > 0){
@@ -152,7 +147,6 @@ class Playlist extends Model {
 				$idblock++;
 				if($idblock > $maxIdblock){$idblock = 1;}
 				
-
 				
 				/* Исходный плейлист */
 				$playlist = $this->getPlaylistForGenerate($monitorId, $idblock);														//получение одного блока из исходного плейлиста
@@ -184,7 +178,6 @@ class Playlist extends Model {
 				$arrRes[$idblock] = $this->getMergeArray($playlist, $arrAddGallery, $arrDopVideo, $idblock);			//объединение исходного плейлиста с закзазами
 			}
 		}
-
 		$res = array();
 		if(count($arrRes) > 0){
 			foreach($arrRes as $idblock => $arr){
@@ -194,7 +187,6 @@ class Playlist extends Model {
 			}
 		}
 			
-
 		return $res;
 	}
 	
@@ -231,7 +223,6 @@ class Playlist extends Model {
 		$dateStart = Carbon::parse($dateStart)->addSeconds($offset * $this->timePlaylist)->toDateTimeString();		//дата начала со смещением
 		$dateEnd = Carbon::parse($dateStart)->addSeconds($this->timePlaylist)->toDateTimeString();
 		
-
 		$res = array(
 			'dateStart' => $dateStart,
 			'dateEnd' => $dateEnd,
@@ -252,7 +243,6 @@ class Playlist extends Model {
 		if(!$res){$res = 0;}
 		return $res;
 	}
-
 	
 	
 	/*
@@ -272,7 +262,6 @@ class Playlist extends Model {
 		return $playlist;
 	}
 	
-
 	
 	
 	/*
@@ -312,7 +301,6 @@ class Playlist extends Model {
 			->orderBy('date_show', 'asc')
 			->get();
 		
-
 		$arrGallery = array();
 		if(count($gallery) > 0){
 			foreach($gallery as $key => $item){				
@@ -392,7 +380,6 @@ class Playlist extends Model {
 	
 	
 	
-
 	/*
 	* getSort - Вычисление коэффициента вероятности показа галлереи
 	*/
@@ -412,7 +399,6 @@ class Playlist extends Model {
 			$diffSec = Carbon::parse($dateShow)->diffInSeconds($dateStartIter);					//Узнаем разницу между датой показа и датой формируемого плейлиста
 			$abstractCount = ceil($diffSec/$intervalSec);														//Узнаем сколько должно было быть показов
 			$diffCount = $abstractCount - ($tarifCountShow - $countShow);							//Узнаем разницу между сколько должно быть и сколько показалось товаров
-
 			$useInterval = abs(($tarifCountShow - $countShow + 1) * $intervalSec); 					//Узнаем используемый интервал
 			$sort = ($intervalAll/$useInterval) * ($diffCount * 100);	
 		}
@@ -422,7 +408,6 @@ class Playlist extends Model {
 	
 	
 	
-
 	/*
 	*	countShowMinus - Уменьшение кол-ва показов на 1
 	*/
@@ -450,7 +435,6 @@ class Playlist extends Model {
 		}
 		return $arrGallery;
 	}
-
 	
 	
 	/*
@@ -486,10 +470,8 @@ class Playlist extends Model {
 				}
 			}
 		}
-
 		return $arrRes;
 	}
-
 	
 	
 	
@@ -564,7 +546,6 @@ class Playlist extends Model {
 			}
 		}
 		
-
 		$arrRes = $this->array_orderby($arrRes, 'block', SORT_ASC, 'init', SORT_DESC, 'sort', SORT_DESC);
 		
 		return $arrRes;
@@ -587,7 +568,6 @@ class Playlist extends Model {
 		
 		$lastIdblock = $idblock + $this->countBlock;
 		if($lastIdblock > $maxIdblock){$lastIdblock -= $maxIdblock;}
-
 		
 		
 		if(count($playlistFinaly) > 0){
@@ -609,7 +589,7 @@ class Playlist extends Model {
 	public function savePlaylistWithGalleryXml($monitorNumber = '', $arrRes = array(), $dateStart){
 		if($monitorNumber != '' AND count($arrRes) > 0){			
 			$dateStart = Carbon::parse($dateStart);
-			$namePlaylist = 'ПЛ'.$dateStart->format('YmdHis').'.xml';
+			$namePlaylist = 'PL'.$dateStart->format('YmdHis').'.xjob';
 			$namePlaylist = iconv("UTF-8", "cp1251", $namePlaylist);
 			
 			if($monitorNumber == 1){
@@ -669,7 +649,6 @@ class Playlist extends Model {
 		
 		return 1;		
 	}
-
 	
 	/*
 	* savePlaylistImg - сохранение картинки для плейлиста
@@ -690,6 +669,14 @@ class Playlist extends Model {
 			Image::make($pathStart)->resize($w, $h)->save($pathSave);
 		}
 		
+		if($monitorNumber == 1){
+			$PrefixPath = Setting::where('type', '=', 'main')->where('name', '=', 'path_first')->first();
+			$pathSave = $PrefixPath->value.$item['name'];
+		}
+		if($monitorNumber == 2){
+			$PrefixPath = Setting::where('type', '=', 'main')->where('name', '=', 'path_two')->first();
+			$pathSave = $PrefixPath->value.$item['name'];
+		}
 		
 		$pathSave = str_replace('/', '\\', $pathSave);
 		return $pathSave;
@@ -732,7 +719,6 @@ class Playlist extends Model {
 				->where('dateEnd', '=', $dateEnd)
 				->first();
 				
-
 			if(!$playlistTimeExist){
 				$playlistTime = new PlaylistTime;
 				$playlistTime->monitor_id = $monitorId;
@@ -768,8 +754,6 @@ class Playlist extends Model {
 		
 		$res1 = $this->saveInitFile(1, $nameInitFile);
 		$res2 = $this->saveInitFile(2, $nameInitFile);
-
-
 		return $res1.' - '.$res2;
 	}
 	
@@ -860,7 +844,6 @@ class Playlist extends Model {
 			}else{
 				$IsTime = 0;
 			}
-
 			
 			
 			/* Подсчет блоков */
@@ -872,7 +855,6 @@ class Playlist extends Model {
 				$idblock = $arrIdblock[$name];
 			}
 			
-
 			
 			
 			
@@ -950,7 +932,6 @@ class Playlist extends Model {
 		call_user_func_array('array_multisort', $args);
 		return array_pop($args);
 	}
-
 	
 	
 	
@@ -1000,7 +981,6 @@ class Playlist extends Model {
 				
 				$dateItem->addMinute($addMinute)->second(0);
 				$dateSave = $dateItem->format('d.m.Y H').':00';
-
 				if(array_key_exists($dateSave, $arrDateGallery)){
 					$arrDateGallery[$dateSave] += $this->timeGallery;
 				}else{
@@ -1098,7 +1078,6 @@ class Playlist extends Model {
 		
 		return $arrRes;
 	}
-
 	
 	/*
 	* checkArrAvailability - проверерка массива на то что даты доступны
@@ -1136,11 +1115,3 @@ class Playlist extends Model {
 	}
 	
 }
-
-
-
-
-
-
-
-

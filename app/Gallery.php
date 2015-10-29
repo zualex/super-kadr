@@ -179,7 +179,6 @@ class Gallery extends Model {
 		if(!array_key_exists('image', $param)){$param['image'] = '';}
 		if(!array_key_exists('tarif', $param)){$param['tarif'] = '';}
 		if(!array_key_exists('dateShow', $param)){$param['dateShow'] = '';}
-		if(!array_key_exists('flagGuest', $param)){$param['flagGuest'] = '';}
 		
 		if($param['monitor'] == ''){$this->error[] = 'Не выбран экран';}
 		if($param['image'] == ''){$this->error[] = 'Не загружено фото';}
@@ -192,18 +191,6 @@ class Gallery extends Model {
 			$dir = $this->pathImages . "/temp/".Auth::user()->id;
 			$uploadImage = array_diff(scandir(base_path().$dir), array('..', '.'));
 			$uploadImage = array_shift($uploadImage);
-			
-			if($param['flagGuest'] == 1){
-				$uploadImage = false;
-				$files = glob(base_path().$dir."/*");
-				foreach ($files as $file){
-					if(strpos($file, Session::get('_token')) !== false){
-						$path_parts = pathinfo($file);
-						$uploadImage = $path_parts['basename'];
-					}	
-				}
-			}
-			
 			if(!$uploadImage){$this->error[] = 'Не загружено фото';}
 		}
 		
@@ -250,12 +237,7 @@ class Gallery extends Model {
 			Image::make(base_path().$dir.'/'.$uploadImage)->save(base_path().$this->pathImages.'/o_'.$src);
 			Image::make(base_path().$dir.'/'.$uploadImage)->resize($sizeImg['mediumWidth'], $sizeImg['mediumHeight'])->save(base_path().$this->pathImages.'/m_'.$src);
 			Image::make(base_path().$dir.'/'.$uploadImage)->resize($sizeImg['smallWidth'], $sizeImg['smallHeight'])->save(base_path().$this->pathImages.'/s_'.$src);
-			
-			if($param['flagGuest'] == 1){
-				array_map('unlink', glob(base_path().$dir."/".Session::get('_token')."*"));					//Удаление файла
-			}else{
-				array_map('unlink', glob(base_path().$dir."/*"));	//Очистка temp
-			}
+			array_map('unlink', glob(base_path().$dir."/*"));	//Очистка temp
 			
 		}
 		

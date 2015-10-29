@@ -257,6 +257,14 @@ class Setting extends Model {
 			'value' => '1111',
 			'type' => 'user',
 		));
+		$this->createSetting(array(
+			'name' => 'od_public',
+			'caption' => 'Публичный ключ Odnoklassniki',
+			'value' => '1111',
+			'type' => 'user',
+		));
+		
+		
 
 	}
 

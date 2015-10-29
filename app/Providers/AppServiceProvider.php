@@ -64,6 +64,7 @@ class AppServiceProvider extends ServiceProvider {
 			
 			Config::set('services.odnoklassniki.client_id', $social['od_id']);
 			Config::set('services.odnoklassniki.client_secret', $social['od_secret']);
+			Config::set('services.odnoklassniki.client_public', $social['od_public']);
 			Config::set('services.odnoklassniki.redirect', Request::root().'/login/callback/odnoklassniki');
 			
 		}

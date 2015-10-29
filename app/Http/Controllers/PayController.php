@@ -1,10 +1,7 @@
 <?php namespace App\Http\Controllers;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
-
 use Session;
 use Redirect;
 use Auth;
@@ -13,9 +10,7 @@ use App\Gallery;
 use App\Status;
 use App\Setting;
 use App\User;
-
 class PayController extends Controller {
-
 	
 	public function conditions($gallery_id)
 	{
@@ -62,7 +57,6 @@ class PayController extends Controller {
 			Auth::loginUsingId($user->id);
 		}
 	
-
 		$gallery = Gallery::where('id', '=', $gallery_id)->first();
 		$pay = Pay::where('gallery_id', '=', $gallery_id)->first();
 		
@@ -75,7 +69,6 @@ class PayController extends Controller {
 		
 		$mrh_login = $setting->getPaymentLogin();
 		$mrh_pass1 = $setting->getPaymentPassword1();
-
 		$inv_id = $pay->id;
 		$inv_desc = $pay->name;
 		$out_summ = $pay->price;
@@ -108,10 +101,8 @@ class PayController extends Controller {
 		if(Auth::user()->email == 'anonymous@anonymous.ru'){
 			Auth::logout();
 		}
-
 		return Redirect::to($url.'?'.$query);
 	}
-
 	
 	public function result()
 	{
@@ -159,7 +150,6 @@ class PayController extends Controller {
 				  die("error");
 		fputs($f,"order_num :$inv_id;Summ :$out_summ;Date :$date;User :$Shp_user\n");
 		fclose($f);
-
 		
 		//Выход из системы для анонимных пользователей
 		if(Auth::user()->email == 'anonymous@anonymous.ru'){
@@ -196,7 +186,6 @@ class PayController extends Controller {
 		$Shp_user = $_REQUEST["Shp_user"];
 		$crc = $_REQUEST["SignatureValue"];
 		$crc = strtoupper($crc);
-
 		$my_crc = strtoupper(md5("$out_summ:$inv_id:$mrh_pass1:Shp_user=$Shp_user"));
 		
 		if ($my_crc != $crc){
@@ -205,7 +194,6 @@ class PayController extends Controller {
 		}
 		
 		$result = "Операция прошла успешно";
-
 				
 		//Выход из системы для анонимных пользователей
 		if(Auth::user()->email == 'anonymous@anonymous.ru'){

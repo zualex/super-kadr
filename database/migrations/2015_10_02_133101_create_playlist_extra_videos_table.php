@@ -1,10 +1,7 @@
 <?php
-
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
 class CreatePlaylistExtraVideosTable extends Migration {
-
 	/**
 	 * Run the migrations.
 	 *
@@ -20,7 +17,6 @@ class CreatePlaylistExtraVideosTable extends Migration {
 			$table->timestamps();
 		});
 	}
-
 	/**
 	 * Reverse the migrations.
 	 *
@@ -30,5 +26,4 @@ class CreatePlaylistExtraVideosTable extends Migration {
 	{
 		Schema::drop('playlist_extra_videos');
 	}
-
 }
