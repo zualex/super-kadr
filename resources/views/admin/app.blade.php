@@ -65,6 +65,7 @@
 			<li class="{{ Route::is('admin.playlist.index') ? 'active' : '' }}"><a href="{{ route('admin.playlist.index') }}"><i class="fa pull-left fa-tasks"></i>Плейлисты</a></li>
 			<li class="{{ Route::is('admin.monitor.index') ? 'active' : '' }}"><a href="{{ route('admin.monitor.index') }}"><i class="fa pull-left fa-tasks"></i>Экраны</a></li>
 			<li class="{{ Route::is('admin.setting.index') ? 'active' : '' }}"><a href="{{ route('admin.setting.index') }}"><i class="fa pull-left fa-wrench"></i>Настройки</a></li>
+			<li class="{{ Route::is('admin.users.index') ? 'active' : '' }}"><a href="{{ route('admin.users.index') }}"><i class="fa pull-left fa-user"></i>Пользователи</a></li>
 		</ul>
 	</div>
 	<div class="wrap">

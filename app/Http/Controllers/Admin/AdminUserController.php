@@ -14,7 +14,7 @@ use Auth;
 
 use App\User;
 
-class UserController extends Controller {
+class AdminUserController extends Controller {
 
 	public function change_password()
 	{
@@ -71,7 +71,7 @@ class UserController extends Controller {
 	 */
 	public function index()
 	{
-		$users = User::latest('level')->get();
+		$users = User::where('level', '!=', 'user')->get();
 		return view('admin.users.index')->with('users', $users);
 	}
 

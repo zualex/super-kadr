@@ -97,7 +97,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::post('/setting/success/all/', ['as' => 'admin.setting.success_all', 'uses' => 'Admin\AdminSettingController@successAll']);
 	
 	/* Пользователи */
-	/*Route::resource('/users', 'Admin\UserController', array('names' => array(
+	Route::get('/users/', ['as' => 'admin.users.index', 'uses' => 'Admin\AdminUserController@index']);
+	Route::get('/users/edit/{id}', ['as' => 'admin.users.edit', 'uses' => 'Admin\AdminUserController@edit']);
+	Route::get('/users/destroy/{id}', ['as' => 'admin.users.destroy', 'uses' => 'Admin\AdminUserController@destroy']);
+	
+	Route::post('/users/update/{id}', ['as' => 'admin.users.update', 'uses' => 'Admin\AdminUserController@update']);
+	
+	
+	/*Route::resource('/users', 'Admin\AdminUserController', array('names' => array(
 		'index' => 'admin.users.index',
 		'create' => 'admin.users.create',
 		'store' => 'admin.users.store',

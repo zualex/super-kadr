@@ -1,55 +1,51 @@
 @extends('admin.app')
 
 @section('content')
-
-
-<h1>Пользователи</h1>
-<a class="btn btn-small btn-success" href="{{ route('admin.users.create') }}">Добавить пользователя</a>
-<br>
-<br>
-
-<!-- will be used to show any messages -->
-@if (Session::has('message'))
-    <div class="alert alert-info">{{ Session::get('message') }}</div>
-@endif
-
-{!! HTML::ul($errors->all()) !!}
-
-
-<table class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <td>ID</td>
-            <td>Имя</td>
-            <td>Email</td>
-            <td>Уровень</td>
-            <td width="220px">Действия</td>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach($users as $key => $value)
-        <tr>
-            <td>{{ $value->id }}</td>
-            <td>{{ $value->name }}</td>
-            <td >{{ $value->email }}</td>
-            <td>{{ $value->level }}</td>
-
-            <!-- we will also add show, edit, and delete buttons -->
-            <td>
-
-                <!-- edit this nerd (uses the edit method found at GET /nerds/{id}/edit -->
-                <a class="btn btn-small btn-info" href="{{ route('admin.users.edit', $value->id) }}">Изменить</a>
-				
-				
-				{!! Form::open(array('route' => array('admin.users.destroy', $value->id), 'class' => 'btn')) !!}
-                    {!! Form::hidden('_method', 'DELETE') !!}
-                    {!! Form::submit('Удалить', array('class' => 'btn btn-warning')) !!}
-                {!! Form::close() !!}
-				
-				
-            </td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
+<div class="transactions">
+	<div class="header">
+		<div class="clear">
+			<div class="title"><span>Пользователи</span></div>			
+		</div>
+	</div>
+	
+	@if (Session::has('message'))
+		<br>
+		<div class="alert alert-info">{{ Session::get('message') }}</div>
+	@endif
+	
+	@if(count($errors) > 0)
+		<div class="alert alert-info">{!! HTML::ul($errors->all()) !!}</div>
+	@endif
+	
+	<table class="table-list">
+		<tr>
+			<th class="center col-2">ID</th>
+			<th>Имя</th>
+			<th class="col-5">E-mail</th>
+			<th class="col-4">Роль</th>
+			<th class="center col-btn"><i class="fa fa-th-list"></i></th>
+		</tr>
+		 @foreach($users as $key => $value)
+				<tr>
+					<td>{{ $value->id }}</td>
+					<td>{{ $value->name }}</td>
+					<td >{{ $value->email }}</td>
+					<td>{{ $value->level }}</td>
+					<td class="center col-btn">
+						<div class="droplist-group">
+							<i class="fa fa-ellipsis-v"></i>
+							<div class="droplist" style="display: none">
+								<div>
+									<ul>
+										<li><a href="{{ route('admin.users.edit', $value->id) }}"><i class="fa pull-left fa-pencil"></i>Изменить</a></li>
+										<li><a href="{{ route('admin.users.destroy', $value->id) }}" onclick="return confirm('Вы действительно хотите удалить пользователя?')"><i class="fa pull-left fa-times"></i>Удалить</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+		@endforeach
+	</table>
+</div>
 @endsection
