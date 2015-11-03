@@ -33,9 +33,10 @@ class Pay extends Model {
 	public function getAll(){
 		$pay = false;
 		$pay = $this
-			->select(DB::raw('pays.*, galleries.src, statuses.name as status_name, statuses.caption as status_caption'))
+			->select(DB::raw('pays.*, galleries.src, statuses.name as status_name, statuses.caption as status_caption, users.name as user_name, users.provider'))
 			->join('galleries', 'galleries.id', '=', 'pays.gallery_id')
 			->join('statuses', 'statuses.id', '=', 'pays.status_pay')
+			->leftJoin('users', 'users.id', '=', 'galleries.user_id')
 			->where('pays.visible', '=', '1')
 			->orderBy('pays.created_at', 'desc')
 			->get();

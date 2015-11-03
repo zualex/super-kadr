@@ -42,6 +42,7 @@
 							<tr>
 								<th class="center col-1"><input class="checkbox" type="checkbox" name="checkall" value=""></th>
 								<th class="center col-2">ID</th>
+								<th class="center col-2">Пользователь</th>
 								<th class="center col-3">Изображение</th>
 								<th>Описание</th>
 								<th class="col-4">Заказ</th>
@@ -57,6 +58,7 @@
 									<input type="checkbox" name="checkelement[]" value="{{ $value->id }}">
 								</td>
 								<td class="center col-2">{{ $value->id }}</td>
+								<td class="center col-2">{{ $value->user_name }} - {{ $value->provider }}</td>
 								<td class="center col-3">
 									<a href="{{ $data['pathImages'].'/o_'.$value->src }}" rel="group1" class="modalbox">
 										<img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt="">
@@ -96,6 +98,7 @@
 							<tr>
 								<th class="center col-1"><input class="checkbox" type="checkbox" name="checkall" value=""></th>
 								<th class="center col-2">ID</th>
+								<th class="center col-2">Пользователь</th>
 								<th class="center col-3">Изображение</th>
 								<th>Описание</th>
 								<th class="col-4">Заказ</th>
@@ -111,6 +114,7 @@
 									<input type="checkbox" name="checkelement[]" value="{{ $value->id }}">
 								</td>
 								<td class="center col-2">{{ $value->id }}</td>
+								<td class="center col-2">{{ $value->user_name }} - {{ $value->provider }}</td>
 								<td class="center col-3">
 									<a href="{{ $data['pathImages'].'/o_'.$value->src }}" rel="group2" class="modalbox">
 										<img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt="">
@@ -156,6 +160,7 @@
 							<tr>
 								<th class="center col-1"><input class="checkbox" type="checkbox" name="checkall" value=""></th>
 								<th class="center col-2">ID</th>
+								<th class="center col-2">Пользователь</th>
 								<th class="center col-3">Изображение</th>
 								<th>Описание</th>
 								<th class="col-4">Заказ</th>
@@ -171,6 +176,7 @@
 									<input type="checkbox" name="checkelement[]" value="{{ $value->id }}">
 								</td>
 								<td class="center col-2">{{ $value->id }}</td>
+								<td class="center col-2">{{ $value->user_name }} - {{ $value->provider }}</td>
 								<td class="center col-3">
 									<a href="{{ $data['pathImages'].'/o_'.$value->src }}" rel="group3" class="modalbox">
 										<img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt="">

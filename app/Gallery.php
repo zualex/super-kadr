@@ -279,9 +279,10 @@ class Gallery extends Model {
 		$status_pay = Status::where('type_status', '=', 'pay')->where('caption', '=', 'paid')->first();
 		
 		$gallery =$this
-				->select(DB::raw('galleries.*, pays.id as pay_id, pays.price, tarifs.name as tarif_name, tarifs.hours, tarifs.interval_sec, statuses.name as status_name, statuses.caption as status_caption'))
+				->select(DB::raw('galleries.*, pays.id as pay_id, pays.price, tarifs.name as tarif_name, tarifs.hours, tarifs.interval_sec, statuses.name as status_name, statuses.caption as status_caption, users.name as user_name, users.provider'))
 				->join('statuses', 'statuses.id', '=', 'galleries.status_order')
 				->leftJoin('pays', 'pays.gallery_id', '=', 'galleries.id')
+				->leftJoin('users', 'users.id', '=', 'galleries.user_id')
 				->join('tarifs', 'tarifs.id', '=', 'galleries.tarif_id')
 				->where('galleries.status_main', '=', $status)
 				->where('pays.status_pay', '=', $status_pay->id)

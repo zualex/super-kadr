@@ -43,7 +43,7 @@
 					<td class="center col-1"><input type="checkbox" name="checkelement[]" value="{{ $value->id }}"></td>
 					<td class="center col-2"> {{ $value->id }} </td>
 					<td>
-						{{ $value->name }}
+						Пользователь: {{ $value->user_name }} - {{ $value->provider }} сделал заказ
 						<a href="{{ $pathImages.'/o_'.$value->src }}" rel="group1" class="modalbox">(подробнее)</a>
 					</td>
 					<td class="col-4">{{ $value->price }} руб.</td>
