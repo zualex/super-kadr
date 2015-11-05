@@ -4,7 +4,12 @@
 <div class="transactions">
 	<div class="header">
 		<div class="clear">
-			<div class="title"><span>Пользователи</span></div>			
+			<div class="title"><span>Пользователи</span></div>	
+			<div class="controls">
+				<div class="btn-group">
+					<a href="{{ route('admin.users.create') }}" class="btn add"><i class="fa pull-left fa-plus-square-o"></i>Добавить пользователя</a>
+				</div>
+			</div>	
 		</div>
 	</div>
 	

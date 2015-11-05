@@ -3,8 +3,8 @@
 use Closure;
 use Auth;
 
-class AuthAmin {
-	
+class checkAdmin {
+
 	/**
 	 * Handle an incoming request.
 	 *
@@ -12,17 +12,13 @@ class AuthAmin {
 	 * @param  \Closure  $next
 	 * @return mixed
 	 */
-
-	
 	public function handle($request, Closure $next)
 	{
-
-		if (Auth::check() && Auth::user()->level == 'admin' || Auth::user()->level == 'moderator'){
+		if (Auth::check() && Auth::user()->level == 'admin'){
 			return $next($request);
 		}else{
 			return redirect()->guest('auth/login');
-		}		
-		
+		}	
 	}
 
 }

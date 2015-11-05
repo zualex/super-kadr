@@ -94,7 +94,7 @@ $(function(){
 							<span class="username">{{ Auth::user()->name }}<i class="fa pull-right fa-caret-down"></i></span>
 						</a>
 						<div class="dropdown" role="menu">
-							@if (Auth::user()->level == 'admin')
+							@if (Auth::user()->level == 'admin' || Auth::user()->level == 'moderator')
 								<a href="{{ route('admin') }}"><i class="fa pull-left fa-cogs"></i>Панель управления</a>
 							@endif
 							<a href="{{ url('/auth/logout') }}"><i class="fa pull-left fa-sign-out"></i>Выйти</a>

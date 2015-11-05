@@ -61,11 +61,15 @@
 	<div id="menu" class="menu-panel">
 		<ul>
 			<li class="{{ Route::is('admin.gallery.index') ? 'active' : '' }}"><a href="{{ route('admin.gallery.index') }}"><i class="fa pull-left fa-credit-card"></i>Заказы</a></li>
-			<li class="{{ Route::is('admin.pay.index') ? 'active' : '' }}"><a href="{{ route('admin.pay.index') }}"><i class="fa pull-left fa-exchange"></i>Транзакции</a></li>
+			@if (Auth::user()->level == 'admin')
+				<li class="{{ Route::is('admin.pay.index') ? 'active' : '' }}"><a href="{{ route('admin.pay.index') }}"><i class="fa pull-left fa-exchange"></i>Транзакции</a></li>
+			@endif
 			<li class="{{ Route::is('admin.playlist.index') ? 'active' : '' }}"><a href="{{ route('admin.playlist.index') }}"><i class="fa pull-left fa-tasks"></i>Плейлисты</a></li>
-			<li class="{{ Route::is('admin.monitor.index') ? 'active' : '' }}"><a href="{{ route('admin.monitor.index') }}"><i class="fa pull-left fa-tasks"></i>Экраны</a></li>
-			<li class="{{ Route::is('admin.setting.index') ? 'active' : '' }}"><a href="{{ route('admin.setting.index') }}"><i class="fa pull-left fa-wrench"></i>Настройки</a></li>
-			<li class="{{ Route::is('admin.users.index') ? 'active' : '' }}"><a href="{{ route('admin.users.index') }}"><i class="fa pull-left fa-user"></i>Пользователи</a></li>
+			@if (Auth::user()->level == 'admin')
+				<li class="{{ Route::is('admin.monitor.index') ? 'active' : '' }}"><a href="{{ route('admin.monitor.index') }}"><i class="fa pull-left fa-tasks"></i>Экраны</a></li>
+				<li class="{{ Route::is('admin.setting.index') ? 'active' : '' }}"><a href="{{ route('admin.setting.index') }}"><i class="fa pull-left fa-wrench"></i>Настройки</a></li>
+				<li class="{{ Route::is('admin.users.index') ? 'active' : '' }}"><a href="{{ route('admin.users.index') }}"><i class="fa pull-left fa-user"></i>Пользователи</a></li>
+			@endif
 		</ul>
 	</div>
 	<div class="wrap">

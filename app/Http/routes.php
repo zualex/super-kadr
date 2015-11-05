@@ -56,8 +56,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::get('/', ['as' => 'admin', 'uses' => 'Admin\AdminController@index']);
 	
 	/* Смена пароля */
-	Route::get('/change_password', ['as' => 'change_password', 'uses' => 'Admin\UserController@change_password']);
-	Route::post('/change_password/save', ['as' => 'change_password.save', 'uses' => 'Admin\UserController@change_password_save']);
+	Route::get('/change_password', ['as' => 'change_password', 'uses' => 'Admin\AdminUserController@change_password']);
+	Route::post('/change_password/save', ['as' => 'change_password.save', 'uses' => 'Admin\AdminUserController@change_password_save']);
 	
 	
 	/* Заказы */
@@ -72,13 +72,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	
 	
 	/* Транзакции */
-	Route::get('/pay/', ['as' => 'admin.pay.index', 'uses' => 'Admin\AdminPayController@index']);
-	Route::get('/gallery/hide/{id}', ['as' => 'admin.pay.hide', 'uses' => 'Admin\AdminPayController@hide']);
+	Route::get('/pay/', ['middleware' => 'checkAdmin', 'as' => 'admin.pay.index', 'uses' => 'Admin\AdminPayController@index']);
+	Route::get('/pay/hide/{id}', ['middleware' => 'checkAdmin', 'as' => 'admin.pay.hide', 'uses' => 'Admin\AdminPayController@hide']);
 	
-	Route::post('/gallery/paid/all/', ['as' => 'admin.pay.paid_all', 'uses' => 'Admin\AdminPayController@paidAll']);
-	Route::post('/gallery/wait/all/', ['as' => 'admin.pay.wait_all', 'uses' => 'Admin\AdminPayController@waitAll']);
-	Route::post('/gallery/cancel/all/', ['as' => 'admin.pay.cancel_all', 'uses' => 'Admin\AdminPayController@cancelAll']);
-	Route::post('/gallery/hide/all/', ['as' => 'admin.pay.hide_all', 'uses' => 'Admin\AdminPayController@hideAll']);
+	Route::post('/pay/paid/all/', ['middleware' => 'checkAdmin', 'as' => 'admin.pay.paid_all', 'uses' => 'Admin\AdminPayController@paidAll']);
+	Route::post('/pay/wait/all/', ['middleware' => 'checkAdmin', 'as' => 'admin.pay.wait_all', 'uses' => 'Admin\AdminPayController@waitAll']);
+	Route::post('/pay/cancel/all/', ['middleware' => 'checkAdmin', 'as' => 'admin.pay.cancel_all', 'uses' => 'Admin\AdminPayController@cancelAll']);
+	Route::post('/pay/hide/all/', ['middleware' => 'checkAdmin', 'as' => 'admin.pay.hide_all', 'uses' => 'Admin\AdminPayController@hideAll']);
 	
 	/* Плейлисты */
 	Route::get('/playlist/', ['as' => 'admin.playlist.index', 'uses' => 'Admin\AdminPlaylistController@index']);
@@ -87,21 +87,24 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::post('/playlist/isTime/{id}', ['as' => 'admin.playlist.isTime', 'uses' => 'Admin\AdminPlaylistController@isTime']);
 	Route::post('/playlist/saveExtraVideo/', ['as' => 'admin.playlist.saveExtraVideo', 'uses' => 'Admin\AdminPlaylistController@saveExtraVideo']);
 	Route::get('/playlist/deleteExtraVideo/{id}', ['as' => 'admin.playlist.deleteExtraVideo', 'uses' => 'Admin\AdminPlaylistController@deleteExtraVideo']);
+	
 	/* Экраны */
-	Route::get('/monitor/', ['as' => 'admin.monitor.index', 'uses' => 'Admin\AdminMonitorController@index']);
-	Route::post('/monitor/success/', ['as' => 'admin.monitor.success', 'uses' => 'Admin\AdminMonitorController@success']);
+	Route::get('/monitor/', ['middleware' => 'checkAdmin', 'as' => 'admin.monitor.index', 'uses' => 'Admin\AdminMonitorController@index']);
+	Route::post('/monitor/success/', ['middleware' => 'checkAdmin', 'as' => 'admin.monitor.success', 'uses' => 'Admin\AdminMonitorController@success']);
 	
 	
 	/* Настройки */
-	Route::get('/setting/', ['as' => 'admin.setting.index', 'uses' => 'Admin\AdminSettingController@index']);
-	Route::post('/setting/success/all/', ['as' => 'admin.setting.success_all', 'uses' => 'Admin\AdminSettingController@successAll']);
+	Route::get('/setting/', ['middleware' => 'checkAdmin', 'as' => 'admin.setting.index', 'uses' => 'Admin\AdminSettingController@index']);
+	Route::post('/setting/success/all/', ['middleware' => 'checkAdmin', 'as' => 'admin.setting.success_all', 'uses' => 'Admin\AdminSettingController@successAll']);
 	
 	/* Пользователи */
-	Route::get('/users/', ['as' => 'admin.users.index', 'uses' => 'Admin\AdminUserController@index']);
-	Route::get('/users/edit/{id}', ['as' => 'admin.users.edit', 'uses' => 'Admin\AdminUserController@edit']);
-	Route::get('/users/destroy/{id}', ['as' => 'admin.users.destroy', 'uses' => 'Admin\AdminUserController@destroy']);
+	Route::get('/users/', ['middleware' => 'checkAdmin', 'as' => 'admin.users.index', 'uses' => 'Admin\AdminUserController@index']);
+	Route::get('/users/edit/{id}', ['middleware' => 'checkAdmin', 'as' => 'admin.users.edit', 'uses' => 'Admin\AdminUserController@edit']);
+	Route::get('/users/destroy/{id}', ['middleware' => 'checkAdmin', 'as' => 'admin.users.destroy', 'uses' => 'Admin\AdminUserController@destroy']);
+	Route::get('/users/create', ['middleware' => 'checkAdmin', 'as' => 'admin.users.create', 'uses' => 'Admin\AdminUserController@create']);
 	
-	Route::post('/users/update/{id}', ['as' => 'admin.users.update', 'uses' => 'Admin\AdminUserController@update']);
+	Route::post('/users/update/{id}', ['middleware' => 'checkAdmin', 'as' => 'admin.users.update', 'uses' => 'Admin\AdminUserController@update']);
+	Route::post('/users/store', ['middleware' => 'checkAdmin', 'as' => 'admin.users.store', 'uses' => 'Admin\AdminUserController@store']);
 	
 	
 	/*Route::resource('/users', 'Admin\AdminUserController', array('names' => array(
