@@ -1,6 +1,6 @@
 Потраченное время: 86 часа (00:00) 1 сентября - 28 сентября (20000)
 Потраченное время: 13 часа (00:00) 1 октября - 10 октября (5000)
-Потраченное время: 1 часа (10:00) 1 ноября -  (15000)
+Потраченное время: 2.5 часа (10:00) 1 ноября -  (15000)
 ----------------------------------------------------------------------------------------------------------
 
 ТЗ
@@ -11,7 +11,7 @@
 + для нового пользователя указать роль:
 	+ 1-я  роль – администратор. - полный доступ ко всем разделам сайта
 	+ 2-я роль – модератор полученных заявок .- доступна только страница ЗАКАЗЫ с вкладками : ЗАЯВКИ –ОДОБРЕННЫЕ-ОТКЛОНЕННЫЕ и страница ПЛЕЙ-ЛИСТ  
-- В "настройки" нужно поле E-mail. На данные адреса сайт АВТОМАТИЧЕСКИ должен присылать уведомления о наступлении событий. На данном этапе мы говорили о событии входа в админку. В уведомлении нас интересует имя пользователя, время, IP адрес.
++ В "настройки" нужно поле E-mail. На данные адреса сайт АВТОМАТИЧЕСКИ должен присылать уведомления о наступлении событий. На данном этапе мы говорили о событии входа в админку. В уведомлении нас интересует имя пользователя, время, IP адрес.
 - На странице "Заявки" - необходимо AJAX, чтоб админ не обновлял страницу, сразу видел новые заявки.
 - На странице "Заявки", "одобренные", "отклоненные" необходимо показывать заявки на текущую дату, так же возможность указать дату или диапозон дат.
 - На странице "транзакции" показывать транзакции на текущую дату, так же возможность указать дату или диапазон дат
@@ -52,18 +52,30 @@ INSERT INTO `settings` (`id`, `name`, `caption`, `value`, `type`, `type_input`, 
 5) Для того чтобы автоматом присылалось уведомление на несколко email, нужно перечислять через запятую, вот пример:
 Azubarev32@gmail.com, Azubarev32@yandex.ru
 
+6) Шаблон письма находиться тут resources/views/mail/signAdminPanel.blade.php
+
 
 Файлы:
+config/mail.php
 app/Gallery.php
 app/Pay.php
+app/Setting.php
 app/Http/Controllers/Admin/UserController.php - удалить
 app/Http/Controllers/Admin/AdminUserController.php
 app/Http/routes.php
+app/Http/Kernel.php
+app/Http/Middleware/AuthAmin.php
+app/Http/Middleware/checkAdmin.php
+app/Handlers/Events/AuthLoginEventHandler.php
+app/Providers/EventServiceProvider.php
+resources/views/app.blade.php
 resources/views/admin/gallery/index.blade.php
 resources/views/admin/pay/index.blade.php
 resources/views/admin/app.blade.php
 resources/views/admin/users/edit.blade.php
 resources/views/admin/users/index.blade.php
+resources/views/admin/users/create.blade.php
+resources/views/mail/signAdminPanel.blade.php
 database/migrations/2015_11_03_114938_add_level_enum_users.php
 
 
