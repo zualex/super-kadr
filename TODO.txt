@@ -32,6 +32,27 @@
 Можно сделать данный запрос в БД, и значение добавиться:
 "ALTER TABLE users MODIFY COLUMN level ENUM('user','admin', 'moderator')"
 
+2) Для того чтобы заработала отправка почты необходимо в файле /.env заполнить эти данные (у меня почтоывй ящик на gmail)
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=MyUsername@gmail.com
+MAIL_PASSWORD=MyPassword
+
+MyUsername@gmail.com - подставить нужный email
+MyPassword - подставить пароль от email
+
+3)В файле /config/mail.php
+'from' => ['address' => 'Azubarev32@gmail.com', 'name' => 'Супер кадр'],
+address и name можно изменить, от кого будут присылаться письма
+
+4) В БД "settings", нужно добавить запись для того чтобы появилось полу в настройках для автоматического уведомления:
+INSERT INTO `settings` (`id`, `name`, `caption`, `value`, `type`, `type_input`, `created_at`, `updated_at`) VALUES (NULL, 'send_emails', 'Уведомление о входе', '', 'main', 'text', '2015-09-17 10:07:40', '2015-09-17 10:07:40');
+
+5) Для того чтобы автоматом присылалось уведомление на несколко email, нужно перечислять через запятую, вот пример:
+Azubarev32@gmail.com, Azubarev32@yandex.ru
+
+
 Файлы:
 app/Gallery.php
 app/Pay.php
