@@ -19,7 +19,20 @@ class Setting extends Model {
 				->orWhere('name', '=', 'keywords')
 				->orWhere('name', '=', 'off_site')
 				->orWhere('name', '=', 'authorization')
+				->orWhere('name', '=', 'send_emails')
 				->get();
+		}
+		return $res;
+	}
+	
+	
+	/* 
+	* Получение email для уведомления о входе в админку
+	*/
+	public function getSendEmails(){
+		$res = array();
+		if(Schema::hasTable('settings')){
+			$res = $this->where('name', '=', 'send_emails')->first();
 		}
 		return $res;
 	}
@@ -160,6 +173,12 @@ class Setting extends Model {
 			'value' => '0',
 			'type' => 'main',
 			'type_input' => 'checkbox',
+		));
+		$this->createSetting(array(
+			'name' => 'send_emails',
+			'caption' => 'Уведомление о входе',
+			'value' => '',
+			'type' => 'main',
 		));
 		
 		
