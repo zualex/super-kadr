@@ -27,6 +27,7 @@
 	@if(count($pay) > 0)
 		<form id="form-admin" role="form" method="POST" >
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
+		<input type="hidden" name="extra_field" id="extra_field" value="">
 		
 		<table class="table-list">
 			<tr>

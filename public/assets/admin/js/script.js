@@ -32,11 +32,19 @@ function actionAll(url){
 		type: 'POST',
 		data: data,
 		success: function(data){
+			$('#extra_field').val('');
 			var data = $.parseJSON(data);
 			if(data.status == 'error'){alert(data.message);}
 			if(data.status == 'success'){
 				alert(data.message);
 				window.location.reload();
+			}
+			if(data.status == 'prompt'){
+				var value = prompt(data.message);
+				if(value){
+					$('#extra_field').val(value);
+					actionAll(url);
+				}
 			}
 		},
 		error: function(){

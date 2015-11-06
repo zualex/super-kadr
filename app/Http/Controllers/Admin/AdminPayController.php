@@ -10,6 +10,7 @@ use App\Status;
 use App\Pay;
 use Session;
 use Response;
+use Config;
 
 class AdminPayController extends Controller {
 
@@ -58,23 +59,39 @@ class AdminPayController extends Controller {
 	*/
 	public function paidAll()
 	{
-		$status_pay= Status::where('type_status', '=', 'pay')->where('caption', '=', 'paid')->first();
-		$checkelement = Request::input('checkelement');
-		if(count($checkelement) > 0){
-			foreach($checkelement as $key => $value){
-				$this->changeStatus($value, $status_pay->id);			//вызов функции которая по одной выставляет статус
+		$extra_field = Request::input('extra_field');
+	
+		if ($extra_field == Config::get('constants.pay_password')){
+			$status_pay= Status::where('type_status', '=', 'pay')->where('caption', '=', 'paid')->first();
+			$checkelement = Request::input('checkelement');
+			if(count($checkelement) > 0){
+				foreach($checkelement as $key => $value){
+					$this->changeStatus($value, $status_pay->id);			//вызов функции которая по одной выставляет статус
+				}
+				
+				Session::flash('message', 'Транзакции оплачены');
+				$res = array(
+					"status" => 'success',
+					"message" => 'Транзакции оплачены'
+				);
+			}else{
+				$res = array(
+					"status" => 'error',
+					"message" => 'Не выбрано ни одного элемента'
+				);
 			}
-			
-			Session::flash('message', 'Транзакции оплачены');
-			$res = array(
-				"status" => 'success',
-				"message" => 'Транзакции оплачены'
-			);
 		}else{
-			$res = array(
-				"status" => 'error',
-				"message" => 'Не выбрано ни одного элемента'
-			);
+			if($extra_field != ''){
+				$res = array(
+					"status" => 'error',
+					"message" => 'Неправильный пароль'
+				);
+			}else{
+				$res = array(
+					"status" => 'prompt',
+					"message" => 'Введите пароль'
+				);
+			}
 			
 		}
 		
