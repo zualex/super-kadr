@@ -34,6 +34,19 @@ class AdminGalleryController extends Controller {
 		);
 		return view('admin.gallery.index')->with('data', $data);
 	}
+	
+	/*
+	* Вывод только заявок
+	*/
+	public function application(Gallery $galleryModel)
+	{
+		$data = array(
+			"galleryModeration" => $galleryModel->getGalleryModeration(),
+			"pathImages" => $galleryModel->pathImages,
+		);
+		return view('admin.gallery.application')->with('data', $data);
+	}
+	
 
 	/*
 	* Выставление статуса одобрена для одной записи
