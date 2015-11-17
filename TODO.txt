@@ -33,7 +33,16 @@
 
 
 Файлы:
-
+app/Http/Controllers/Admin/AdminGalleryController.php
+app/Http/Controllers/Admin/AdminPayController.php
+app/Http/routes.php
+app/Gallery.php
+app/Pay.php
+resources/views/admin/gallery/application.blade.php
+resources/views/admin/gallery/index.blade.php
+resources/views/admin/gallery/index.blade.php
+resources/views/admin/pay/index.blade.php
+public/assets/admin/lib/jquery-ui-1.11.4.datepicker/*
 
 
 ----------------------------------------------------------------------------------------------------------
