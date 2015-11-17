@@ -30,14 +30,22 @@ class Pay extends Model {
 	
 	
 	
-	public function getAll(){
+	public function getAll($dateFrom = '', $dateTo = ''){
 		$pay = false;
+		
+		$nowDate = Carbon::now();
+		if($dateFrom == ''){$dateFrom = $nowDate->format('Y-m-d');}
+		if($dateTo == ''){$dateTo = $nowDate->format('Y-m-d');}
+		$dateTo = Carbon::parse($dateTo)->addDay(1);
+		
 		$pay = $this
 			->select(DB::raw('pays.*, galleries.src, statuses.name as status_name, statuses.caption as status_caption, users.name as user_name, users.provider'))
 			->join('galleries', 'galleries.id', '=', 'pays.gallery_id')
 			->join('statuses', 'statuses.id', '=', 'pays.status_pay')
 			->leftJoin('users', 'users.id', '=', 'galleries.user_id')
 			->where('pays.visible', '=', '1')
+			->where('pays.created_at', '>=', $dateFrom)
+			->where('pays.created_at', '<=', $dateTo)
 			->orderBy('pays.created_at', 'desc')
 			->get();
 		//dd($pay);

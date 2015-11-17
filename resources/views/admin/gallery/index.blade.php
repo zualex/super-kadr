@@ -1,19 +1,74 @@
 @extends('admin.app')
 
 @section('content')
+<link media="all" type="text/css" rel="stylesheet" href="/assets/admin/lib/jquery-ui-1.11.4.datepicker/jquery-ui.min.css">
+<script src="/assets/admin/lib/jquery-ui-1.11.4.datepicker/jquery-ui.min.js"></script>
 <script>
-setInterval(function() {
-	$.ajax({
-		url: "{{ route('admin.gallery.application') }}", 
-		dataType: "html",
-		type: 'GET',
-		data: {},
-		success: function(data){
-			console.log(1);
-			$('#application').html(data);
+$(function() {
+	$.datepicker.regional['ru'] = {
+		closeText: 'Закрыть',
+		prevText: '&#x3c;Пред',
+		nextText: 'След&#x3e;',
+		currentText: 'Сегодня',
+		monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+		'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+		monthNamesShort: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+		'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+		dayNames: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+		dayNamesShort: ['вск', 'пнд', 'втр', 'срд', 'чтв', 'птн', 'сбт'],
+		dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+		weekHeader: 'Нед',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''
+	};
+	$.datepicker.setDefaults($.datepicker.regional['ru']);
+
+
+	$("#dateFrom").datepicker({
+		dateFormat: "yy-mm-dd",
+		changeMonth: true,
+		changeYear: true,
+		firstDay:1,
+		onClose: function( selectedDate ) {
+			$("#dateTo").datepicker("option", "minDate", selectedDate);
 		}
-	});
-}, 15000);
+    });
+    $("#dateTo").datepicker({
+		dateFormat: "yy-mm-dd",
+		changeMonth: true,
+		changeYear: true,
+		firstDay:1,
+		onClose: function( selectedDate ) {
+			$("#dateFrom").datepicker("option", "maxDate", selectedDate);
+		}
+    });
+});
+</script>
+
+<script>
+$(function() {
+	var ajax_from = $('#ajax_from').val();	
+	var ajax_to = $('#ajax_to').val();	
+	setInterval(function() {
+		$.ajax({
+			url: "{{ route('admin.gallery.application') }}", 
+			dataType: "html",
+			type: 'GET',
+			cache: false,
+			data: {
+				'dateFrom' : ajax_from,
+				'dateTo' : ajax_to
+			},
+			success: function(data){
+				//console.log(ajax_from+' - '+ajax_to);
+				$('#application').html(data);
+			}
+		});
+	}, 15000);
+});
 </script>
 
 
@@ -47,11 +102,21 @@ setInterval(function() {
 			<div class="alert alert-info">{{ Session::get('message') }}</div>
 		@endif
 		
+		<input type="hidden" id="ajax_from" name="ajax_from" value="{{ $data['dateFrom'] }}">
+		<input type="hidden" id="ajax_to" name="ajax_to" value="{{ $data['dateTo'] }}">
+		<form method="GET" >
+			<div style="padding:10px 0 0 10px">
+				Поиск по дате c 
+				<input type="text" class="datepicker inputbox " id="dateFrom" readonly name="dateFrom" value="{{ $data['dateFrom'] }}" style="width: 100px;"> по:
+				<input type="text" class="datepicker inputbox " id="dateTo" readonly name="dateTo" value="{{ $data['dateTo'] }}"  style="width: 100px;">
+				<input type="submit" class="btn add" style="margin-left:12px;float: none;display: inline-block;" value="Поиск">
+			</div>
+		</form>
+		
 		<form id="form-admin" role="form" method="POST" >
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		
-		<div class="box-content">
-			
+		<div class="box-content">	
 			<section id="application" class="visible">
 				@include('admin.gallery.application')
 			</section>

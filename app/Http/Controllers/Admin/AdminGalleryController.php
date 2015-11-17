@@ -16,6 +16,7 @@ use App\Status;
 use App\Pay;
 use App\Like;
 use App\Comment;
+use Carbon\Carbon;
 
 
 class AdminGalleryController extends Controller {
@@ -25,12 +26,19 @@ class AdminGalleryController extends Controller {
 	*/
 	public function index(Gallery $galleryModel)
 	{
+		$nowDate = Carbon::now();
+		$dateFrom = $nowDate->format('Y-m-d');		
+		$dateTo = $nowDate->format('Y-m-d');
+		if (Request::has('dateFrom')){ $dateFrom = Carbon::parse(Request::input('dateFrom'))->format('Y-m-d');}
+		if (Request::has('dateTo')){ $dateTo = Carbon::parse(Request::input('dateTo'))->format('Y-m-d');}
 		
 		$data = array(
-			"galleryModeration" => $galleryModel->getGalleryModeration(),
-			"gallerySuccess" => $galleryModel->getGallerySuccess(),
-			"galleryCancel" => $galleryModel->getGalleryCancel(),
+			"galleryModeration" => $galleryModel->getGalleryModeration('asc', $dateFrom, $dateTo),
+			"gallerySuccess" => $galleryModel->getGallerySuccess('desc', $dateFrom, $dateTo),
+			"galleryCancel" => $galleryModel->getGalleryCancel('desc', $dateFrom, $dateTo),
 			"pathImages" => $galleryModel->pathImages,
+			"dateFrom" => $dateFrom,
+			"dateTo" => $dateTo,
 		);
 		return view('admin.gallery.index')->with('data', $data);
 	}
@@ -40,9 +48,17 @@ class AdminGalleryController extends Controller {
 	*/
 	public function application(Gallery $galleryModel)
 	{
+		$nowDate = Carbon::now();
+		$dateFrom = $nowDate->format('Y-m-d');		
+		$dateTo = $nowDate->addMonth(1)->format('Y-m-d');
+		if (Request::has('dateFrom')){ $dateFrom = Carbon::parse(Request::input('dateFrom'))->format('Y-m-d');}
+		if (Request::has('dateTo')){ $dateTo = Carbon::parse(Request::input('dateTo'))->format('Y-m-d');}
+		
 		$data = array(
-			"galleryModeration" => $galleryModel->getGalleryModeration(),
+			"galleryModeration" => $galleryModel->getGalleryModeration('asc', $dateFrom, $dateTo),
 			"pathImages" => $galleryModel->pathImages,
+			"dateFrom" => $dateFrom,
+			"dateTo" => $dateTo,
 		);
 		return view('admin.gallery.application')->with('data', $data);
 	}

@@ -1,6 +1,53 @@
 @extends('admin.app')
 
 @section('content')
+<link media="all" type="text/css" rel="stylesheet" href="/assets/admin/lib/jquery-ui-1.11.4.datepicker/jquery-ui.min.css">
+<script src="/assets/admin/lib/jquery-ui-1.11.4.datepicker/jquery-ui.min.js"></script>
+<script>
+$(function() {
+	$.datepicker.regional['ru'] = {
+		closeText: 'Закрыть',
+		prevText: '&#x3c;Пред',
+		nextText: 'След&#x3e;',
+		currentText: 'Сегодня',
+		monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+		'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+		monthNamesShort: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+		'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+		dayNames: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+		dayNamesShort: ['вск', 'пнд', 'втр', 'срд', 'чтв', 'птн', 'сбт'],
+		dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+		weekHeader: 'Нед',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''
+	};
+	$.datepicker.setDefaults($.datepicker.regional['ru']);
+
+
+	$("#dateFrom").datepicker({
+		dateFormat: "yy-mm-dd",
+		changeMonth: true,
+		changeYear: true,
+		firstDay:1,
+		onClose: function( selectedDate ) {
+			$("#dateTo").datepicker("option", "minDate", selectedDate);
+		}
+    });
+    $("#dateTo").datepicker({
+		dateFormat: "yy-mm-dd",
+		changeMonth: true,
+		changeYear: true,
+		firstDay:1,
+		onClose: function( selectedDate ) {
+			$("#dateFrom").datepicker("option", "maxDate", selectedDate);
+		}
+    });
+});
+</script>
+
 <div class="transactions">
 	<div class="header">
 		<div class="clear">
@@ -24,6 +71,16 @@
 		<div class="alert alert-info">{{ Session::get('message') }}</div>
 	@endif
 	
+	<form method="GET" >
+		<div style="padding:10px 0 0 10px">
+			Поиск по дате c 
+			<input type="text" class="datepicker inputbox " id="dateFrom" readonly name="dateFrom" value="{{ $data['dateFrom'] }}" style="width: 100px;"> по:
+			<input type="text" class="datepicker inputbox " id="dateTo" readonly name="dateTo" value="{{ $data['dateTo'] }}"  style="width: 100px;">
+			<input type="submit" class="btn add" style="margin-left:12px;float: none;display: inline-block;" value="Поиск">
+		</div>
+	</form>
+		
+		
 	@if(count($pay) > 0)
 		<form id="form-admin" role="form" method="POST" >
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">

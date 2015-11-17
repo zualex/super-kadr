@@ -11,6 +11,7 @@ use App\Pay;
 use Session;
 use Response;
 use Config;
+use Carbon\Carbon;
 
 class AdminPayController extends Controller {
 
@@ -21,10 +22,22 @@ class AdminPayController extends Controller {
 	 */
 	public function index(Pay $payModel, Gallery $galleryModel)
 	{
-		$pay = $payModel->getAll();
+		$nowDate = Carbon::now();
+		$dateFrom = $nowDate->format('Y-m-d');		
+		$dateTo = $nowDate->format('Y-m-d');
+		if (Request::has('dateFrom')){ $dateFrom = Carbon::parse(Request::input('dateFrom'))->format('Y-m-d');}
+		if (Request::has('dateTo')){ $dateTo = Carbon::parse(Request::input('dateTo'))->format('Y-m-d');}
+		$data = array(
+			"dateFrom" => $dateFrom,
+			"dateTo" => $dateTo,
+		);
+	
+		$pay = $payModel->getAll($dateFrom, $dateTo);
+		
 		return view('admin.pay.index')
 			->with('pay', $pay)
-			->with('pathImages', $galleryModel->pathImages);
+			->with('pathImages', $galleryModel->pathImages)
+			->with('data', $data);
 	}
 
 	/*

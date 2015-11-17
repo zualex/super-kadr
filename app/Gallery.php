@@ -19,6 +19,7 @@ use App\Tarif;
 use App\Like;
 use App\Pay;
 
+
 class Gallery extends Model {
 	
 	public $error;
@@ -248,9 +249,9 @@ class Gallery extends Model {
 	/*
 	* Список галереии со статусом на модерации
 	*/
-	public function getGalleryModeration($way = 'asc'){
+	public function getGalleryModeration($way = 'asc', $dateFrom = '', $dateTo = ''){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'moderation')->first();
-		$gallery =$this->queryAdminGallery($status_main->id, $way);
+		$gallery =$this->queryAdminGallery($status_main->id, $way, $dateFrom, $dateTo);
 
 		return $gallery;
 	}
@@ -258,9 +259,9 @@ class Gallery extends Model {
 	/*
 	* Список галереии со статусом на одобрено
 	*/
-	public function getGallerySuccess($way = 'desc'){
+	public function getGallerySuccess($way = 'desc', $dateFrom = '', $dateTo = ''){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
-		$gallery =$this->queryAdminGallery($status_main->id, $way);
+		$gallery =$this->queryAdminGallery($status_main->id, $way, $dateFrom, $dateTo);
 
 		return $gallery;
 	}	
@@ -268,15 +269,20 @@ class Gallery extends Model {
 	/*
 	* Список галереии со статусом на отменено
 	*/
-	public function getGalleryCancel($way = 'desc'){
+	public function getGalleryCancel($way = 'desc', $dateFrom = '', $dateTo = ''){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'cancel')->first();
-		$gallery =$this->queryAdminGallery($status_main->id, $way);
+		$gallery =$this->queryAdminGallery($status_main->id, $way, $dateFrom, $dateTo);
 
 		return $gallery;
 	}
 	
-	public function queryAdminGallery($status, $way = 'desc'){
+	public function queryAdminGallery($status, $way = 'desc', $dateFrom = '', $dateTo = ''){
 		$status_pay = Status::where('type_status', '=', 'pay')->where('caption', '=', 'paid')->first();
+		
+		$nowDate = Carbon::now();
+		if($dateFrom == ''){$dateFrom = $nowDate->format('Y-m-d');}
+		if($dateTo == ''){$dateTo = $nowDate->format('Y-m-d');}
+		$dateTo = Carbon::parse($dateTo)->addDay(1);
 		
 		$gallery =$this
 				->select(DB::raw('galleries.*, pays.id as pay_id, pays.price, tarifs.name as tarif_name, tarifs.hours, tarifs.interval_sec, statuses.name as status_name, statuses.caption as status_caption, users.name as user_name, users.provider'))
@@ -286,6 +292,8 @@ class Gallery extends Model {
 				->join('tarifs', 'tarifs.id', '=', 'galleries.tarif_id')
 				->where('galleries.status_main', '=', $status)
 				->where('pays.status_pay', '=', $status_pay->id)
+				->where('galleries.date_show', '>=', $dateFrom)
+				->where('galleries.date_show', '<=', $dateTo)
 				->orderBy('galleries.date_show', $way)
 				->get();
 		return $gallery;
