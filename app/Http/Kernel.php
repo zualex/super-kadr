@@ -30,6 +30,7 @@ class Kernel extends HttpKernel {
 		'checkAdmin' => 'App\Http\Middleware\checkAdmin',
 		'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
 		'guest' => 'App\Http\Middleware\RedirectIfAuthenticated',
+		'block.user.ip' => 'App\Http\Middleware\BlockUserIp',
 	];
 
 }

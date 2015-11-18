@@ -12,7 +12,7 @@
 		<div>
 			<div class="logo"><span><b>Авторизация</b>на сайте</span></div>
 			
-			@if (count($errors) > 0)
+			@if (count($errors) > 0)			
 				<div class="alert alert-danger">
 					Произошла ошибка<br><br>
 					<ul>
