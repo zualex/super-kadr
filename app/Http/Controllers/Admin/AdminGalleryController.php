@@ -72,7 +72,7 @@ class AdminGalleryController extends Controller {
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 		$this->changeStatus($id, $status_main->id);
 		Session::flash('message', 'Заказ одобрен');
-		return redirect()->route('admin.gallery.index');
+		return redirect()->back();
 	}
 	
 	/*
@@ -83,7 +83,7 @@ class AdminGalleryController extends Controller {
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'cancel')->first();
 		$this->changeStatus($id, $status_main->id);
 		Session::flash('message', 'Заказ отклонен');
-		return redirect()->route('admin.gallery.index');
+		return redirect()->back();
 	}
 	
 	/*
@@ -94,6 +94,32 @@ class AdminGalleryController extends Controller {
         $gallery = Gallery::find($id);
 		$gallery->status_main = $status_id;
 		$gallery->save();
+		
+		
+		/* При выставление статуса успешно или отмена устанавливаем значение конца модерации */
+		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
+		$status_main2 = Status::where('type_status', '=', 'main')->where('caption', '=', 'cancel')->first();
+		if($status_main->id == $status_id || $status_main2->id == $status_id){
+			if(count($gallery) > 0){
+				if($gallery->end_moderation != '0000-00-00 00:00:00'){			//Если дата конца не 0 то ее делаем датой начала а дата конца перезаписываем
+					$gallery->start_moderation = $gallery->end_moderation;
+				}
+				$gallery->end_moderation = Carbon::now();
+				$gallery->save();
+			}
+		}
+		
+		
+		/* При выставление статуса на модерацию устанавливаем значение начала модерации */
+		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'moderation')->first();
+		if($status_main->id == $status_id){
+			if(count($gallery) > 0){
+				$gallery->start_moderation = Carbon::now();
+				$gallery->end_moderation = '0000-00-00 00:00:00';
+				$gallery->save();
+			}
+		}
+		
 		return $gallery;
 	}
 	
@@ -129,7 +155,7 @@ class AdminGalleryController extends Controller {
 		$gallery->delete();
 		 
 		Session::flash('message', 'Заказ удален');
-		return redirect()->route('admin.gallery.index');
+		return redirect()->back();
 	}
 	
 	/*

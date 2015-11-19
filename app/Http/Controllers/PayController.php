@@ -144,6 +144,15 @@ class PayController extends Controller {
 		$pay->status_pay = $status_pay->id;
 		$pay->save();
 		
+		/* При выставление статуса оплачено устанавливаем значение начала модерации */
+		$gallery = Gallery::find($pay->gallery_id);
+		if(count($gallery) > 0){
+			if($gallery->start_moderation == '0000-00-00 00:00:00'){
+				$gallery->start_moderation = Carbon::now();
+				$gallery->save();
+			}
+		}
+		
 		
 		
 		$f=@fopen(base_path()."/public/pay/order.txt","a+") or

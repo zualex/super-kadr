@@ -133,6 +133,7 @@ $(function() {
 								<th>Описание</th>
 								<th class="col-4">Заказ</th>
 								<th class="col-4">Тариф</th>
+								<th class="col-4">Время на модерации</th>
 								<th class="col-5">Статус</th>
 								<th class="center col-btn"><i class="fa fa-th-list"></i></th>
 							</tr>
@@ -159,6 +160,12 @@ $(function() {
 								<td>Изображение будет показано {{ $value->count_show }} раз в течение {{ $value->hours }} часа<br>Начало показа {{ $value->date_show }}</td>
 								<td class="col-4">AA{{ $value->pay_id }}</td>
 								<td class="col-4">{{ $value->tarif_name }}</td>
+								<td class="col-4">
+									{{ 
+										Carbon\Carbon::parse($value->end_moderation)
+										->diffInMinutes(Carbon\Carbon::parse($value->start_moderation))
+									}} мин
+								</td>
 								<td class="col-5">
 				
 									@if($value->count_show == $value->hours*60*60/$value->interval_sec)
@@ -201,6 +208,7 @@ $(function() {
 								<th>Описание</th>
 								<th class="col-4">Заказ</th>
 								<th class="col-4">Тариф</th>
+								<th class="col-4">Время на модерации</th>
 								<th class="col-5">Статус</th>
 								<th class="center col-btn"><i class="fa fa-th-list"></i></th>
 							</tr>
@@ -227,6 +235,12 @@ $(function() {
 								<td>Изображение будет показано {{ $value->hours*60*60/$value->interval_sec }} раз в течение {{ $value->hours }} часа<br>Начало показа {{ $value->date_show }}</td>
 								<td class="col-4">AA{{ $value->pay_id }}</td>
 								<td class="col-4">{{ $value->tarif_name }}</td>
+								<td class="col-4">
+									{{ 
+										Carbon\Carbon::parse($value->end_moderation)
+										->diffInMinutes(Carbon\Carbon::parse($value->start_moderation))
+									}} мин
+								</td>
 								<td class="col-5">
 									<span class="status cancel"><i class="fa pull-left fa-ban"></i>Отменено</span>
 								</td>

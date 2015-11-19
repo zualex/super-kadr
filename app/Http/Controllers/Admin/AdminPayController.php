@@ -22,6 +22,7 @@ class AdminPayController extends Controller {
 	 */
 	public function index(Pay $payModel, Gallery $galleryModel)
 	{
+	
 		$nowDate = Carbon::now();
 		$dateFrom = $nowDate->format('Y-m-d');		
 		$dateTo = $nowDate->format('Y-m-d');
@@ -44,10 +45,23 @@ class AdminPayController extends Controller {
 	* Изменение статуса для одной записи
 	*/
 	public function changeStatus($id, $status_id)
-	{
+	{	
         $pay = Pay::find($id);
 		$pay->status_pay = $status_id;
 		$pay->save();
+		
+		/* При выставление статуса оплачено устанавливаем значение начала модерации */
+		$status_paid= Status::where('type_status', '=', 'pay')->where('caption', '=', 'paid')->first();
+		if($status_paid->id == $status_id){
+			$gallery = Gallery::find($pay->gallery_id);
+			if(count($gallery) > 0){
+				if($gallery->start_moderation == '0000-00-00 00:00:00'){
+					$gallery->start_moderation = Carbon::now();
+					$gallery->save();
+				}
+			}
+		}
+		
 		return $pay;
 	}
 	
