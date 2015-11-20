@@ -1,6 +1,6 @@
 Потраченное время: 86 часа (00:00) 1 сентября - 28 сентября (20000)
 Потраченное время: 13 часа (00:00) 1 октября - 10 октября (5000)
-Потраченное время: 8.5 часа (00:00) 1 ноября -  (17000)
+Потраченное время: 10 часа (00:00) 1 ноября -  (17000)
 ----------------------------------------------------------------------------------------------------------
 
 ТЗ
@@ -17,7 +17,7 @@
 + На странице "транзакции" показывать транзакции на текущую дату, так же возможность указать дату или диапазон дат
 + на кнопку ОПЛАЧЕНО установить доп.пароль (он один для всех) отличный от собственного пароля
 + На странице заказы время поступления на модерацию и время модерации.
-- Из админки возможность добавлять лайки фотографии
++ Из админки возможность добавлять лайки фотографии
 + АДМИН ВВОДИТ 5 РАЗ ПАРОЛЬ НЕ ПРАВИЛЬНО , ВХОД В АДМИНКУ –БЛОКИРУЕТСЯ ДЛЯ ДАННОГО ПОЛЬЗОВАТЕЛЯ НА 15 МИНУТ
 - Галерея конкурсо
 - Перед действием оплата - необходима табличка с информацией по заказу со следующей информацией: вы выбрали экран тариф дата время показа.
@@ -44,19 +44,25 @@ app/Http/Controllers/Auth/AuthController.php
 app/Http/Controllers/Admin/AdminGalleryController.php
 app/Http/Controllers/Admin/AdminPayController.php
 app/Http/Controllers/PayController.php
+app/Http/Controllers/GalleryController.php
 app/Http/routes.php
 app/Http/Kernel.php
 app/Http/Middleware/BlockUserIp.php
 app/UserIp.php
 app/Gallery.php
 app/Pay.php
+app/LikeAdmin.php
 resources/views/admin/gallery/application.blade.php
 resources/views/admin/gallery/index.blade.php
 resources/views/admin/pay/index.blade.php
 resources/views/auth/login.blade.php
+resources/views/pages/gallery/index.blade.php
+resources/views/pages/gallery/show.blade.php
 public/assets/admin/lib/jquery-ui-1.11.4.datepicker/*
+public/assets/admin/js/script.js
 database/migrations/2015_11_18_190207_user_ip.php
 database/migrations/2015_11_19_185350_add_field_gallery.php
+database/migrations/2015_11_20_192209_create_like_admins_table.php
 
 ----------------------------------------------------------------------------------------------------------
 
