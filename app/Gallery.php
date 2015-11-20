@@ -43,6 +43,11 @@ class Gallery extends Model {
         return $this->hasMany('App\Like');
     }
 	
+	public function like_admins()
+    {
+        return $this->hasOne('App\LikeAdmin');
+    }
+	
 	public function comments()
     {
         return $this->hasMany('App\Comment');
@@ -56,9 +61,12 @@ class Gallery extends Model {
 	public function galleryAll(){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 		
+		//(COUNT(likes.id)+SUM(like_admins.count)) AS like_count
+		//COUNT(likes.id) AS like_count
 		$galleries =$this
-				->select(DB::raw('galleries.*, COUNT(likes.id) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
+				->select(DB::raw('galleries.*, (COUNT(likes.id)+SUM(like_admins.count)) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
 				->leftJoin('likes', 'galleries.id', '=', 'likes.gallery_id')
+				->leftJoin('like_admins', 'galleries.id', '=', 'like_admins.gallery_id')
 				->where('status_main', '=', $status_main->id)
 				->groupBy('galleries.id')
 				->orderBy('like_count', 'desc')
@@ -93,7 +101,7 @@ class Gallery extends Model {
 			$galleryTop = DB::select('
 				SELECT 
 					g.*,  
-					(SELECT COUNT(likes.id) FROM likes WHERE likes.gallery_id = g.id) as like_count,  
+					((SELECT COUNT(likes.id) FROM likes WHERE likes.gallery_id = g.id)+(SELECT like_admins.count FROM like_admins WHERE like_admins.gallery_id = g.id)) as like_count,  
 					(SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = g.id) as comment_count
 				FROM galleries as g
 				LEFT JOIN likes as l ON l.gallery_id = g.id
@@ -116,9 +124,10 @@ class Gallery extends Model {
 			if(count($galleryTop) < $this->limitMain){
 				$limit = $this->limitMain - count($galleryTop);
 				$galleryDop = DB::select('
-					SELECT g.*,  COUNT(l.id) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = g.id) as comment_count
+					SELECT g.*,  (COUNT(l.id)+SUM(l_a.count)) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = g.id) as comment_count
 					FROM galleries as g
 					LEFT JOIN likes as l ON l.gallery_id = g.id
+					LEFT JOIN like_admins as l_a ON l_a.gallery_id = g.id
 					WHERE 
 						status_main = ?
 						AND g.id NOT IN ('.implode(",", $arrIdGallery).')
@@ -154,14 +163,15 @@ class Gallery extends Model {
 			$gallery =$this
 				->where('id', '=', $id)
 				->with('likes')
+				->with('like_admins')
 				->with('comments')
 				->first();
 			$gallery->pathImages = $this->pathImages;
 		}
-		
+		//dd($gallery);
 		return $gallery;
 	}
-			
+
 	
 
 	
@@ -285,8 +295,10 @@ class Gallery extends Model {
 		$dateTo = Carbon::parse($dateTo)->addDay(1);
 		
 		$gallery =$this
-				->select(DB::raw('galleries.*, pays.id as pay_id, pays.price, tarifs.name as tarif_name, tarifs.hours, tarifs.interval_sec, statuses.name as status_name, statuses.caption as status_caption, users.name as user_name, users.provider'))
+				->select(DB::raw('galleries.*, COUNT(likes.id) as like_count, like_admins.count AS like_admins_count, pays.id as pay_id, pays.price, tarifs.name as tarif_name, tarifs.hours, tarifs.interval_sec, statuses.name as status_name, statuses.caption as status_caption, users.name as user_name, users.provider'))
 				->join('statuses', 'statuses.id', '=', 'galleries.status_order')
+				->leftJoin('likes', 'galleries.id', '=', 'likes.gallery_id')
+				->leftJoin('like_admins', 'galleries.id', '=', 'like_admins.gallery_id')
 				->leftJoin('pays', 'pays.gallery_id', '=', 'galleries.id')
 				->leftJoin('users', 'users.id', '=', 'galleries.user_id')
 				->join('tarifs', 'tarifs.id', '=', 'galleries.tarif_id')
@@ -294,9 +306,11 @@ class Gallery extends Model {
 				->where('pays.status_pay', '=', $status_pay->id)
 				->where('galleries.date_show', '>=', $dateFrom)
 				->where('galleries.date_show', '<=', $dateTo)
+				->groupBy('galleries.id')
 				->orderBy('galleries.date_show', $way)
 				->get();
 		return $gallery;
 	}
 
 }
+

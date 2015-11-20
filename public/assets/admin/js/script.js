@@ -79,3 +79,28 @@ function saveFieldCheckbox(el, url){
 	});
 	
 }
+
+
+
+/* В заказах при изменении кол-ва лайков сохранение*/
+function saveNewLikes(el, url){
+	var value = 0;
+	value = $(el).val();
+	$.ajax({
+		url: url, 
+		dataType: "html",
+		type: 'POST',
+		data: {
+			'value' : value
+		},
+		success: function(data){
+			var data = $.parseJSON(data);
+			if(data.status == 'error'){alert(data.message);}
+			if(data.status == 'success'){alert(data.message);}
+		},
+		error: function(){
+			alert('Произошла ошибка');
+		}
+	});
+	
+}

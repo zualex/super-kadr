@@ -15,6 +15,7 @@ use App\Gallery;
 use App\Status;
 use App\Pay;
 use App\Like;
+use App\LikeAdmin;
 use App\Comment;
 use Carbon\Carbon;
 
@@ -26,6 +27,7 @@ class AdminGalleryController extends Controller {
 	*/
 	public function index(Gallery $galleryModel)
 	{
+			
 		$nowDate = Carbon::now();
 		$dateFrom = $nowDate->format('Y-m-d');		
 		$dateTo = $nowDate->format('Y-m-d');
@@ -40,8 +42,41 @@ class AdminGalleryController extends Controller {
 			"dateFrom" => $dateFrom,
 			"dateTo" => $dateTo,
 		);
+		//dd($data);
 		return view('admin.gallery.index')->with('data', $data);
 	}
+	
+	
+	
+	/*
+	* Сохранение лайков
+	*/
+	public function like($id){
+		$likeAdmin = LikeAdmin::where('gallery_id', '=', $id)->first();
+		$count = Request::input('value');
+		if(count($likeAdmin) == 0){
+			$likeAdmin = new LikeAdmin;
+			$likeAdmin->gallery_id = $id;
+		}
+		
+		if(count($likeAdmin) > 0){
+			$likeAdmin->count = $count;
+			$likeAdmin->save();
+		
+			$res = array(
+				"status" => 'success',
+				"message" => 'Изменения сохранены'
+			);
+		}else{
+			$res = array(
+				"status" => 'error',
+				"message" => 'Произошла ошибка. Изменения не сохранены'
+			);
+		}
+		
+		return Response::json($res);
+	}
+	
 	
 	/*
 	* Вывод только заявок

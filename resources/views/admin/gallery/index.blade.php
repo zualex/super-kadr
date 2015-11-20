@@ -134,6 +134,7 @@ $(function() {
 								<th class="col-4">Заказ</th>
 								<th class="col-4">Тариф</th>
 								<th class="col-4">Время на модерации</th>
+								<th class="col-4">Кол-во лайков</th>
 								<th class="col-5">Статус</th>
 								<th class="center col-btn"><i class="fa fa-th-list"></i></th>
 							</tr>
@@ -165,6 +166,16 @@ $(function() {
 										Carbon\Carbon::parse($value->end_moderation)
 										->diffInMinutes(Carbon\Carbon::parse($value->start_moderation))
 									}} мин
+								</td>
+								<td class="col-4">
+									Пользователи: {{ $value->like_count }}<br>								
+									Накрутка: <input 
+										type="text" 
+										class="inputbox" 
+										style="width:60px" 
+										name="like_admins[]" 
+										value="{{ $value->like_admins_count }}" 
+										onchange="saveNewLikes(this, '{{ route('admin.gallery.like', $value->id) }}')" >									
 								</td>
 								<td class="col-5">
 				
@@ -232,7 +243,7 @@ $(function() {
 										<img class="order-image" src="{{ $data['pathImages'].'/s_'.$value->src }}" alt="">
 									</a>
 								</td>
-								<td>Изображение будет показано {{ $value->hours*60*60/$value->interval_sec }} раз в течение {{ $value->hours }} часа<br>Начало показа {{ $value->date_show }}</td>
+								<td>Изображение будет показано {{ $value->hours*60*60 / $value->interval_sec }} раз в течение {{ $value->hours }} часа<br>Начало показа {{ $value->date_show }}</td>
 								<td class="col-4">AA{{ $value->pay_id }}</td>
 								<td class="col-4">{{ $value->tarif_name }}</td>
 								<td class="col-4">

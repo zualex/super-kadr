@@ -24,6 +24,8 @@ class GalleryController extends Controller {
 	
 	public function index(Gallery $galleryModel)
 	{	
+	
+		
 		$data = array(
 			'gallery' => $galleryModel->galleryAll(),
 			'pathImages' => $galleryModel->pathImages,

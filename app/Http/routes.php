@@ -66,6 +66,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::get('/gallery/success/{id}', ['as' => 'admin.gallery.success', 'uses' => 'Admin\AdminGalleryController@success']);
 	Route::get('/gallery/cancel/{id}', ['as' => 'admin.gallery.cancel', 'uses' => 'Admin\AdminGalleryController@cancel']);
 	Route::get('/gallery/delete/{id}', ['as' => 'admin.gallery.delete', 'uses' => 'Admin\AdminGalleryController@delete']);
+	Route::post('/gallery/like/{id}', ['as' => 'admin.gallery.like', 'uses' => 'Admin\AdminGalleryController@like']);
 	
 	Route::post('/gallery/success/all/', ['as' => 'admin.gallery.success_all', 'uses' => 'Admin\AdminGalleryController@successAll']);
 	Route::post('/gallery/moderation/all/', ['as' => 'admin.gallery.moderation_all', 'uses' => 'Admin\AdminGalleryController@moderationAll']);

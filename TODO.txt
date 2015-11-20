@@ -36,6 +36,8 @@
 3) К таблице galleries нужно добавить два поля 'start_moderation' и 'end_moderation'
 тип полей: datetime
 
+3)  Нужно добавить таблицу like_admins.
+
 
 Файлы:
 app/Http/Controllers/Auth/AuthController.php
