@@ -60,6 +60,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::post('/change_password/save', ['as' => 'change_password.save', 'uses' => 'Admin\AdminUserController@change_password_save']);
 	
 	
+	
 	/* Заказы */
 	Route::get('/gallery/', ['as' => 'admin.gallery.index', 'uses' => 'Admin\AdminGalleryController@index']);
 	Route::get('/gallery/application', ['as' => 'admin.gallery.application', 'uses' => 'Admin\AdminGalleryController@application']);
@@ -71,6 +72,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	Route::post('/gallery/success/all/', ['as' => 'admin.gallery.success_all', 'uses' => 'Admin\AdminGalleryController@successAll']);
 	Route::post('/gallery/moderation/all/', ['as' => 'admin.gallery.moderation_all', 'uses' => 'Admin\AdminGalleryController@moderationAll']);
 	Route::post('/gallery/delete/all/', ['as' => 'admin.gallery.delete_all', 'uses' => 'Admin\AdminGalleryController@deleteAll']);
+	
+	
+	/* Конкурс */
+	Route::get('/competition/', ['as' => 'admin.competition.index', 'uses' => 'Admin\AdminCompetition@index']);
+	
+	Route::post('/competition/save/', ['as' => 'admin.competition.save', 'uses' => 'Admin\AdminCompetition@save']);
+	Route::post('/competition/save_extra/', ['as' => 'admin.competition.save_extra', 'uses' => 'Admin\AdminCompetition@saveExtra']);
 	
 	
 	/* Транзакции */

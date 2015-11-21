@@ -61,6 +61,7 @@
 	<div id="menu" class="menu-panel">
 		<ul>
 			<li class="{{ Route::is('admin.gallery.index') ? 'active' : '' }}"><a href="{{ route('admin.gallery.index') }}"><i class="fa pull-left fa-credit-card"></i>Заказы</a></li>
+			<li class="{{ Route::is('admin.competition.index') ? 'active' : '' }}"><a href="{{ route('admin.competition.index') }}"><i class="fa pull-left fa-credit-card"></i>Статистика</a></li>
 			@if (Auth::user()->level == 'admin')
 				<li class="{{ Route::is('admin.pay.index') ? 'active' : '' }}"><a href="{{ route('admin.pay.index') }}"><i class="fa pull-left fa-exchange"></i>Транзакции</a></li>
 			@endif
