@@ -1,6 +1,6 @@
 Потраченное время: 86 часа (00:00) 1 сентября - 28 сентября (20000)
 Потраченное время: 13 часа (00:00) 1 октября - 10 октября (5000)
-Потраченное время: 10 часа (13:00) 1 ноября -  (17000)
+Потраченное время: 12 часа (00:00) 1 ноября -  (17000)
 ----------------------------------------------------------------------------------------------------------
 
 ТЗ
@@ -45,6 +45,7 @@
 app/Http/Controllers/Auth/AuthController.php
 app/Http/Controllers/Admin/AdminGalleryController.php
 app/Http/Controllers/Admin/AdminPayController.php
+app/Http/Controllers/Admin/AdminCompetition.php
 app/Http/Controllers/PayController.php
 app/Http/Controllers/GalleryController.php
 app/Http/routes.php
@@ -54,6 +55,9 @@ app/UserIp.php
 app/Gallery.php
 app/Pay.php
 app/LikeAdmin.php
+app/Competition.php
+resources/views/admin/app.blade.php
+resources/views/admin/competition/index.blade.php
 resources/views/admin/gallery/application.blade.php
 resources/views/admin/gallery/index.blade.php
 resources/views/admin/pay/index.blade.php
@@ -65,6 +69,7 @@ public/assets/admin/js/script.js
 database/migrations/2015_11_18_190207_user_ip.php
 database/migrations/2015_11_19_185350_add_field_gallery.php
 database/migrations/2015_11_20_192209_create_like_admins_table.php
+database/migrations/2015_11_21_135320_create_competitions_table.php
 
 ----------------------------------------------------------------------------------------------------------
 
