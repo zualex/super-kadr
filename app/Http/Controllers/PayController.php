@@ -187,7 +187,7 @@ class PayController extends Controller {
 	}
 	
 	
-	public function success()
+	public function success(Gallery $galleryModel)
 	{
 	
 		//Если не авторизован то авторизуемся как анонимы
@@ -202,30 +202,46 @@ class PayController extends Controller {
 			Auth::loginUsingId($user->id);
 		}
 		
-		
-		$setting = new Setting;
-		
-		$mrh_pass1 = $setting->getPaymentPassword1();
-		$out_summ = $_REQUEST["OutSum"];
-		$inv_id = $_REQUEST["InvId"];
-		$Shp_user = $_REQUEST["Shp_user"];
-		$crc = $_REQUEST["SignatureValue"];
-		$crc = strtoupper($crc);
-		$my_crc = strtoupper(md5("$out_summ:$inv_id:$mrh_pass1:Shp_user=$Shp_user"));
-		
-		if ($my_crc != $crc){
-			return "bad sign\n";
-			exit();
+		$head_name = '';
+		if(isset($_REQUEST["OutSum"])){
+			$setting = new Setting;
+			
+			$mrh_pass1 = $setting->getPaymentPassword1();
+			$out_summ = $_REQUEST["OutSum"];
+			$inv_id = $_REQUEST["InvId"];
+			$Shp_user = $_REQUEST["Shp_user"];
+			$crc = $_REQUEST["SignatureValue"];
+			$crc = strtoupper($crc);
+			$my_crc = strtoupper(md5("$out_summ:$inv_id:$mrh_pass1:Shp_user=$Shp_user"));
+			
+			if ($my_crc != $crc){
+				return "bad sign\n";
+				exit();
+			}
+			
+			$head_name = 'Проведение платежа';
 		}
+
+		if(isset($_REQUEST["InvId"])){
+			$pay = Pay::find($_REQUEST["InvId"]);
+			if(count($pay) > 0){
+				$gallery = Gallery::find($pay->gallery_id);
+			}
+		}
+		//dd($gallery);
 		
-		$result = "Операция прошла успешно";
+		
+		
 				
 		//Выход из системы для анонимных пользователей
 		if(Auth::user()->email == 'anonymous@anonymous.ru'){
 			Auth::logout();
 		}
 		
-		return view('pages.pay.success')->with('result', $result);
+		return view('pages.pay.success')
+			->with('gallery', $gallery)
+			->with('pathImages', $galleryModel->pathImages)
+			->with('head_name', $head_name);
 	}
 	
 	

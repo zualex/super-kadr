@@ -14,7 +14,11 @@
 					<div class="likes" onclick="likeGallery(this, {{ $gallery->id }}, '{{ route('gallery.like') }}')">
 						<i class="fa pull-left fa-heart"></i>
 						<span>
+							@if($gallery->like_admins)
 								{{ count($gallery->likes) - $gallery->like_admins->count }}
+							@else
+								{{ count($gallery->likes) }}
+							@endif
 						</span>
 					</div>
 					<div class="comments"><i class="fa pull-left fa-comment"></i><span>{{ count($gallery->comments) }}</span></div>
