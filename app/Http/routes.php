@@ -12,9 +12,11 @@
 /*
 * Pages
 */
-Route::get('/', ['as' => 'main', 'uses' => 'HomeController@index']);									//Главная страница
-Route::get('/gallery', ['as' => 'gallery', 'uses' => 'GalleryController@index']);					//Страница галереи
-Route::get('/gallery/{id}', ['as' => 'gallery.show', 'uses' => 'GalleryController@show']);	//Детальная страница галереи
+Route::get('/', ['as' => 'main', 'uses' => 'HomeController@index']);														//Главная страница
+Route::get('/gallery', ['as' => 'gallery', 'uses' => 'GalleryController@index']);										//Страница галереи
+Route::get('/gallery/{id}', ['as' => 'gallery.show', 'uses' => 'GalleryController@show']);						//Детальная страница галереи
+Route::get('/competition', ['as' => 'competition', 'uses' => 'CompetitionController@index']);					//страница галереи конкурсов
+Route::get('/competition/{id}', ['as' => 'competition.show', 'uses' => 'CompetitionController@show']);	//страница пользователя и его галереи
 Route::get('/conditions', ['as' => 'conditions', function(){ return view('pages.conditions.index'); }]);	//Страница Услуги
 Route::get('/contacts', ['as' => 'contacts', function(){ return view('pages.contacts.index'); }]);			//Страница Контакты
 Route::get('/dev', ['as' => 'dev', function(){ return view('dev'); }]);	//Станица при отключении сайта

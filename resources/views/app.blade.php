@@ -70,6 +70,7 @@ $(function(){
 				
 					<li class="{{ Route::is('main') ? 'active' : '' }}"><a href="{{ route('main') }}">главная</a></li>
 					<li class="{{ Route::is('gallery') ? 'active' : '' }} {{ Route::is('gallery.show') ? 'active' : '' }}"><a href="{{ route('gallery') }}">галерея</a></li>
+					<li class="{{ Route::is('competition') ? 'active' : '' }}"><a href="{{ route('competition') }}">галерея конкурса</a></li>
 					<li class="{{ Route::is('conditions') ? 'active' : '' }}"><a href="{{ route('conditions') }}">условия</a></li>
 					<li class="{{ Route::is('contacts') ? 'active' : '' }}"><a href="{{ route('contacts') }}">контакты</a></li>
 				</ul>

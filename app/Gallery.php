@@ -329,6 +329,7 @@ class Gallery extends Model {
 	*			'user_id' => $user_id,							//id пользователя
 	*			'name' => $value->user->name,			//Имя пользователя
 	*			'provider' => $value->user->provider,	//Социальная сеть
+	*			'avatar' => $value->user->avatar,			//аватарка
 	*			'item' => array(),									//галерея
 	*			'all_like' => 0,										//Кол-во всех лайков
 	*			'max_like' => 0,									//Мак кол-во лайков за одну фото
@@ -352,6 +353,7 @@ class Gallery extends Model {
 				->with('user')
 				->with('likes')
 				->with('like_admins')
+				->with('comments')
 				->where('status_main', '=', $status_main->id)
 				->where('date_show', '>=', $start_select)
 				->where('date_show', '<=', $end_select)
@@ -370,6 +372,7 @@ class Gallery extends Model {
 								'user_id' => $user_id,
 								'name' => $value->user->name,
 								'provider' => $value->user->provider,
+								'avatar' => $value->user->avatar,
 								'item' => array(),
 								'all_like' => 0,
 								'max_like' => 0,
@@ -384,6 +387,7 @@ class Gallery extends Model {
 						$like = $like+$like_admin;
 						
 						$value->like_count = $like;
+						$value->comment_count = count($value->comments);
 						
 						$res[$user_id]['item'][] = $value;
 						$res[$user_id]['all_like'] += $like;
@@ -423,6 +427,69 @@ class Gallery extends Model {
 		return $res;
 	}
 	
+	
+
+	/*
+	*	Получение ТОП 10 фото
+	*/
+	public function getTop($arrRes, $limit){
+		$res = array();
+		
+		$count = 0;
+		foreach($arrRes as $key => $value){
+			foreach($value['item'] as $item){
+				$count++;
+				if($count <= $limit){
+					$res[] = $item;
+				}
+			}
+		}
+		$res = $this->array_orderby($res, 'like_count', SORT_DESC);
+
+		return $res;
+	}
+	
+	
+	
+	/*
+	*	Получение ТОП авторов
+	*/
+	public function getAutor($arrRes){
+		$res = array();
+		
+		$count = 0;
+		foreach($arrRes as $key => $value){
+			$count++;
+			$res[] = array(
+				'user_id' => $value['user_id'],
+				'name' => $value['name'],
+				'provider' => $value['provider'],
+				'avatar' => $value['avatar'],
+				'count' => $value['count'],
+			);
+		}
+
+		return $res;
+	}	
+	
+	
+	
+	/*
+	*	Получение галереи пользователя
+	*/
+	public function getAutorGallery($arrRes, $user_id){
+		$res = array();
+		
+		foreach($arrRes as $key => $value){
+			if($user_id == $value['user_id']){
+				foreach($value['item'] as $item){
+					$res[] = $item;
+				}
+			}
+		}
+		$res = $this->array_orderby($res, 'like_count', SORT_DESC);
+		return $res;
+	}
 	
 	
 	/*
