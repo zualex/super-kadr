@@ -26,16 +26,17 @@ $(function() {
 	};
 	$.datepicker.setDefaults($.datepicker.regional['ru']);
 
-
-	$("#date_start").datepicker({
-		dateFormat: "yy-mm-dd",
-		changeMonth: true,
-		changeYear: true,
-		firstDay:1,
-		onClose: function( selectedDate ) {
-			$("#date_end").datepicker("option", "minDate", selectedDate);
-		}
-    });
+	@if($data['edit'] == 1)
+		$("#date_start").datepicker({
+			dateFormat: "yy-mm-dd",
+			changeMonth: true,
+			changeYear: true,
+			firstDay:1,
+			onClose: function( selectedDate ) {
+				$("#date_end").datepicker("option", "minDate", selectedDate);
+			}
+		});
+	@endif
     $("#date_end").datepicker({
 		dateFormat: "yy-mm-dd",
 		changeMonth: true,
@@ -99,14 +100,30 @@ $(function() {
 						<div class="inline-block">
 							<div class="line-title"><span>Конкурс:</span></div>
 							<div class="line-value">
-									<input class="inputbox" type="text" name="name" value="{{ $data['name'] }}" placeholder="Название конкурса">
+									<input 
+										class="inputbox" 
+										type="text" 
+										name="name" 
+										value="{{ $data['name'] }}" 
+										placeholder="Название конкурса"
+										@if($data['edit'] == 0)
+											readonly
+										@endif
+									>
 							</div>
 						</div>
 						
 						<div class="inline-block">
 							<div class="line-title"><span>Условия конкурса:</span></div>
 							<div class="line-value">
-								<textarea class="inputbox" name="text" style="width:300px;height:150px;">{{ $data['text'] }}</textarea>
+								<textarea 
+									class="inputbox" 
+									name="text" 
+									style="width:300px;height:150px;"
+									@if($data['edit'] == 0)
+										readonly
+									@endif
+								>{{ $data['text'] }}</textarea>
 							</div>
 						</div>
 					</div>
@@ -115,7 +132,17 @@ $(function() {
 						<div class="inline-block">
 							<div class="line-title"><span>Начало конкурса:</span></div>
 							<div class="line-value">
-									<input class="inputbox" type="text" name="date_start" id="date_start" value="{{ $data['date_start'] }}" placeholder="Начало конкурса">
+									<input 
+										class="inputbox" 
+										type="text" 
+										name="date_start" 
+										id="date_start" 
+										value="{{ $data['date_start'] }}" 
+										placeholder="Начало конкурса"
+										@if($data['edit'] == 0)
+											readonly
+										@endif
+									>
 							</div>
 						</div>
 						
@@ -140,9 +167,17 @@ $(function() {
 				<div style="clear:both"></div>
 				
 				<hr>
-					<h2>Текущий конкрус: {{ $data['name'] }} (c {{ $data['date_start'] }} по {{ $data['date_end'] }})</h2>
+					<h2>Текущий конкрус: 
+						{{ $data['name'] }} 
+							(c 
+								{{ $data['date_start'] }} 
+								@if($data['date_start'] != $data['date_end'])
+									по {{ $data['date_end'] }} 
+								@endif
+							)
+					</h2>
 				<hr>
-				<h3>Выбор запроса</h2>
+				<h3>Выбор запроса {{ $data['edit'] }}</h2>
 				
 				@if (Session::has('message2'))
 					<br>

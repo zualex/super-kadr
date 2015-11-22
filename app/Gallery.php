@@ -343,13 +343,18 @@ class Gallery extends Model {
 		$competition = Competition::first();
 		if(count($competition) > 0 ){
 			$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
+			$start_select = '0000-00-00 00:00:00';
+			$end_select = '9999-12-30 23:59:59';
+			if($competition->start_select){$start_select = $competition->start_select;}
+			if($competition->end_select){$end_select = Carbon::parse($competition->end_select)->addDay(1);}
+			
 			$gallery =$this
 				->with('user')
 				->with('likes')
 				->with('like_admins')
 				->where('status_main', '=', $status_main->id)
-				->where('date_show', '>=', $competition->start_select)
-				->where('date_show', '<=', $competition->end_select)
+				->where('date_show', '>=', $start_select)
+				->where('date_show', '<=', $end_select)
 				->get();
 			
 			if(count($gallery) > 0){

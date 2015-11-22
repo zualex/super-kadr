@@ -29,6 +29,7 @@ class AdminCompetition extends Controller {
 		$condition = '';
 		$start_select = '';
 		$end_select = '';
+		$edit = 1;
 		
 		$competition = Competition::first();
 		if(count($competition) > 0 ){
@@ -39,7 +40,18 @@ class AdminCompetition extends Controller {
 			$condition = $competition->condition;
 			if($competition->start_select){$start_select = Carbon::parse($competition->start_select)->format('Y-m-d');}
 			if($competition->end_select){$end_select = Carbon::parse($competition->end_select)->format('Y-m-d');}
+			
+			if($name != '' && $text !=''){
+				$edit = 0;
+			}
+
+			if(Carbon::parse($competition->date_end)->timestamp <= Carbon::now()->timestamp){
+				$edit = 1;
+			}
+			
 		}
+		
+
 		
 		$data = array(
 			"name" => $name,
@@ -50,6 +62,7 @@ class AdminCompetition extends Controller {
 			"condition" => $condition,
 			"start_select" => $start_select,
 			"end_select" => $end_select,
+			"edit" => $edit,
 			"gallery" => $galleryModel->getGalleryCompetition(),
 			"pathImages" => $galleryModel->pathImages,
 		);
@@ -74,13 +87,31 @@ class AdminCompetition extends Controller {
 		if($date_start == ''){$error .= 'Не заполнено поле "Начало конкурса"<br>';}
 		if($date_end == ''){$error .= 'Не заполнено поле "Конец конкурса"<br>';}
 
+		$edit = 0;
+		
 		if($error == ''){
 			$competition = Competition::first();
-			if(count($competition) == 0){$competition = new Competition;}
-			$competition->name = $name;
-			$competition->text = $text;
-			$competition->date_start = $date_start;
-			$competition->date_end = $date_end;
+			if(count($competition) == 0){
+				$competition = new Competition;
+				$edit = 1;
+			}else{
+				if(Carbon::parse($competition->date_end)->timestamp <= Carbon::now()->timestamp){
+					$edit = 1;
+				}
+			}
+			
+			// Если можно редактировать
+			if($edit == 1){
+				$competition->name = $name;
+				$competition->text = $text;
+				$competition->date_start = $date_start;
+			}
+			
+			//Если новая дата конца конкурса не меньше уже которой есть
+			if(!$competition->date_end || Carbon::parse($competition->date_end)->timestamp <= Carbon::parse($date_end)->timestamp){
+				$competition->date_end = $date_end;
+			}
+			
 			$competition->save();
 		
 		
