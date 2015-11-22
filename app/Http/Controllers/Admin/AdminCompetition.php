@@ -11,6 +11,7 @@ use Response;
 use Request;
 use Input;
 use App\Competition;
+use App\Gallery;
 use Carbon\Carbon;
 
 
@@ -19,7 +20,7 @@ class AdminCompetition extends Controller {
 	/*
 	* Вывод конкурса
 	*/
-	public function index()
+	public function index(Competition $competitionModel, Gallery $galleryModel)
 	{	
 		$name = '';
 		$text = '';
@@ -45,12 +46,16 @@ class AdminCompetition extends Controller {
 			"text" => $text,
 			"date_start" => $date_start,
 			"date_end" => $date_end,
+			"arrCondition" => $competitionModel->getCondition(),
 			"condition" => $condition,
 			"start_select" => $start_select,
 			"end_select" => $end_select,
+			"gallery" => $galleryModel->getGalleryCompetition(),
+			"pathImages" => $galleryModel->pathImages,
 		);
 		return view('admin.competition.index')->with('data', $data);
 	}
+	
 	
 	
 	/*

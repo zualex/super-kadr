@@ -156,9 +156,9 @@ $(function() {
 						<div class="line-title">Клиент</div>
 						<div class="line-value">
 							<select  class="inputbox" name="condition">
-								<option @if($data['condition'] == 'like_all_foto') selected @endif value="like_all_foto">Макс кол-во лайков по всем фото клиента</option>
-								<option @if($data['condition'] == 'like_one_foto') selected @endif value="like_one_foto">Макс кол-во лайков на одну фото клиента</option>
-								<option @if($data['condition'] == 'foto_all_user') selected @endif value="foto_all_user">Макс кол-во фото у одного клиента</option>
+								@foreach($data['arrCondition'] as $key=>$value)
+									<option @if($data['condition'] == $key) selected @endif value="{{ $key }}">{{ $value }}</option>
+								@endforeach
 							</select>
 						</div>
 					</div>
@@ -188,6 +188,52 @@ $(function() {
 					</div>
 				
 				</form>
+				
+				
+				
+				@if(count($data['gallery']) > 0)
+					<table class="table-list">
+						<thead>
+							<tr>
+								<th class="center col-1">Место</th>
+								<th class="col-3">Клиент</th>
+								<th class="col-3">Соц. сеть</th>
+								<th class="col-5">Фото клиента</th>
+							</tr>
+						</thead>
+						@foreach($data['gallery'] as $key => $value)
+							<tr>
+								<td class="center col-1">{{ $key+1 }}</td>
+								<td class="col-3">{{ $value['name'] }}</td>
+								<td class="col-3">{{ $value['provider'] }}</td>
+								<td class="col-5">
+									<table class="table-list">
+										@foreach($value['item'] as $item)
+											<tr>
+												<td class="col-4">
+													<a href="{{ $data['pathImages'].'/o_'.$item->src }}" rel="group1" class="modalbox">
+														<img class="order-image" src="{{ $data['pathImages'].'/s_'.$item->src }}" alt=""  >
+													</a>
+												</td>
+												<td class="col-4">кол-во лайков: {{ $item->like_count }}</td>
+												<td></td>
+											</tr>
+										@endforeach
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">ИТОГ</td>
+								<td class="col-5">
+									<span style="padding-right:7px;">{{ $value['count'] }} фото</span>|
+									<span style="padding-left:5px;padding-right:7px;">{{ $value['all_like'] }} лайков</span>|
+									<span style="padding-left:5px;padding-right:7px;">{{ $value['max_like'] }} макс. лайков</span>
+								</td>
+							</tr>
+						@endforeach
+						<tbody>
+					</table>
+				@endif
 				
 			</section>
 		</div>

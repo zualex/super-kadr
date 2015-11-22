@@ -53,6 +53,11 @@ class Gallery extends Model {
         return $this->hasMany('App\Comment');
     }
 	
+	public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+	
 	
 	
 	/*
@@ -112,6 +117,7 @@ class Gallery extends Model {
 				ORDER BY like_count DESC, comment_count DESC
 				LIMIT ?', [$status_main->id, $this->limitMain]
 			);
+			
 			/* 
 			*	Сохраняем список id и узнаем реальное кол-во  лайков так как запрос был
 			*/
@@ -311,6 +317,128 @@ class Gallery extends Model {
 				->get();
 		return $gallery;
 	}
+	
+	
+	/*
+	* Получение галереи для конкурса
+	*
+	*	user_id дуюдтруется так как при сортировку массива ключ обнуляется
+	*
+	*	$res = array(
+	*		'user_id' => array(									//id пользователя
+	*			'user_id' => $user_id,							//id пользователя
+	*			'name' => $value->user->name,			//Имя пользователя
+	*			'provider' => $value->user->provider,	//Социальная сеть
+	*			'item' => array(),									//галерея
+	*			'all_like' => 0,										//Кол-во всех лайков
+	*			'max_like' => 0,									//Мак кол-во лайков за одну фото
+	*			'count' => 0,											//Кол-во фото
+	*		)
+	*	)
+	*/
+	public function getGalleryCompetition(){
+		$res = array();
+		$gallery = array();
+				
+		$competition = Competition::first();
+		if(count($competition) > 0 ){
+			$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
+			$gallery =$this
+				->with('user')
+				->with('likes')
+				->with('like_admins')
+				->where('status_main', '=', $status_main->id)
+				->where('date_show', '>=', $competition->start_select)
+				->where('date_show', '<=', $competition->end_select)
+				->get();
+			
+			if(count($gallery) > 0){
+				$count = 0;
+				foreach($gallery as $key => $value){
+					$count++;
+					$user_id = $value->user_id;
+					$email = $value->user->email;
+					if($email != 'anonymous@anonymous.ru'){
+					
+						if(!array_key_exists($user_id, $res)){
+							$res[$user_id] = array(
+								'user_id' => $user_id,
+								'name' => $value->user->name,
+								'provider' => $value->user->provider,
+								'item' => array(),
+								'all_like' => 0,
+								'max_like' => 0,
+								'count' => 0,
+							);
+						}
+						
+						$like = 0;
+						$like_admin = 0;
+						if($value->likes){$like = count($value->likes);}
+						if($value->like_admins){$like_admin = $value->like_admins->count;}
+						$like = $like+$like_admin;
+						
+						$value->like_count = $like;
+						
+						$res[$user_id]['item'][] = $value;
+						$res[$user_id]['all_like'] += $like;
+						if($res[$user_id]['max_like'] < $like){
+							$res[$user_id]['max_like'] = $like;
+						}
+						$res[$user_id]['count'] += 1;
+					}
+				}
+				
+				//Сортировка item по кол-ву лайков
+				foreach($res as $key => $value){
+					$res[$key]['item'] = $this->array_orderby($value['item'], 'like_count', SORT_DESC);
+				}
+				
+				//Макс кол-во лайков по всем фото клиента
+				if($competition->condition == 'like_all_foto'){
+					$res = $this->array_orderby($res, 'all_like', SORT_DESC, 'count', SORT_DESC);
+				}
+				
+				//Макс кол-во лайков на одну фото клиента
+				if($competition->condition == 'like_one_foto'){
+					$res = $this->array_orderby($res, 'max_like', SORT_DESC, 'all_like', SORT_DESC);
+				}
+				
+				//Макс кол-во фото у одного клиента
+				if($competition->condition == 'foto_all_user'){
+					$res = $this->array_orderby($res, 'count', SORT_DESC, 'all_like', SORT_DESC);
+				}
+				
+				
+			}
+			
+		}
+		
 
+		return $res;
+	}
+	
+	
+	
+	/*
+	* сортировка массив
+	*/
+	public function array_orderby() {
+		$args = func_get_args();
+		$data = array_shift($args);
+		foreach ($args as $n => $field) {
+			if (is_string($field)) {
+				$tmp = array();
+				foreach ($data as $key => $row)
+					$tmp[$key] = $row[$field];
+				$args[$n] = $tmp;
+				}
+		}
+
+		$args[] = &$data;
+		call_user_func_array('array_multisort', $args);
+		return array_pop($args);
+	}
+	
 }
 
