@@ -12,6 +12,7 @@ use App\Setting;
 use App\User;
 use App\Monitor;
 use App\Tarif;
+use App\LikeAdmin;
 class PayController extends Controller {
 	
 	public function conditions($gallery_id)
@@ -167,6 +168,15 @@ class PayController extends Controller {
 				$gallery->start_moderation = Carbon::now();
 				$gallery->save();
 			}
+		}
+		
+		/* По умолчанию накрутка лайков = 0*/
+		$likeAdmin = LikeAdmin::where('gallery_id', '=', $pay->gallery_id)->first();
+		if(count($likeAdmin) == 0){
+			$likeAdmin = new LikeAdmin;
+			$likeAdmin->gallery_id = $pay->gallery_id;
+			$likeAdmin->count = 0;
+			$likeAdmin->save();
 		}
 		
 		
