@@ -130,6 +130,14 @@ class AdminGalleryController extends Controller {
 		$gallery->status_main = $status_id;
 		$gallery->save();
 		
+		/* По умолчанию накрутка лайков = 0*/
+		$likeAdmin = LikeAdmin::where('gallery_id', '=', $id)->first();
+		if(count($likeAdmin) == 0){
+			$likeAdmin = new LikeAdmin;
+			$likeAdmin->gallery_id = $id;
+			$likeAdmin->count = 0;
+			$likeAdmin->save();
+		}
 		
 		/* При выставление статуса успешно или отмена устанавливаем значение конца модерации */
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
