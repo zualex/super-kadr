@@ -70,7 +70,17 @@
 			<p align="JUSTIFY"><font face="Times New Roman, serif"><font size="3"><font color="#000000"><font face="Arial, serif">7.1 ЕСЛИ ВЫ НЕ СОГЛАСНЫ СO ВСЕМИ ВЫШЕУКАЗАННЫМИ УСЛОВИЯМИ, ВЫ НЕ ИМЕЕТЕ ПРАВА ПОСЕЩАТЬ РЕСУРС КАК В ЦЕЛОМ, ТАК И ЛЮБУЮ ЕГО ЧАСТЬ, КРОМЕ СТРАНИЦЫ С ПОЛЬЗОВАТЕЛЬСКИМ СОГЛАШЕНИЕМ, ПОЛУЧАТЬ И/ИЛИ ИСПОЛЬЗОВАТЬ СОДЕРЖИМОЕ НАСТОЯЩЕГО РЕСУРСА ЛЮБЫМИ ДРУГИМИ СПОСОБАМИ КАК В ЦЕЛОМ ТАК И В ЛЮБОЙ ЕГО ЧАСТИ, А ТАКЖЕ ПОЛЬЗОВАТЬСЯ УСЛУГОЙ!</font></font></font></font></p>
 			<p align="JUSTIFY"><font face="Times New Roman, serif"><font size="3"><font color="#000000"><font face="Arial, serif">7.2 ЕСЛИ ВЫ НЕ СОГЛАСНЫ С ПОЛЬЗОВАТЕЛЬСКИМ СОГЛАШЕНИЕМ ИЛИ ВАМ ЕЩЕ НЕ ИСПОЛНИЛОСЬ 18 ЛЕТ, ВЫ ДОЛЖНЫ НЕМЕДЛЕННО ПОКИНУТЬ РЕСУРС.</font></font></font></font></p>
 		</div>
-
+		
+		<br><br>
+		<div>
+			Вы выбрали:<br>
+			Экран {{ $monitor->number }}<br>
+			Тариф: {{ $tarif->name }} {{ $tarif->desc_main }} {{ $tarif->desc_dop }}<br>
+			Дата показа: {{ $date_show }}<br>
+			Цена: {{ $tarif->price }} руб.<br>
+			
+		</div>
+		<br><br>
 		
 		<form action='{{ route('pay.index', $gallery_id) }}' method="GET" onsubmit="if($('#yes_form').prop('checked')){return true;}else{alert('необходимо принять условия договора')}return false;">
 			<label for="yes_form">

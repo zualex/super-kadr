@@ -10,6 +10,8 @@ use App\Gallery;
 use App\Status;
 use App\Setting;
 use App\User;
+use App\Monitor;
+use App\Tarif;
 class PayController extends Controller {
 	
 	public function conditions($gallery_id)
@@ -28,6 +30,16 @@ class PayController extends Controller {
 		}
 	
 		$gallery = Gallery::where('id', '=', $gallery_id)->first();
+		$monitor = '';
+		$tarif = '';
+		$date_show = '';
+		if(count($gallery) > 0){
+			$monitor = Monitor::find($gallery->monitor_id);
+			$tarif = Tarif::find($gallery->tarif_id);
+			$date_show = $gallery->date_show;
+			//$monitor = $monitor->number;
+			//$tarif = $tarif->name. ' '.$tarif->desc_main.' '.$tarif->desc_dop;
+		}
 		if($gallery->user_id != Auth::user()->id){
 			Session::flash('message', 'Вы не можете оплатить так как заказ не ваш');
 			 return redirect()->route('main');
@@ -38,7 +50,11 @@ class PayController extends Controller {
 			Auth::logout();
 		}
 		
-		return view('pages.pay.conditions')->with('gallery_id', $gallery_id);
+		return view('pages.pay.conditions')
+			->with('monitor', $monitor)
+			->with('tarif', $tarif)
+			->with('date_show', $date_show)
+			->with('gallery_id', $gallery_id);
 	}
 	
 	
