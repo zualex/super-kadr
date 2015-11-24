@@ -33,20 +33,22 @@ class AuthLoginEventHandler {
 		if (Auth::check() && Auth::user()->level == 'admin' || Auth::user()->level == 'moderator'){
 			$settingModel = new Setting;
 			$result = $settingModel->getSendEmails();
-			if($result->value != ''){				
-				$key = Array(
-					"name" => Auth::user()->name,
-					"email" => Auth::user()->email,
-					"time" => Carbon::now()->toDateTimeString(),
-					"ip" => Request::getClientIp(),
-				);
-				$emails = explode(',', $result->value);
-				Mail::send('mail.signAdminPanel', ['key' => $key], function($message) use ($emails) 
-				{
-					foreach($emails as $email){
-						$message->to(trim($email))->subject('Уведомление о входе в административную панель');
-					}
-				});
+			if(count($result) > 0){
+				if($result->value != ''){				
+					$key = Array(
+						"name" => Auth::user()->name,
+						"email" => Auth::user()->email,
+						"time" => Carbon::now()->toDateTimeString(),
+						"ip" => Request::getClientIp(),
+					);
+					$emails = explode(',', $result->value);
+					Mail::send('mail.signAdminPanel', ['key' => $key], function($message) use ($emails) 
+					{
+						foreach($emails as $email){
+							$message->to(trim($email))->subject('Уведомление о входе в административную панель');
+						}
+					});
+				}
 			}
 		}
     }
