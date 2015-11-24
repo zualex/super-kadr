@@ -24,6 +24,14 @@ class CompetitionController extends Controller {
 	public function index(Gallery $galleryModel, User $userModel)
 	{	
 		$data = array();
+		$name = '';
+		$text = '';
+		$date_start = '';
+		$date_end = '';
+		$condition = '';
+		$start_select = '';
+		$end_select = '';
+		
 		
 		$competition = Competition::first();
 		if(count($competition) > 0 ){
