@@ -5,6 +5,12 @@
 <title>{{ $mainSetting['title'] }}</title>
 <meta name="description" content="{{ $mainSetting['description'] }}" />
 <meta name="keywords" content="{{ $mainSetting['keywords'] }}" />
+
+<meta property="og:site_name" content="{{ $mainSetting['title'] }}" />
+<meta property="og:title" content="{{ $mainSetting['title'] }}" />
+<meta property="og:url" content="{{ Request::url() }}" />
+
+
 {!! HTML::script('/assets/superkadr/js/jquery.js') !!}
 <link rel="shortcut icon" href="/public/img/favicon.ico" />
 

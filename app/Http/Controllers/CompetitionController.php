@@ -47,7 +47,7 @@ class CompetitionController extends Controller {
 		$arrRes = $galleryModel->getGalleryCompetition();
 		$top = $galleryModel->getTop($arrRes, 10);
 		$autor = $galleryModel->getAutor($arrRes);
-		$dopGallery= $galleryModel->getTop($arrRes, 15);
+		$dopGallery= $galleryModel->getGalleryCompetitionAll();
 		
 		$data = array(
 			"name" => $name,
