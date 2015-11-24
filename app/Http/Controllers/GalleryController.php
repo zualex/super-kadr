@@ -17,6 +17,7 @@ use App\Like;
 use App\Comment;
 use App\User;
 use App\Setting;
+use Carbon\Carbon;
 
 
 class GalleryController extends Controller {
@@ -221,6 +222,11 @@ class GalleryController extends Controller {
 				'tarif' => Request::input('tarif'),
 			);	
 			$pay = $payModel->createPay($param);
+			
+			/* При выставление статуса на модерацию устанавливаем значение начала модерации */
+			$gallery->start_moderation = Carbon::now();
+			$gallery->end_moderation = '0000-00-00 00:00:00';
+			$gallery->save();
 		}
 		
 		if(count($galleryModel->error) > 0){$error .= implode(', ', $galleryModel->error);}
