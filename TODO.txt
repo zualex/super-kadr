@@ -1,6 +1,6 @@
 Потраченное время: 86 часа (00:00) 1 сентября - 28 сентября (20000)
 Потраченное время: 13 часа (00:00) 1 октября - 10 октября (5000)
-Потраченное время: 16 часа (00:00) 1 ноября -  (17000)
+Потраченное время: 17 часа (00:00) 1 ноября -  (17000)
 ----------------------------------------------------------------------------------------------------------
 
 ТЗ
@@ -29,58 +29,7 @@
  и делаем на ней кнопки  "Поделиться с друзьями "( фейсбук, контакт, твитер, инстаграмм, одноклассники) -  расшаривается ссылка   super-kadr32.ru и надпись  "Голосуй за меня! С ЛЮБОВЬЮ, твой Супер-Кадр!"
  
  
- 
-Изменения:
-1) На странице "Заявки" - необходимо AJAX - обновление страницы стоит 15 секунд
-Изменить можно в файле \resources\views\admin\gallery\index.blade.php есть 15000
 
-2) Нужно добавить таблицу user_ips.
-
-3) К таблице galleries нужно добавить два поля 'start_moderation' и 'end_moderation'
-тип полей: datetime
-
-4)  Нужно добавить таблицу like_admins.
-
-5)  Нужно добавить таблицу competitions.
-
-6) Нужно один раз задать кол-во лайков для заказов равное 0, иначе на сайте не правильно расчет будет. Для этого нужно в админ панеле нужно выбрать все одобренные заказы и нажать кнопку одобрить.
-
-
-
-Файлы:
-app/Http/Controllers/Auth/AuthController.php
-app/Http/Controllers/Admin/AdminGalleryController.php
-app/Http/Controllers/Admin/AdminPayController.php
-app/Http/Controllers/Admin/AdminCompetition.php
-app/Http/Controllers/PayController.php
-app/Http/Controllers/GalleryController.php
-app/Http/Controllers/CompetitionController.php
-app/Http/routes.php
-app/Http/Kernel.php
-app/Http/Middleware/BlockUserIp.php
-app/UserIp.php
-app/Gallery.php
-app/Pay.php
-app/LikeAdmin.php
-app/Competition.php
-resources/views/app.blade.php
-resources/views/admin/app.blade.php
-resources/views/admin/competition/index.blade.php
-resources/views/pages/competition/show.blade.php
-resources/views/admin/gallery/application.blade.php
-resources/views/admin/gallery/index.blade.php
-resources/views/admin/pay/index.blade.php
-resources/views/pages/pay/conditions.blade.php
-resources/views/pages/pay/success.blade.php
-resources/views/auth/login.blade.php
-resources/views/pages/gallery/index.blade.php
-resources/views/pages/gallery/show.blade.php
-public/assets/admin/lib/jquery-ui-1.11.4.datepicker/*
-public/assets/admin/js/script.js
-database/migrations/2015_11_18_190207_user_ip.php
-database/migrations/2015_11_19_185350_add_field_gallery.php
-database/migrations/2015_11_20_192209_create_like_admins_table.php
-database/migrations/2015_11_21_135320_create_competitions_table.php
 
 ----------------------------------------------------------------------------------------------------------
 
