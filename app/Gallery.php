@@ -434,7 +434,7 @@ class Gallery extends Model {
 	*	Получение ТОП 10 фото
 	*/
 	public function getTop($arrRes, $limit){
-		$res = array();
+		/*$res = array();
 		
 		$count = 0;
 		foreach($arrRes as $key => $value){
@@ -447,7 +447,35 @@ class Gallery extends Model {
 		}
 		$res = $this->array_orderby($res, 'like_count', SORT_DESC);
 
-		return $res;
+		return $res;*/
+		
+		
+		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
+		
+		$competition = Competition::first();
+		if(count($competition) > 0 ){
+			$start_select = '0000-00-00 00:00:00';
+			$end_select = '9999-12-30 23:59:59';
+			if($competition->start_select){$start_select = $competition->start_select;}
+			if($competition->end_select){$end_select = Carbon::parse($competition->end_select)->addDay(1);}
+			
+				
+			$galleries =$this
+				->select(DB::raw('galleries.*, (COUNT(likes.id)+SUM(like_admins.count)) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
+				->leftJoin('likes', 'galleries.id', '=', 'likes.gallery_id')
+				->leftJoin('like_admins', 'galleries.id', '=', 'like_admins.gallery_id')
+				->where('date_show', '>=', $start_select)
+				->where('date_show', '<=', $end_select)
+				->where('status_main', '=', $status_main->id)
+				->groupBy('galleries.id')
+				->orderBy('like_count', 'desc')
+				->orderBy('comment_count', 'desc')
+				->take($limit)
+				->get();
+		}
+
+		return $galleries;
+		
 	}
 	
 	

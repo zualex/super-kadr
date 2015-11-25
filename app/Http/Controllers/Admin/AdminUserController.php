@@ -108,6 +108,13 @@ class AdminUserController extends Controller {
 			});
 		}
 		
+		$userCheck = User::where('email', '=', Input::get('email'))->first();
+		if(count($userCheck) > 0){
+			$validator->after(function($validator){
+				$validator->errors()->add('field', 'Пользователь с email '.Input::get('email').' уже существует в системе');
+			});
+		}
+		
 	
         // process the login
         if ($validator->fails()) {

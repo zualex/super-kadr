@@ -99,7 +99,6 @@ class AuthController extends Controller {
 		}
 		
 			
-			
 		$name = $user->getNickname();
 		if($provider == 'vkontakte'){
 			if($user->email != ''){$name = $user->email;}
@@ -121,12 +120,23 @@ class AuthController extends Controller {
 			if($user->name != ''){$name = $user->name;}
 		}
 		
+		$avatar = $user->getAvatar();
+		if(array_key_exists('avatar_original', $user)){
+			$avatar = $user->avatar_original;
+			
+			if($provider == 'facebook'){
+				$avatar = str_replace('?width=1920', '?width=200', $avatar);
+			}
+			
+		}
+		
+		//dd(u)
 		$arrValues = array(
 			'provider' => $provider,
 			'social_id' => $user->getId(),
 			'name' => $name,
 			'email' => $user->getEmail(),
-			'avatar' => $user->getAvatar(),
+			'avatar' => $avatar,
 		);
 		
 		$userId = $postUser->socialAuth($arrValues);

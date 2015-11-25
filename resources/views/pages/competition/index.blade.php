@@ -56,7 +56,7 @@
 							@foreach($data['autor'] as $key => $value)
 								<div class="slide">
 									<a href="{{ route('competition.show', $value['user_id']) }}">
-										<div class="image" style="background-size: initial;
+										<div class="image" style="
 											@if($value['avatar'])
 												background-image:url('{{ $value['avatar'] }}')
 											@else
