@@ -40,6 +40,9 @@ class AdminCompetition extends Controller {
 			$condition = $competition->condition;
 			if($competition->start_select){$start_select = Carbon::parse($competition->start_select)->format('Y-m-d');}
 			if($competition->end_select){$end_select = Carbon::parse($competition->end_select)->format('Y-m-d');}
+			if($competition->start_select == '0000-00-00 00:00:00'){$start_select = '';}
+			if($competition->end_select == '0000-00-00 00:00:00'){$end_select = '';}
+			
 			
 			if($name != '' && $text !=''){
 				$edit = 0;
@@ -63,7 +66,7 @@ class AdminCompetition extends Controller {
 			"start_select" => $start_select,
 			"end_select" => $end_select,
 			"edit" => $edit,
-			"gallery" => $galleryModel->getGalleryCompetition(),
+			"gallery" => $galleryModel->getGalleryCompetitionAdmin(),
 			"pathImages" => $galleryModel->pathImages,
 		);
 		return view('admin.competition.index')->with('data', $data);
@@ -135,8 +138,9 @@ class AdminCompetition extends Controller {
 		$end_select = Request::input('end_select');
 		
 		if($condition == ''){$error .= 'Не выбран "Клиент"<br>';}
-		if($start_select == ''){$error .= 'Не заполнено поле "Начало выборки"<br>';}
-		if($end_select == ''){$error .= 'Не заполнено поле "Конец выборки"<br>';}
+		//if($start_select == ''){$error .= 'Не заполнено поле "Начало выборки"<br>';}
+		//if($end_select == ''){$error .= 'Не заполнено поле "Конец выборки"<br>';}
+
 
 		if($error == ''){
 			$competition = Competition::first();
@@ -153,6 +157,19 @@ class AdminCompetition extends Controller {
 		}
 		return redirect()->back();
 		
+	}
+	
+	
+	
+	/*
+	*
+	*/
+	public function delete(){
+		$competition = Competition::first();
+		if(count($competition) > 0){
+			$competition->delete();
+		}
+		return redirect()->back();
 	}
 	
 }

@@ -158,6 +158,10 @@ $(function() {
 								<a href="#" class="btn add savesettings" onclick="$('#form-admin').submit();return false;">
 									<i class="fa pull-left fa-floppy-o"></i>Сохранить
 								</a>
+								
+								<a href="{{ route('admin.competition.delete') }}" class="btn del savesettings" onclick="if(!confirm('Вы действительно хотите удалить конкурс!')){return false;}">
+									<i class="fa pull-left fa-trash"></i>Удалить
+								</a>
 							</div>
 						</div>
 					</div>
@@ -177,7 +181,7 @@ $(function() {
 							)
 					</h2>
 				<hr>
-				<h3>Выбор запроса {{ $data['edit'] }}</h2>
+				<h3>Выбор запроса</h2>
 				
 				@if (Session::has('message2'))
 					<br>
@@ -216,7 +220,7 @@ $(function() {
 							<div class="line-title"></div>
 							<div class="line-value">
 								<a href="#" class="btn add savesettings" onclick="$('#form-admin2').submit();return false;">
-									<i class="fa pull-left fa-floppy-o"></i>Сохранить
+									<i class="fa pull-left fa-search"></i>Поиск
 								</a>
 							</div>
 						</div>

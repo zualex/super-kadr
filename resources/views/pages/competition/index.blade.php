@@ -3,6 +3,7 @@
 @section('content')
 <div class="wrapper">
 	<div class="block">
+		@if($data['name'] != '')
 		<div class="header"><span>Конкурс: {{ $data['name'] }}</span></div>
 		<div class="body clear">
 			<p>
@@ -16,8 +17,9 @@
 				{!! $data['text'] !!}
 			</p>
 		</div>
-
+		@endif
 		
+		@if(count($data['top']) > 0)
 		<div id="slider" class="block color-1">
 			<div class="header"><span>ТОП-10</span></div>
 			<div class="body clear">
@@ -42,11 +44,11 @@
 				</div>
 			</div>
 		</div>
+		@endif
 		
 		
 		
-		
-		
+		@if(count($data['autor']) > 0)
 		<div id="slider" class="block color-1">
 			<div class="header"><span>Лучший автор</span></div>
 			<div class="body clear">
@@ -80,8 +82,9 @@
 				</div>
 			</div>
 		</div>
+		@endif
 		
-		
+		@if(count($data['gallery']) > 0)
 		<div class="header"><span>Конкурсые работы</span></div>
 		<div id="Container-Gallery" class="block-page">
 			<div class="content clear">
@@ -139,7 +142,7 @@
 			
 			
 		</div>
-		
+		@endif
 		
 		
 		

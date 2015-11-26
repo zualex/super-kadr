@@ -81,6 +81,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'authAdmin'], function(){
 	
 	Route::post('/competition/save/', ['as' => 'admin.competition.save', 'uses' => 'Admin\AdminCompetition@save']);
 	Route::post('/competition/save_extra/', ['as' => 'admin.competition.save_extra', 'uses' => 'Admin\AdminCompetition@saveExtra']);
+	Route::get('/competition/delete/', ['as' => 'admin.competition.delete', 'uses' => 'Admin\AdminCompetition@delete']);
 	
 	
 	/* Транзакции */

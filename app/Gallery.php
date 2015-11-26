@@ -320,6 +320,128 @@ class Gallery extends Model {
 	}
 	
 	
+	
+	
+	
+	/*
+	* Получение галереи для конкурса
+	*
+	*	user_id дуюдтруется так как при сортировку массива ключ обнуляется
+	*
+	*	$res = array(
+	*		'user_id' => array(									//id пользователя
+	*			'user_id' => $user_id,							//id пользователя
+	*			'name' => $value->user->name,			//Имя пользователя
+	*			'provider' => $value->user->provider,	//Социальная сеть
+	*			'avatar' => $value->user->avatar,			//аватарка
+	*			'item' => array(),									//галерея
+	*			'all_like' => 0,										//Кол-во всех лайков
+	*			'max_like' => 0,									//Мак кол-во лайков за одну фото
+	*			'count' => 0,											//Кол-во фото
+	*		)
+	*	)
+	*/
+	public function getGalleryCompetitionAdmin(){
+		$res = array();
+		$gallery = array();
+				
+		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
+		$competition = Competition::first();
+		if(count($competition) > 0 ){
+			$start_select = '0000-00-00 00:00:00';
+			$end_select = '9999-12-30 23:59:59';
+			if($competition->start_select){$start_select = $competition->start_select;}
+			if($competition->end_select){$end_select = Carbon::parse($competition->end_select)->addDay(1);}
+			if($competition->start_select == '0000-00-00 00:00:00'){$start_select = '0000-00-00 00:00:00';}
+			if($competition->end_select == '0000-00-00 00:00:00'){$end_select = '9999-12-30 23:59:59';}
+			$condition = $competition->condition;
+		}else{
+			$start_select = '0000-00-00 00:00:00';
+			$end_select = '9999-12-30 23:59:59';
+			$condition = 'like_all_foto';
+		}
+		
+	
+		$gallery =$this
+			->with('user')
+			->with('likes')
+			->with('like_admins')
+			->with('comments')
+			->where('status_main', '=', $status_main->id)
+			->where('date_show', '>=', $start_select)
+			->where('date_show', '<=', $end_select)
+			->get();
+			
+		
+		if(count($gallery) > 0){
+			$count = 0;
+			foreach($gallery as $key => $value){
+				$count++;
+				$user_id = $value->user_id;
+				$email = $value->user->email;
+				if($email != 'anonymous@anonymous.ru'){
+				
+					if(!array_key_exists($user_id, $res)){
+						$res[$user_id] = array(
+							'user_id' => $user_id,
+							'name' => $value->user->name,
+							'provider' => $value->user->provider,
+							'avatar' => $value->user->avatar,
+							'item' => array(),
+							'all_like' => 0,
+							'max_like' => 0,
+							'count' => 0,
+						);
+					}
+					
+					$like = 0;
+					$like_admin = 0;
+					if($value->likes){$like = count($value->likes);}
+					if($value->like_admins){$like_admin = $value->like_admins->count;}
+					$like = $like+$like_admin;
+					
+					$value->like_count = $like;
+					$value->comment_count = count($value->comments);
+					
+					$res[$user_id]['item'][] = $value;
+					$res[$user_id]['all_like'] += $like;
+					if($res[$user_id]['max_like'] < $like){
+						$res[$user_id]['max_like'] = $like;
+					}
+					$res[$user_id]['count'] += 1;
+				}
+			}
+			
+			
+			//Сортировка item по кол-ву лайков
+			foreach($res as $key => $value){
+				$res[$key]['item'] = $this->array_orderby($value['item'], 'like_count', SORT_DESC);
+			}
+			
+			//Макс кол-во лайков по всем фото клиента
+			if($condition == 'like_all_foto'){
+				$res = $this->array_orderby($res, 'all_like', SORT_DESC, 'count', SORT_DESC);
+			}
+			
+			//Макс кол-во лайков на одну фото клиента
+			if($condition == 'like_one_foto'){
+				$res = $this->array_orderby($res, 'max_like', SORT_DESC, 'all_like', SORT_DESC);
+			}
+			
+			//Макс кол-во фото у одного клиента
+			if($condition == 'foto_all_user'){
+				$res = $this->array_orderby($res, 'count', SORT_DESC, 'all_like', SORT_DESC);
+			}
+			
+			
+		}
+		
+
+		return $res;
+	}
+	
+	
+	
 	/*
 	* Получение галереи для конкурса
 	*
@@ -343,13 +465,18 @@ class Gallery extends Model {
 		$gallery = array();
 				
 		$competition = Competition::first();
-		if(count($competition) > 0 ){
+		if(count($competition) > 0 && $competition->name != ''){
 			$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 			$start_select = '0000-00-00 00:00:00';
 			$end_select = '9999-12-30 23:59:59';
-			if($competition->start_select){$start_select = $competition->start_select;}
-			if($competition->end_select){$end_select = Carbon::parse($competition->end_select)->addDay(1);}
+			if($competition->start_select){$start_select = Carbon::parse($competition->date_start);}
+			if($competition->end_select){$end_select = Carbon::parse($competition->date_end)->addDay(1);}
+			if($competition->date_start == $competition->date_end){
+				$start_select = '0000-00-00 00:00:00';
+				$end_select = '9999-12-30 23:59:59';
+			}
 			
+
 			$gallery =$this
 				->with('user')
 				->with('likes')
@@ -449,15 +576,19 @@ class Gallery extends Model {
 
 		return $res;*/
 		
-		
+		$galleries = array();
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 		
 		$competition = Competition::first();
-		if(count($competition) > 0 ){
+		if(count($competition) > 0 && $competition->name != ''){
 			$start_select = '0000-00-00 00:00:00';
 			$end_select = '9999-12-30 23:59:59';
-			if($competition->start_select){$start_select = $competition->start_select;}
-			if($competition->end_select){$end_select = Carbon::parse($competition->end_select)->addDay(1);}
+			if($competition->start_select){$start_select = Carbon::parse($competition->date_start);}
+			if($competition->end_select){$end_select = Carbon::parse($competition->date_end)->addDay(1);}
+			if($competition->date_start == $competition->date_end){
+				$start_select = '0000-00-00 00:00:00';
+				$end_select = '9999-12-30 23:59:59';
+			}
 			
 				
 			$galleries =$this
@@ -527,14 +658,18 @@ class Gallery extends Model {
 	*/
 	public function getGalleryCompetitionAll(){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
-		
+		$galleries = array();
 		$competition = Competition::first();
-		if(count($competition) > 0 ){
+		if(count($competition) > 0 && $competition->name != ''){
 			$start_select = '0000-00-00 00:00:00';
 			$end_select = '9999-12-30 23:59:59';
-			if($competition->start_select){$start_select = $competition->start_select;}
-			if($competition->end_select){$end_select = Carbon::parse($competition->end_select)->addDay(1);}
-			
+			if($competition->start_select){$start_select = Carbon::parse($competition->date_start);}
+			if($competition->end_select){$end_select = Carbon::parse($competition->date_end)->addDay(1);}
+			if($competition->date_start == $competition->date_end){
+				$start_select = '0000-00-00 00:00:00';
+				$end_select = '9999-12-30 23:59:59';
+			}
+
 				
 			$galleries =$this
 				->select(DB::raw('galleries.*, (COUNT(likes.id)+SUM(like_admins.count)) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
@@ -548,6 +683,8 @@ class Gallery extends Model {
 				->orderBy('like_count', 'desc')
 				->orderBy('comment_count', 'desc')
 				->paginate($this->limitMain);
+				
+		
 		}
 
 		return $galleries;
