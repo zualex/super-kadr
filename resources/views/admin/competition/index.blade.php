@@ -152,6 +152,18 @@ $(function() {
 								<input class="inputbox" type="text" name="date_end" id="date_end" value="{{ $data['date_end'] }}" placeholder="Конец конкурса">
 							</div>
 						</div>
+						
+						<div class="inline-block">
+							<div class="line-title">Клиент</div>
+							<div class="line-value">
+								<select  class="inputbox" name="condition">
+									@foreach($data['arrCondition'] as $key=>$value)
+										<option @if($data['condition'] == $key) selected @endif value="{{ $key }}">{{ $value }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+						
 						<div class="inline-block">
 							<div class="line-title"></div>
 							<div class="line-value">
@@ -175,7 +187,7 @@ $(function() {
 						{{ $data['name'] }} 
 							(c 
 								{{ $data['date_start'] }} 
-								@if($data['date_start'] != $data['date_end'])
+								@if($data['date_end'] != '' && $data['date_start'] != $data['date_end'])
 									по {{ $data['date_end'] }} 
 								@endif
 							)
@@ -190,18 +202,7 @@ $(function() {
 				
 				<form id="form-admin2" role="form" method="POST" action="{{ route('admin.competition.save_extra') }}">
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
-				
-					<div class="inline-block">
-						<div class="line-title">Клиент</div>
-						<div class="line-value">
-							<select  class="inputbox" name="condition">
-								@foreach($data['arrCondition'] as $key=>$value)
-									<option @if($data['condition'] == $key) selected @endif value="{{ $key }}">{{ $value }}</option>
-								@endforeach
-							</select>
-						</div>
-					</div>
-					
+									
 					<div class="inline-block">
 						<div class="line-title"><span>Начало выборки:</span></div>
 						<div class="line-value">

@@ -42,7 +42,8 @@ class AdminCompetition extends Controller {
 			if($competition->end_select){$end_select = Carbon::parse($competition->end_select)->format('Y-m-d');}
 			if($competition->start_select == '0000-00-00 00:00:00'){$start_select = '';}
 			if($competition->end_select == '0000-00-00 00:00:00'){$end_select = '';}
-			
+			if($competition->date_start == '0000-00-00 00:00:00'){$date_start = '';}
+			if($competition->date_end == '0000-00-00 00:00:00'){$date_end = '';}
 			
 			if($name != '' && $text !=''){
 				$edit = 0;
@@ -55,7 +56,7 @@ class AdminCompetition extends Controller {
 		}
 		
 
-		
+
 		$data = array(
 			"name" => $name,
 			"text" => $text,
@@ -84,11 +85,13 @@ class AdminCompetition extends Controller {
 		$text = Request::input('text');
 		$date_start = Request::input('date_start');
 		$date_end = Request::input('date_end');
+		$condition = Request::input('condition');
 		
 		if($name == ''){$error .= 'Не заполнено поле "Конкурс"<br>';}
 		if($text == ''){$error .= 'Не заполнено поле "Условия конкурса"<br>';}
 		if($date_start == ''){$error .= 'Не заполнено поле "Начало конкурса"<br>';}
-		if($date_end == ''){$error .= 'Не заполнено поле "Конец конкурса"<br>';}
+		//if($date_end == ''){$error .= 'Не заполнено поле "Конец конкурса"<br>';}
+		if($condition == ''){$error .= 'Не выбран "Клиент"<br>';}
 
 		$edit = 0;
 		
@@ -133,28 +136,26 @@ class AdminCompetition extends Controller {
 	public function saveExtra()
 	{	
 		$error = '';
-		$condition = Request::input('condition');
 		$start_select = Request::input('start_select');
 		$end_select = Request::input('end_select');
 		
-		if($condition == ''){$error .= 'Не выбран "Клиент"<br>';}
+		
 		//if($start_select == ''){$error .= 'Не заполнено поле "Начало выборки"<br>';}
 		//if($end_select == ''){$error .= 'Не заполнено поле "Конец выборки"<br>';}
 
 
-		if($error == ''){
+		//if($error == ''){
 			$competition = Competition::first();
 			if(count($competition) == 0){$competition = new Competition;}
-			$competition->condition = $condition;
 			$competition->start_select = $start_select;
 			$competition->end_select = $end_select;
 			$competition->save();
 		
 		
-			Session::flash('message2', 'Конкурс сохранен');
-		}else{
-			Session::flash('message2', $error);
-		}
+			//Session::flash('message2', 'Конкурс сохранен');
+		//}else{
+			//Session::flash('message2', $error);
+		//}
 		return redirect()->back();
 		
 	}

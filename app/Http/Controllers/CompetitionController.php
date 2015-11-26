@@ -38,7 +38,7 @@ class CompetitionController extends Controller {
 			$name = $competition->name;
 			$text = $competition->text;
 			if($competition->date_start){$date_start = Carbon::parse($competition->date_start)->format('Y-m-d');}
-			if($competition->date_end){$date_end = Carbon::parse($competition->date_end)->format('Y-m-d');}
+			if($competition->date_end && $competition->date_end != '0000-00-00 00:00:00'){$date_end = Carbon::parse($competition->date_end)->format('Y-m-d');}
 			$condition = $competition->condition;
 			if($competition->start_select){$start_select = Carbon::parse($competition->start_select)->format('Y-m-d');}
 			if($competition->end_select){$end_select = Carbon::parse($competition->end_select)->format('Y-m-d');}

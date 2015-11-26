@@ -354,6 +354,7 @@ class Gallery extends Model {
 			if($competition->end_select){$end_select = Carbon::parse($competition->end_select)->addDay(1);}
 			if($competition->start_select == '0000-00-00 00:00:00'){$start_select = '0000-00-00 00:00:00';}
 			if($competition->end_select == '0000-00-00 00:00:00'){$end_select = '9999-12-30 23:59:59';}
+			
 			$condition = $competition->condition;
 		}else{
 			$start_select = '0000-00-00 00:00:00';
@@ -469,8 +470,10 @@ class Gallery extends Model {
 			$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 			$start_select = '0000-00-00 00:00:00';
 			$end_select = '9999-12-30 23:59:59';
-			if($competition->start_select){$start_select = Carbon::parse($competition->date_start);}
-			if($competition->end_select){$end_select = Carbon::parse($competition->date_end)->addDay(1);}
+			if($competition->date_start){$start_select = Carbon::parse($competition->date_start);}
+			if($competition->date_end && $competition->date_end != '0000-00-00 00:00:00'){$end_select = Carbon::parse($competition->date_end)->addDay(1);}
+
+			
 			if($competition->date_start == $competition->date_end){
 				$start_select = '0000-00-00 00:00:00';
 				$end_select = '9999-12-30 23:59:59';
@@ -583,8 +586,8 @@ class Gallery extends Model {
 		if(count($competition) > 0 && $competition->name != ''){
 			$start_select = '0000-00-00 00:00:00';
 			$end_select = '9999-12-30 23:59:59';
-			if($competition->start_select){$start_select = Carbon::parse($competition->date_start);}
-			if($competition->end_select){$end_select = Carbon::parse($competition->date_end)->addDay(1);}
+			if($competition->date_start){$start_select = Carbon::parse($competition->date_start);}
+			if($competition->date_end && $competition->date_end != '0000-00-00 00:00:00'){$end_select = Carbon::parse($competition->date_end)->addDay(1);}
 			if($competition->date_start == $competition->date_end){
 				$start_select = '0000-00-00 00:00:00';
 				$end_select = '9999-12-30 23:59:59';
@@ -665,8 +668,8 @@ class Gallery extends Model {
 		if(count($competition) > 0 && $competition->name != ''){
 			$start_select = '0000-00-00 00:00:00';
 			$end_select = '9999-12-30 23:59:59';
-			if($competition->start_select){$start_select = Carbon::parse($competition->date_start);}
-			if($competition->end_select){$end_select = Carbon::parse($competition->date_end)->addDay(1);}
+			if($competition->date_start){$start_select = Carbon::parse($competition->date_start);}
+			if($competition->date_end && $competition->date_end != '0000-00-00 00:00:00'){$end_select = Carbon::parse($competition->date_end)->addDay(1);}
 			if($competition->date_start == $competition->date_end){
 				$start_select = '0000-00-00 00:00:00';
 				$end_select = '9999-12-30 23:59:59';

@@ -9,7 +9,7 @@
 			<p>
 				<b>Сроки проведения:</b>
 					c {{ $data['date_start'] }} 
-					@if($data['date_start'] != $data['date_end'])
+					@if($data['date_end'] != '' && $data['date_start'] != $data['date_end'])
 						по {{ $data['date_end'] }} 
 					@endif
 			</p>
@@ -69,6 +69,9 @@
 									<div class="info">
 										<div class="likes">
 											<i class="fa pull-left fa-heart"></i><span>{{ $value['all_like']}}</span>
+										</div>
+										<div class="comments">
+											<i class="fa pull-left fa-camera"></i><span>{{ $value['count']}}</span>
 										</div>
 									</div>
 								</div>

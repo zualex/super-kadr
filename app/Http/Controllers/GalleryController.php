@@ -79,6 +79,7 @@ class GalleryController extends Controller {
 			$angle = $_POST['rotation'];					// rotation angle
 			$jpeg_quality = 100;
 			
+			
 			$monitor = $_POST['monitor'];
 			$modelMonitor = Monitor::find($monitor);
 			if(count($modelMonitor) > 0){
@@ -103,6 +104,7 @@ class GalleryController extends Controller {
 				
 				$output_filename = $dirFile."/croppedImg_".rand();
 				
+				
 				$what = getimagesize($imgUrl);
 				switch(strtolower($what['mime']))
 				{
@@ -125,7 +127,35 @@ class GalleryController extends Controller {
 					default: die('image type not supported');
 				}
 				if(is_writable(dirname(base_path().$output_filename))){
+				
+				
+					/*
+					* Если загружать через IOS то изображение в зависимости от ориентации не правльно поворачивается
+					*/
+					$exif = exif_read_data($imgUrl);
+					$dopAngle = 0;
+					if (isset($exif['Orientation'])){
+						switch ($exif['Orientation']){
+							case 3:
+								// Need to rotate 180 deg
+								$dopAngle = -180;
+								break;
 
+							case 6:
+								// Need to rotate 90 deg clockwise
+								$dopAngle = -90;
+								break;
+
+							case 8:
+								// Need to rotate 90 deg counter clockwise
+								$dopAngle = 90;
+								break;
+						}
+					}
+					$angle = $angle - $dopAngle;
+				
+				
+				
 					// resize the original image to size of editor
 					$resizedImage = imagecreatetruecolor($imgW, $imgH);
 					imagecopyresampled($resizedImage, $source_image, 0, 0, 0, 0, $imgW, $imgH, $imgInitW, $imgInitH);
@@ -149,6 +179,8 @@ class GalleryController extends Controller {
 					imagecopyresampled($final_image, $cropped_rotated_image, 0, 0, $imgX1, $imgY1, $cropW, $cropH, $cropW, $cropH);
 					// finally output png image
 					//imagepng($final_image, base_path().$output_filename.$type, $png_quality);
+					
+									
 					imagejpeg($final_image, base_path().$output_filename.$type, $jpeg_quality);
 					
 					
