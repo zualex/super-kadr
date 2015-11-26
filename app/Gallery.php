@@ -626,6 +626,8 @@ class Gallery extends Model {
 				'provider' => $value['provider'],
 				'avatar' => $value['avatar'],
 				'count' => $value['count'],
+				'all_like' => $value['all_like'],
+				'max_like' => $value['max_like'],
 			);
 		}
 

@@ -68,7 +68,7 @@
 									</a>
 									<div class="info">
 										<div class="likes">
-											<i class="fa pull-left fa-heart"></i><span>{{ $value['count']}}</span>
+											<i class="fa pull-left fa-heart"></i><span>{{ $value['all_like']}}</span>
 										</div>
 									</div>
 								</div>
