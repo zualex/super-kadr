@@ -15,7 +15,7 @@
 						<i class="fa pull-left fa-heart"></i>
 						<span>
 							@if($gallery->like_admins)
-								{{ count($gallery->likes) - $gallery->like_admins->count }}
+								{{ count($gallery->likes) + $gallery->like_admins->count }}
 							@else
 								{{ count($gallery->likes) }}
 							@endif

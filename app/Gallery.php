@@ -104,20 +104,42 @@ class Gallery extends Model {
 			/*
 			* like_count считается отдельно так как есть ограничения что лайки считаются за месяц а нужно за весь период
 			*/
-			$galleryTop = DB::select('
-				SELECT 
-					g.*,  
-					((SELECT COUNT(likes.id) FROM likes WHERE likes.gallery_id = g.id)+(SELECT like_admins.count FROM like_admins WHERE like_admins.gallery_id = g.id)) as like_count,  
-					(SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = g.id) as comment_count
+			$galleryTopId= DB::select('
+				SELECT g.id
 				FROM galleries as g
 				LEFT JOIN likes as l ON l.gallery_id = g.id
 				WHERE 
 					status_main = ?
 					AND date(l.created_at) BETWEEN "'.$dateStart.'" AND "'.$dateEnd.'"
 				GROUP BY g.id
-				ORDER BY like_count DESC, comment_count DESC
 				LIMIT ?', [$status_main->id, $this->limitMain]
 			);
+			if(count($galleryTopId) > 0){
+				$arrayTemp = array();
+				foreach($galleryTopId as $key => $value){
+					$arrayTemp[$value->id] = $value->id;
+				}
+				
+				$galleryTop = DB::select('
+					SELECT 
+						g.*,  
+						((SELECT COUNT(likes.id) FROM likes WHERE likes.gallery_id = g.id)+(SELECT like_admins.count FROM like_admins WHERE like_admins.gallery_id = g.id)) as like_count,  
+						(SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = g.id) as comment_count
+					FROM galleries as g
+					LEFT JOIN likes as l ON l.gallery_id = g.id
+					WHERE 
+						status_main = ?
+						AND g.id IN ('.implode(",", $arrayTemp).')
+					GROUP BY g.id
+					ORDER BY like_count DESC, comment_count DESC
+					LIMIT ?', [$status_main->id, $this->limitMain]
+				);
+				
+				
+			}
+			
+			
+			
 			
 			/* 
 			*	Сохраняем список id и узнаем реальное кол-во  лайков так как запрос был
