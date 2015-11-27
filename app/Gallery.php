@@ -586,7 +586,7 @@ class Gallery extends Model {
 	*	Получение ТОП 10 фото
 	*/
 	public function getTop($arrRes, $limit){
-		/*$res = array();
+		$res = array();
 		
 		$count = 0;
 		foreach($arrRes as $key => $value){
@@ -599,9 +599,9 @@ class Gallery extends Model {
 		}
 		$res = $this->array_orderby($res, 'like_count', SORT_DESC);
 
-		return $res;*/
+		return $res;
 		
-		$galleries = array();
+		/*$galleries = array();
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 		
 		$competition = Competition::first();
@@ -628,9 +628,10 @@ class Gallery extends Model {
 				->orderBy('comment_count', 'desc')
 				->take($limit)
 				->get();
+			
 		}
 
-		return $galleries;
+		return $galleries;*/
 		
 	}
 	
