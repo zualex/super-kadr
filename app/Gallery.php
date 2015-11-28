@@ -69,7 +69,7 @@ class Gallery extends Model {
 		//(COUNT(likes.id)+SUM(like_admins.count)) AS like_count
 		//COUNT(likes.id) AS like_count
 		$galleries =$this
-				->select(DB::raw('galleries.*, (COUNT(likes.id)+SUM(like_admins.count)) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
+				->select(DB::raw('galleries.*, (COUNT(likes.id)+like_admins.count) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
 				->leftJoin('likes', 'galleries.id', '=', 'likes.gallery_id')
 				->leftJoin('like_admins', 'galleries.id', '=', 'like_admins.gallery_id')
 				->where('status_main', '=', $status_main->id)
@@ -89,6 +89,7 @@ class Gallery extends Model {
 	*/
 	public function mainGallery(){
 		$gallery = array();
+		$galleryTop = array();
 
 		/* Кэшируем на 30 минут */
 		//$expiresAt = Carbon::now()->addMinutes(30);
@@ -153,7 +154,7 @@ class Gallery extends Model {
 			if(count($galleryTop) < $this->limitMain){
 				$limit = $this->limitMain - count($galleryTop);
 				$galleryDop = DB::select('
-					SELECT g.*,  (COUNT(l.id)+SUM(l_a.count)) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = g.id) as comment_count
+					SELECT g.*,  (COUNT(l.id)+l_a.count) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = g.id) as comment_count
 					FROM galleries as g
 					LEFT JOIN likes as l ON l.gallery_id = g.id
 					LEFT JOIN like_admins as l_a ON l_a.gallery_id = g.id
@@ -700,7 +701,7 @@ class Gallery extends Model {
 
 				
 			$galleries =$this
-				->select(DB::raw('galleries.*, (COUNT(likes.id)+SUM(like_admins.count)) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
+				->select(DB::raw('galleries.*, (COUNT(likes.id)+like_admins.count) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
 				->leftJoin('likes', 'galleries.id', '=', 'likes.gallery_id')
 				->leftJoin('like_admins', 'galleries.id', '=', 'like_admins.gallery_id')
 				->where('date_show', '>=', $start_select)
@@ -712,7 +713,6 @@ class Gallery extends Model {
 				->orderBy('comment_count', 'desc')
 				->paginate($this->limitMain);
 				
-		
 		}
 
 		return $galleries;
