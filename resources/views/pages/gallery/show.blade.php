@@ -12,7 +12,11 @@
 				<div class="description"><span>Оцените и прокомментируйте:</span></div>
 				<div class="buttons">
 					<div class="likes" onclick="likeGallery(this, {{ $gallery->id }}, '{{ route('gallery.like') }}')">
-						<i class="fa pull-left fa-heart"></i>
+						@if(array_key_exists($gallery->id ,$likes))
+							<i class="fa pull-left fa-heart like_active"></i>
+						@else
+							<i class="fa pull-left fa-heart"></i>
+						@endif
 						<span>
 							@if($gallery->like_admins)
 								{{ count($gallery->likes) + $gallery->like_admins->count }}

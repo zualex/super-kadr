@@ -13,6 +13,8 @@ use Input;
 use App\Competition;
 use App\Gallery;
 use App\User;
+use App\Like;
+use Auth;
 use Carbon\Carbon;
 
 
@@ -23,6 +25,18 @@ class CompetitionController extends Controller {
 	*/
 	public function index(Gallery $galleryModel, User $userModel)
 	{	
+		
+		$likes = array();
+		if(Auth::check()){
+			$like = Like::where('user_id', '=', Auth::user()->id)->get();
+			if(count($like) > 0){
+				foreach($like as $value){
+					$likes[$value->gallery_id] = $value->gallery_id;
+				}
+			}
+		}
+	
+		
 		$data = array();
 		$name = '';
 		$text = '';
@@ -65,7 +79,8 @@ class CompetitionController extends Controller {
 		
 		return view('pages.competition.index')
 			->with('defaultAvatar', $userModel->defaultAvatar)
-			->with('data', $data);
+			->with('data', $data)
+			->with('likes', $likes);
 	}
 	
 	
@@ -74,6 +89,17 @@ class CompetitionController extends Controller {
 	* Детальная страница пользователя с его картинками
 	*/
 	public function show(Gallery $galleryModel, $id){
+	
+		$likes = array();
+		if(Auth::check()){
+			$like = Like::where('user_id', '=', Auth::user()->id)->get();
+			if(count($like) > 0){
+				foreach($like as $value){
+					$likes[$value->gallery_id] = $value->gallery_id;
+				}
+			}
+		}
+	
 		$arrRes = $galleryModel->getGalleryCompetition();
 		$autorGallery = $galleryModel->getAutorGallery($arrRes, $id);
 		
@@ -82,7 +108,9 @@ class CompetitionController extends Controller {
 			'gallery' => $autorGallery,
 			'pathImages' => $galleryModel->pathImages,
 		);
-		return view('pages.competition.show')->with('data', $data);
+		return view('pages.competition.show')
+			->with('data', $data)
+			->with('likes', $likes);
 	}
 	
 	

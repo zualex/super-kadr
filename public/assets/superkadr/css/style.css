@@ -325,3 +325,10 @@ footer .sirene>a{color:#333;}
 }
 
 
+
+.like_active{
+	color: #FE5252;
+}
+.wrapper #Container-Gallery>.social>div .details div i.like_active{
+	color: #E62D16;
+}

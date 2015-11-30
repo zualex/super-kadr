@@ -16,7 +16,6 @@ use Carbon\Carbon;
 
 
 class AdminCompetition extends Controller {
-
 	/*
 	* Вывод конкурса
 	*/

@@ -4,6 +4,7 @@ use App\User;
 use App\Gallery;
 use App\Tarif;
 use App\Monitor;
+use App\Like;
 use Carbon\Carbon;
 class HomeController extends Controller {
 	/*
@@ -28,6 +29,17 @@ class HomeController extends Controller {
 	 */
 	public function index(User $userModel, Gallery $galleryModel)
 	{
+	
+
+		$likes = array();
+		if(Auth::check()){
+			$like = Like::where('user_id', '=', Auth::user()->id)->get();
+			if(count($like) > 0){
+				foreach($like as $value){
+					$likes[$value->gallery_id] = $value->gallery_id;
+				}
+			}
+		}
 		
 		$data = array(
 			'mainGallery' => $galleryModel->mainGallery(),
@@ -37,7 +49,9 @@ class HomeController extends Controller {
 		);
 		
 		//dd($galleryModel->mainGallery());
-		return view('home')->with('data', $data);
+		return view('home')
+			->with('data', $data)
+			->with('likes', $likes);
 	}
 	
 	public function dateContent(){

@@ -11,7 +11,14 @@
 								<div class="slide">
 									<a href="{{ route('gallery.show', $value->id) }}"><div class="image" style="background-image:url('{{ $data['mainGallery']['pathImages'].'/s_'.$value->src }}');"></div></a>
 									<div class="info">
-										<div class="likes" onclick="likeGallery(this, {{ $value->id }}, '{{ route('gallery.like') }}')"><i class="fa pull-left fa-heart"></i><span>{{ $value->like_count }}</span></div>
+										<div class="likes" onclick="likeGallery(this, {{ $value->id }}, '{{ route('gallery.like') }}')">
+											@if(array_key_exists($value->id ,$likes))
+												<i class="fa pull-left fa-heart like_active"></i>
+											@else
+												<i class="fa pull-left fa-heart"></i>
+											@endif
+											<span>{{ $value->like_count }}</span>
+										</div>
 										<div class="comments" onclick="window.location.href='{{ route('gallery.show', $value->id) }}#comment'"><i class="fa pull-left fa-comment"></i><span>{{ $value->comment_count }}</span></div>
 									</div>
 								</div>

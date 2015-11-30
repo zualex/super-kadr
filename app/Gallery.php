@@ -21,7 +21,6 @@ use App\Pay;
 
 
 class Gallery extends Model {
-	
 	public $error;
 	public $pathImages;
 	public $limitMain;

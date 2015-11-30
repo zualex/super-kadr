@@ -390,6 +390,11 @@ function likeGallery(el, gallery, url){
 				var countLikes = $(el).find('span').html()/1;
 				countLikes += data.message;
 				$(el).find('span').html(countLikes);
+				if(data.message > 0){
+					$(el).find('i').addClass('like_active');
+				}else{
+					$(el).find('i').removeClass('like_active');
+				}
 			}			
 		},
 		error: function(){

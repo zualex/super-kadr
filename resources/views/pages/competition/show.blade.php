@@ -14,7 +14,11 @@
 				<a href="{{ route('gallery.show', $value->id) }}"><div class="image" style="background-image:url('{{ $data['pathImages'].'/m_'.$value->src }}');"></div></a>
 				<div class="info clear">
 					<div class="likes" onclick="likeGallery(this, {{ $value->id }}, '{{ route('gallery.like') }}')">
-						<i class="fa pull-left fa-heart"></i>
+						@if(array_key_exists($value->id ,$likes))
+							<i class="fa pull-left fa-heart like_active"></i>
+						@else
+							<i class="fa pull-left fa-heart"></i>
+						@endif
 						<span>
 								{{ $value->like_count }}
 						</span>

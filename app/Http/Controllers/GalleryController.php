@@ -25,13 +25,24 @@ class GalleryController extends Controller {
 	
 	public function index(Gallery $galleryModel)
 	{	
-	
+		
+		$likes = array();
+		if(Auth::check()){
+			$like = Like::where('user_id', '=', Auth::user()->id)->get();
+			if(count($like) > 0){
+				foreach($like as $value){
+					$likes[$value->gallery_id] = $value->gallery_id;
+				}
+			}
+		}
 		
 		$data = array(
 			'gallery' => $galleryModel->galleryAll(),
 			'pathImages' => $galleryModel->pathImages,
 		);
-		return view('pages.gallery.index')->with('data', $data);
+		return view('pages.gallery.index')
+			->with('data', $data)
+			->with('likes', $likes);
 	}
 	
 	
@@ -43,11 +54,21 @@ class GalleryController extends Controller {
 	 */
 	public function show(Gallery $galleryModel, Comment $commentModel, User $userModel,  $id)
 	{	
+		$likes = array();
+		if(Auth::check()){
+			$like = Like::where('user_id', '=', Auth::user()->id)->get();
+			if(count($like) > 0){
+				foreach($like as $value){
+					$likes[$value->gallery_id] = $value->gallery_id;
+				}
+			}
+		}
 		
 		return view('pages.gallery.show')
 			->with('gallery', $galleryModel->getGallery($id))
 			->with('comments', $commentModel->showComment($id))
-			->with('defaultAvatar', $userModel->defaultAvatar);
+			->with('defaultAvatar', $userModel->defaultAvatar)
+			->with('likes', $likes);
 	}
 	
 	
