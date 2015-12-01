@@ -84,14 +84,14 @@
 			.cropControls i.cropControlRotateLeft:before{content: "\f0e2";}
 			.cropControls i.cropControlRotateRight{}
 			.cropControls i.cropControlRotateRight:before{content: "\f01e";}
-			.cropControls i.cropControlCrop{color:#2ecc71;position: absolute;bottom: 0;width: 100%;height: 60px;}
+			.cropControls i.cropControlCrop{color:#2ecc71;position: absolute;bottom: 0;left:50%;width: 200px;margin-left:-100px;height: 60px;}
 			.cropControls i.cropControlCrop:before{content: "\f078";}
 			.cropControls i.cropControlCrop:after{content: "ОК";margin-left: 15px; font-family:'SegoeUIBold';}
 			.cropControls i.cropControlUpload{}
 			.cropControls i.cropControlUpload:before{content: "\f010";}
 			.cropControls i.cropControlReset{color:#c0392b;}
 			.cropControls i.cropControlReset:before{content: "\f00d";}
-			.cropControls i.cropControlRemoveCroppedImage{}
+			.cropControls i.cropControlRemoveCroppedImage{position: absolute;top: 0;left: 0;z-index: 1;}
 			
 			.cropControls i:last-child{
 				margin-right:none;

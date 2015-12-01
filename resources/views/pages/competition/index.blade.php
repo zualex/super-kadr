@@ -2,34 +2,42 @@
 
 @section('content')
 <div class="wrapper">
-	<div class="block">
+	<div class="competition">
 		@if($data['name'] != '')
-		<div class="header"><span>Конкурс: {{ $data['name'] }}</span></div>
+		<div class="header">
+			<span>Конкурс</span>
+		</div>
+		<div class="title">
+			<span>{{ $data['name'] }}</span>
+		</div>
+		<div class="date">
+			<span>Сроки проведения:
+			c {{ $data['date_start'] }} 
+			@if($data['date_end'] != '01.01.1970' && $data['date_start'] != $data['date_end'])
+				по {{ $data['date_end'] }} 
+			@endif</span>
+		</div>
 		<div class="body clear">
-			<p>
-				<b>Сроки проведения:</b>
-					c {{ $data['date_start'] }} 
-					@if($data['date_end'] != '' && $data['date_start'] != $data['date_end'])
-						по {{ $data['date_end'] }} 
-					@endif
-			</p>
-			<p>
+			<div class="text">
+			<span>
 				{!! $data['text'] !!}
-			</p>
+			</span>
+			</div>
 		</div>
 		@endif
-		
+	</div>
+	<div class="block">
 		@if(count($data['top']) > 0)
 		<div id="slider" class="block color-1">
 			<div class="header"><span>ТОП-10</span></div>
 			<div class="body clear">
-				<div class="slider" id="slider1">
+				<div class="slider color-1" id="slider2">
 					<div class="content">
 						<div class="slide-list clear">
 							@foreach($data['top'] as $key => $value)
 								<div class="slide">
 									<a href="{{ route('gallery.show', $value->id) }}"><div class="image" style="background-image:url('{{ $data['pathImages'].'/s_'.$value->src }}');"></div></a>
-									<div class="info">
+									<div class="info indicate">
 										<div class="likes" onclick="likeGallery(this, {{ $value->id }}, '{{ route('gallery.like') }}')">
 											@if(array_key_exists($value->id ,$likes))
 												<i class="fa pull-left fa-heart like_active"></i>
@@ -59,7 +67,7 @@
 		<div id="slider" class="block color-1">
 			<div class="header"><span>Лучший автор</span></div>
 			<div class="body clear">
-				<div class="slider" id="slider1">
+				<div class="slider color-2" id="slider3">
 					<div class="content">
 						<div class="slide-list clear">
 							@foreach($data['autor'] as $key => $value)
@@ -95,7 +103,7 @@
 		@endif
 		
 		@if(count($data['gallery']) > 0)
-		<div class="header"><span>Конкурсые работы</span></div>
+		<div class="header"><span>Конкурсные работы</span></div>
 		<div id="Container-Gallery" class="block-page">
 			<div class="content clear">
 				@foreach($data['gallery'] as $key => $value)

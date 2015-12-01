@@ -40,7 +40,7 @@
 			<div class="inline-block">
 				<div class="line-title"><span>Роль</span></div>
 				<div class="line-value">
-					<select name="level">
+					<select name="level" class="selectbox">
 						<option value="moderator">Модератор</option>
 						<option value="admin">Администратор</option>
 					</select>
@@ -62,9 +62,9 @@
 			</div>
 			
 			<div class="inline-block">
-				<div class="line-title">&nbsp;</div>
-				<div class="line-value">
-					<input type="submit" class="btn add savesettings" value="Создать пользователя">
+				<div class="btn-group">
+					<a class="btn add" onclick="$('#form-admin').submit();"><i class="fa pull-left fa-plus-square-o"></i>Создать</a>
+					<a href="/admin/users/" class="btn cancel"><i class="fa pull-left fa-times-circle"></i>Отмена</a>
 				</div>
 			</div>
 		</form>

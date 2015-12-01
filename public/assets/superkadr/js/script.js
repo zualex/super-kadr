@@ -179,7 +179,9 @@ $(function(){
 	}
 
 	$(function() {
-		auto_right('.slider');
+		auto_right('#slider1');
+		auto_right('#slider2');
+		auto_right('#slider3');
 	})
 
 	function auto_right(carusel){
@@ -254,6 +256,7 @@ $(document).ready( function () {
 	/*
 	*	Инициализируем первый монитор
 	*/
+	if($('#upload').length){
 	$('.monitor-select .select:first').addClass('active');
 	var nowMonitor = $('.monitor-select .select:first').attr('data-monitor');
 	var Cwidth = $('.monitor-select .select:first').attr('data-width')/1;
@@ -295,7 +298,7 @@ $(document).ready( function () {
 			$('#monitor-change-class').width(newW).height(newH);
 		}, 300);
 	});
-	
+	}
 	
 	/*
 	*	Выбор даты

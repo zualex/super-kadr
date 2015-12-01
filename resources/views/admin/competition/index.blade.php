@@ -25,7 +25,6 @@ $(function() {
 		yearSuffix: ''
 	};
 	$.datepicker.setDefaults($.datepicker.regional['ru']);
-
 	@if($data['edit'] == 1)
 		$("#date_start").datepicker({
 			dateFormat: "yy-mm-dd",

@@ -1,9 +1,6 @@
 <?php namespace App;
-
 use Illuminate\Database\Eloquent\Model;
-
 use Schema;
-
 class Setting extends Model {
 	
 	/* 
@@ -69,7 +66,6 @@ class Setting extends Model {
 				$value->value = 0;
 				$value->save();
 			}
-
 		}
 	
 		foreach ($param as $key => $value){
@@ -284,7 +280,5 @@ class Setting extends Model {
 		));
 		
 		
-
 	}
-
 }

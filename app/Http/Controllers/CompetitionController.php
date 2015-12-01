@@ -66,8 +66,8 @@ class CompetitionController extends Controller {
 		$data = array(
 			"name" => $name,
 			"text" => $text,
-			"date_start" => $date_start,
-			"date_end" => $date_end,
+			"date_start" => date('d.m.Y',strtotime($date_start)),
+			"date_end" => date('d.m.Y',strtotime($date_end)),
 			"condition" => $condition,
 			"start_select" => $start_select,
 			"end_select" => $end_select,

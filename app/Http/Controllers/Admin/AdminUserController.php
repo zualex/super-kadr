@@ -1,21 +1,15 @@
 <?php namespace App\Http\Controllers\Admin;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
-
 use Validator;
 use Input;
 use Session;
 use Redirect;
 use Hash;
 use Auth;
-
 use App\User;
-
 class AdminUserController extends Controller {
-
 	public function change_password()
 	{
 		return view('auth.change_password');
@@ -31,7 +25,7 @@ class AdminUserController extends Controller {
         $validator = Validator::make(Input::all(), $rules);
 		if(Input::get('password_new') != Input::get('password_repeat')){
 			$validator->after(function($validator){
-				$validator->errors()->add('field', 'ĞĞ¾Ğ²Ñ‹Ğ¹ Ğ¿Ğ°Ñ€Ğ¾Ğ»ÑŒ Ğ½Ğµ Ğ¿Ñ€Ğ°Ğ²Ğ¸Ğ»ÑŒĞ½Ğ¾ Ğ¿Ğ¾Ğ²Ñ‚Ğ¾Ñ€ĞµĞ½');
+				$validator->errors()->add('field', 'Íîâûé ïàğîëü íå ïğàâèëüíî ïîâòîğåí');
 			});
 		}
 		
@@ -39,7 +33,7 @@ class AdminUserController extends Controller {
 		
 		if (!Hash::check(Input::get('password_old'), Auth::user()->password)) {
 			$validator->after(function($validator){
-				$validator->errors()->add('field', 'ĞĞµĞ¿Ñ€Ğ°Ğ²Ğ¸Ğ»ÑŒĞ½Ğ¾ Ğ²Ğ²ĞµĞ´ĞµĞ½ ÑÑ‚Ğ°Ñ€Ñ‹Ğ¹ Ğ¿Ğ°Ñ€Ğ¾Ğ»ÑŒ');
+				$validator->errors()->add('field', 'Íåïğàâèëüíî ââåäåí ñòàğûé ïàğîëü');
 			});
 		}
 		
@@ -54,16 +48,13 @@ class AdminUserController extends Controller {
 			Auth::loginUsingId($user->id);
 			
 			// redirect
-            Session::flash('message', 'ĞŸĞ°Ñ€Ğ¾Ğ»ÑŒ ÑƒÑĞ¿ĞµÑˆĞ½Ğ¾ Ğ¸Ğ·Ğ¼ĞµĞ½ĞµĞ½');
+            Session::flash('message', 'Ïàğîëü óñïåøíî èçìåíåí');
             return redirect()->route('admin');
         }
 		
-
 		
 	}
 	
-
-
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -74,7 +65,6 @@ class AdminUserController extends Controller {
 		$users = User::where('level', '!=', 'user')->get();
 		return view('admin.users.index')->with('users', $users);
 	}
-
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -84,7 +74,6 @@ class AdminUserController extends Controller {
 	{
 		return view('admin.users.create');
 	}
-
 	/**
 	 * Store a newly created resource in storage.
 	 *
@@ -93,7 +82,6 @@ class AdminUserController extends Controller {
 	public function store()
 	{
 		// validate
-
         $rules = array(
             'name'       => 'required',
             'email'      => 'required|email',
@@ -104,14 +92,14 @@ class AdminUserController extends Controller {
         $validator = Validator::make(Input::all(), $rules);
 		if(Input::get('password') != Input::get('password_confirmation')){
 			$validator->after(function($validator){
-				$validator->errors()->add('field', 'ĞŸĞ°Ñ€Ğ¾Ğ»Ğ¸ Ğ½Ğµ ÑĞ¾Ğ²Ğ¿Ğ°Ğ´Ğ°ÑÑ‚');
+				$validator->errors()->add('field', 'Ïàğîëè íå ñîâïàäàşò');
 			});
 		}
 		
 		$userCheck = User::where('email', '=', Input::get('email'))->first();
 		if(count($userCheck) > 0){
 			$validator->after(function($validator){
-				$validator->errors()->add('field', 'ĞŸĞ¾Ğ»ÑŒĞ·Ğ¾Ğ²Ğ°Ñ‚ĞµĞ»ÑŒ Ñ email '.Input::get('email').' ÑƒĞ¶Ğµ ÑÑƒÑ‰ĞµÑÑ‚Ğ²ÑƒĞµÑ‚ Ğ² ÑĞ¸ÑÑ‚ĞµĞ¼Ğµ');
+				$validator->errors()->add('field', 'Ïîëüçîâàòåëü ñ email '.Input::get('email').' óæå ñóùåñòâóåò â ñèñòåìå');
 			});
 		}
 		
@@ -129,13 +117,11 @@ class AdminUserController extends Controller {
             $user->level = Input::get('level');
             $user->password = Hash::make(Input::get('password'));
             $user->save();
-
             // redirect
-            Session::flash('message', 'ĞŸĞ¾Ğ»ÑŒĞ·Ğ¾Ğ²Ğ°Ñ‚ĞµĞ»ÑŒ ÑƒÑĞ¿ĞµÑˆĞ½Ğ¾ Ğ´Ğ¾Ğ±Ğ°Ğ²Ğ»ĞµĞ½');
+            Session::flash('message', 'Ïîëüçîâàòåëü óñïåøíî äîáàâëåí');
             return redirect()->route('admin.users.index');
         }
 	}
-
 	/**
 	 * Display the specified resource.
 	 *
@@ -146,7 +132,6 @@ class AdminUserController extends Controller {
 	{
 		//
 	}
-
 	/**
 	 * Show the form for editing the specified resource.
 	 *
@@ -157,10 +142,8 @@ class AdminUserController extends Controller {
 	{
 		// get the nerd
         $user = User::find($id);
-
 		return view('admin.users.edit')->with('user', $user);
 	}
-
 	/**
 	 * Update the specified resource in storage.
 	 *
@@ -177,7 +160,6 @@ class AdminUserController extends Controller {
             'level' => 'required',
         );
         $validator = Validator::make(Input::all(), $rules);
-
         // process the login
         if ($validator->fails()) {
             return redirect()->route('admin.users.edit', $id)
@@ -190,13 +172,11 @@ class AdminUserController extends Controller {
             $user->email = Input::get('email');
             $user->level = Input::get('level');
             $user->save();
-
             // redirect
-            Session::flash('message', 'ĞŸĞ¾Ğ»ÑŒĞ·Ğ¾Ğ²Ğ°Ñ‚ĞµĞ»ÑŒ ÑƒÑĞ¿ĞµÑˆĞ½Ğ¾ Ğ¾Ñ‚Ñ€ĞµĞ´Ğ°ĞºÑ‚Ğ¸Ñ€Ğ¾Ğ²Ğ°Ğ½!');
+            Session::flash('message', 'Ïîëüçîâàòåëü óñïåøíî îòğåäàêòèğîâàí!');
             return redirect()->route('admin.users.index');
         }
 	}
-
 	/**
 	 * Remove the specified resource from storage.
 	 *
@@ -210,23 +190,19 @@ class AdminUserController extends Controller {
         $validator = Validator::make(Input::all(), $rules);
 		if (Auth::check() and Auth::user()->id == $id){
 			$validator->after(function($validator){
-				$validator->errors()->add('field', 'ĞĞµĞ»ÑŒĞ·Ñ ÑƒĞ´Ğ°Ğ»Ğ¸Ñ‚ÑŒ ÑĞµĞ±Ñ');
+				$validator->errors()->add('field', 'Íåëüçÿ óäàëèòü ñåáÿ');
 			});
 		}
 		
-
         if ($validator->fails()) {
             return redirect()->route('admin.users.index')->withErrors($validator);
         } else {
-
 			// delete
 			$user = User::find($id);
 			$user->delete();
-
 			// redirect
-			Session::flash('message', 'ĞŸĞ¾Ğ»ÑŒĞ·Ğ¾Ğ²Ğ°Ñ‚ĞµĞ»ÑŒ ÑƒÑĞ¿ĞµÑˆĞ½Ğ¾ ÑƒĞ´Ğ°Ğ»ĞµĞ½!');
+			Session::flash('message', 'Ïîëüçîâàòåëü óñïåøíî óäàëåí!');
 			return redirect()->route('admin.users.index');
 		}
 	}
-
 }

@@ -2,7 +2,7 @@
 					<table class="table-list">
 						<thead>
 							<tr>
-								<th class="center col-1"><input class="checkbox" type="checkbox" name="checkall" value=""></th>
+								<th class="center col-check"><input class="checkbox" type="checkbox" name="checkall" value=""></th>
 								<th class="center col-2">ID</th>
 								<th class="center col-2">Пользователь</th>
 								<th class="center col-3">Изображение</th>
@@ -17,7 +17,7 @@
 						<tbody>
 						@foreach($data['galleryModeration'] as $key => $value)
 							<tr>
-								<td class="center col-1">
+								<td class="center col-check">
 									<input type="checkbox" name="checkelement[]" value="{{ $value->id }}">
 								</td>
 								<td class="center col-2">{{ $value->id }}</td>

@@ -104,14 +104,28 @@ $(function() {
 		
 		<input type="hidden" id="ajax_from" name="ajax_from" value="{{ $data['dateFrom'] }}">
 		<input type="hidden" id="ajax_to" name="ajax_to" value="{{ $data['dateTo'] }}">
-		<form method="GET" >
-			<div style="padding:10px 0 0 10px">
-				Поиск по дате c 
-				<input type="text" class="datepicker inputbox " id="dateFrom" readonly name="dateFrom" value="{{ $data['dateFrom'] }}" style="width: 100px;"> по:
-				<input type="text" class="datepicker inputbox " id="dateTo" readonly name="dateTo" value="{{ $data['dateTo'] }}"  style="width: 100px;">
-				<input type="submit" class="btn add" style="margin-left:12px;float: none;display: inline-block;" value="Поиск">
+		<form id="sort-items" method="GET" >
+		<div class="sort-block">
+			<div class="inline-block">
+				<div class="title">Поиск по дате</div>
 			</div>
-		</form>
+			<div class="inline-block">
+				<div class="inline-title">C</div>
+				<div class="inline-value">
+					<input type="text" class="datepicker inputbox " id="dateFrom" readonly name="dateFrom" value="{{ $data['dateFrom'] }}">
+				</div>
+				<div class="inline-title">По</div>
+				<div class="inline-value">
+					<input type="text" class="datepicker inputbox " id="dateTo" readonly name="dateTo" value="{{ $data['dateTo'] }}">
+				</div>
+			</div>
+			<div class="inline-block">
+				<div class="btn-group">
+					<a onclick="$('#sort-items').submit();" class="btn add"><i class="fa pull-left fa-search"></i>Найти</a>
+				</div>
+			</div>
+		</div>
+	</form>
 		
 		<form id="form-admin" role="form" method="POST" >
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -126,7 +140,7 @@ $(function() {
 					<table class="table-list">
 						<thead>
 							<tr>
-								<th class="center col-1"><input class="checkbox" type="checkbox" name="checkall" value=""></th>
+								<th class="center col-check"><input class="checkbox" type="checkbox" name="checkall" value=""></th>
 								<th class="center col-2">ID</th>
 								<th class="center col-2">Пользователь</th>
 								<th class="center col-3">Изображение</th>
@@ -142,7 +156,7 @@ $(function() {
 						<tbody>				
 						@foreach($data['gallerySuccess'] as $key => $value)
 							<tr>
-								<td class="center col-1">
+								<td class="center col-check">
 									<input type="checkbox" name="checkelement[]" value="{{ $value->id }}">
 								</td>
 								<td class="center col-2">{{ $value->id }}</td>
@@ -212,7 +226,7 @@ $(function() {
 					<table class="table-list">
 						<thead>
 							<tr>
-								<th class="center col-1"><input class="checkbox" type="checkbox" name="checkall" value=""></th>
+								<th class="center col-check"><input class="checkbox" type="checkbox" name="checkall" value=""></th>
 								<th class="center col-2">ID</th>
 								<th class="center col-2">Пользователь</th>
 								<th class="center col-3">Изображение</th>
@@ -227,7 +241,7 @@ $(function() {
 						<tbody>
 						@foreach($data['galleryCancel'] as $key => $value)
 							<tr>
-								<td class="center col-1">
+								<td class="center col-check">
 									<input type="checkbox" name="checkelement[]" value="{{ $value->id }}">
 								</td>
 								<td class="center col-2">{{ $value->id }}</td>

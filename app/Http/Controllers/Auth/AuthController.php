@@ -60,9 +60,7 @@ class AuthController extends Controller {
 		$this->validate($request, [
 			'email' => 'required|email', 'password' => 'required',
 		]);
-
 		$credentials = $request->only('email', 'password');
-
 		if ($this->auth->attempt($credentials, $request->has('remember')))
 		{
 			return redirect()->intended($this->redirectPath());
@@ -71,7 +69,6 @@ class AuthController extends Controller {
 		/* Сохраняем не удавшуюся попытку входа */
 		$userIp = new UserIp;
 		$userIp->badLogin();
-
 		return redirect($this->loginPath())
 					->withInput($request->only('email', 'remember'))
 					->withErrors([

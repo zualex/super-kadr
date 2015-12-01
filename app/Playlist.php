@@ -750,11 +750,11 @@ class Playlist extends Model {
 		$day = sprintf("%02d", $nowDate->day);
 		$month = sprintf("%02d", $nowDate->month);
 		$nameInitFile = 'ПЛ'.$day.$month.$nowDate->year.'.xjob';
-		$nameInitFile = iconv("UTF-8", "cp1251", $nameInitFile);
+		//$nameInitFile = iconv("UTF-8", "cp1251", $nameInitFile);
 		
 		$res1 = $this->saveInitFile(1, $nameInitFile);
 		$res2 = $this->saveInitFile(2, $nameInitFile);
-		return $res1.' - '.$res2;
+		return 'Статус выгрузки для экранов 1-2 ('.$day.$month.$nowDate->year.'): '.$res1.' - '.$res2;
 	}
 	
 	
@@ -762,30 +762,33 @@ class Playlist extends Model {
 	* saveInitFile - сохранение исходного плейлиста
 	*/
 	public function saveInitFile($monitorNumber, $nameInitFile){	
-		$res = 0;
-		
-		$monitorId = $this->getId($monitorNumber);
-		if($monitorNumber == 1){
-			$path = $this->pathPlaylistMonitor_1.'/'.$this->folderInit;
-		}
-		if($monitorNumber == 2){
-			$path = $this->pathPlaylistMonitor_2.'/'.$this->folderInit;
-		}
-		
-		$pathFileInit = $path.'/'.$nameInitFile;
-		if (File::exists($pathFileInit)){
-			$this->deleteInitPlaylist($monitorId);
-			$res = $this->saveFileInDB($pathFileInit, $monitorId);
-		}
-		
-		/* Очистка старых исходных файлов */
-		foreach(File::files($path) as $key => $file){
-			if($pathFileInit != $file){
-				File::delete($file);
+			$res = 0;
+
+			$monitorId = $this->getId($monitorNumber);
+			if($monitorNumber == 1){
+					$path = $this->pathPlaylistMonitor_1.'/'.$this->folderInit;
 			}
-		}
-		
-		return $res;
+			if($monitorNumber == 2){
+					$path = $this->pathPlaylistMonitor_2.'/'.$this->folderInit;
+			}
+
+			$pathFileInit = $path.'/'.$nameInitFile;
+			if (File::exists($pathFileInit)){
+					echo 'Файл подключен: '.$pathFileInit.'<br>';
+					$this->deleteInitPlaylist($monitorId);
+					$res = $this->saveFileInDB($pathFileInit, $monitorId);
+			}else{
+					echo 'Файл не обнаружен: '.$pathFileInit.'<br>';
+			}
+
+			/* Очистка старых исходных файлов */
+			foreach(File::files($path) as $key => $file){
+				if($pathFileInit != $file){
+						File::delete($file);
+				}
+			}
+
+			return $res;
 	}
 	
 	

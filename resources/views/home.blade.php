@@ -4,13 +4,13 @@
 		<div id="slider" class="block color-1">
 			<div class="header"><span>Самое популярное в галерее</span></div>
 			<div class="body clear">
-				<div class="slider" id="slider1">
+				<div class="slider color-1" id="slider1">
 					<div class="content">
 						<div class="slide-list clear">
 							@foreach($data['mainGallery']['galleries'] as $key => $value)
 								<div class="slide">
 									<a href="{{ route('gallery.show', $value->id) }}"><div class="image" style="background-image:url('{{ $data['mainGallery']['pathImages'].'/s_'.$value->src }}');"></div></a>
-									<div class="info">
+									<div class="info indicate">
 										<div class="likes" onclick="likeGallery(this, {{ $value->id }}, '{{ route('gallery.like') }}')">
 											@if(array_key_exists($value->id ,$likes))
 												<i class="fa pull-left fa-heart like_active"></i>

@@ -82,7 +82,7 @@ header>div .profile .name:hover  .controls{display:block;}
 button{border:0;outline:none;}
 
 .btn-group{display:inline-block;}
-.btn{display:block;float:left;vertical-align:top;line-height:30px;border-radius:4px;padding:0 10px;color:#fff;margin-right:10px;cursor:pointer;}
+.btn{display:block;width:auto !important;float:left;vertical-align:top;line-height:30px;border-radius:4px;padding:0 10px;color:#fff;margin-right:10px;cursor:pointer;}
 .btn:last-child{margin:0;}
 .btn.add{background-color:#2ecc71;}
 .btn.add:hover{background-color:#27ae60;}
@@ -144,13 +144,14 @@ button{border:0;outline:none;}
 
 .events-list{}
 .add-event{padding:10px 20px;}
-.export-block {padding: 10px 20px;}
+.sort-block{padding: 10px 20px;}
 
 .table-list{width:100%;border-collapse: collapse;border-spacing: 0;}
 .table-list th, .table-list td{padding:10px;text-align:left;vertical-align: top;position:relative;}
 .table-list th{background-color:#7f8c8d;color:#fff;font-family:'SegoeUIBold';font-weight:normal;}
 .table-list tr:nth-child(odd){background-color:#ecf0f1;}
 .table-list .center{text-align:center;}
+.table-list .col-check{width:20px;}
 .table-list .col-1{width:10px;padding: 0;}
 .table-list .col-2{width:80px;}
 .table-list .col-3{width:100px;}

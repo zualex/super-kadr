@@ -741,4 +741,3 @@ class Gallery extends Model {
 	}
 	
 }
-

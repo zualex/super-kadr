@@ -55,8 +55,10 @@ class AdminPayController extends Controller {
 		if($status_paid->id == $status_id){
 			$gallery = Gallery::find($pay->gallery_id);
 			if(count($gallery) > 0){
-				$gallery->start_moderation = Carbon::now();
-				$gallery->save();
+				if($gallery->start_moderation == '0000-00-00 00:00:00'){
+					$gallery->start_moderation = Carbon::now();
+					$gallery->save();
+				}
 			}
 		}
 		

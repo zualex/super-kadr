@@ -14,7 +14,6 @@ use App\Monitor;
 use App\Tarif;
 use App\LikeAdmin;
 use Carbon\Carbon;
-
 class PayController extends Controller {
 	
 	public function conditions($gallery_id)
@@ -56,7 +55,7 @@ class PayController extends Controller {
 		return view('pages.pay.conditions')
 			->with('monitor', $monitor)
 			->with('tarif', $tarif)
-			->with('date_show', $date_show)
+			->with('date_show', date('j.m.Y H:i', strtotime($date_show)))
 			->with('gallery_id', $gallery_id);
 	}
 	
@@ -231,7 +230,6 @@ class PayController extends Controller {
 			
 			$head_name = 'Проведение платежа';
 		}
-
 		if(isset($_REQUEST["InvId"])){
 			$pay = Pay::find($_REQUEST["InvId"]);
 			if(count($pay) > 0){

@@ -1,10 +1,7 @@
 <?php namespace App\Http\Middleware;
-
 use Closure;
 use Auth;
-
 class checkAdmin {
-
 	/**
 	 * Handle an incoming request.
 	 *
@@ -20,5 +17,4 @@ class checkAdmin {
 			return redirect()->guest('auth/login');
 		}	
 	}
-
 }
