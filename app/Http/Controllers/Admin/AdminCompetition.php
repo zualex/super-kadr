@@ -110,6 +110,7 @@ class AdminCompetition extends Controller {
 				$competition->name = $name;
 				$competition->text = $text;
 				$competition->date_start = $date_start;
+				$competition->condition = $condition;
 			}
 			
 			//Если новая дата конца конкурса не меньше уже которой есть

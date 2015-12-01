@@ -384,7 +384,7 @@ class Gallery extends Model {
 			$condition = 'like_all_foto';
 		}
 		
-	
+		
 		$gallery =$this
 			->with('user')
 			->with('likes')
@@ -442,7 +442,7 @@ class Gallery extends Model {
 			}
 			
 			//Макс кол-во лайков по всем фото клиента
-			if($condition == 'like_all_foto'){
+			if($condition == 'like_all_foto' || $condition == ''){
 				$res = $this->array_orderby($res, 'all_like', SORT_DESC, 'count', SORT_DESC);
 			}
 			
@@ -557,7 +557,7 @@ class Gallery extends Model {
 				}
 				
 				//Макс кол-во лайков по всем фото клиента
-				if($competition->condition == 'like_all_foto'){
+				if($competition->condition == 'like_all_foto' || $competition->condition == ''){
 					$res = $this->array_orderby($res, 'all_like', SORT_DESC, 'count', SORT_DESC);
 				}
 				
@@ -684,7 +684,7 @@ class Gallery extends Model {
 	/*
 	* dopGalleryCompetitionAll - вывод всех галерей для конкурсов
 	*/
-	public function getGalleryCompetitionAll(){
+	public function getGalleryCompetitionAll($limit = 0){
 		$status_main = Status::where('type_status', '=', 'main')->where('caption', '=', 'success')->first();
 		$galleries = array();
 		$competition = Competition::first();
@@ -699,18 +699,35 @@ class Gallery extends Model {
 			}
 
 				
-			$galleries =$this
-				->select(DB::raw('galleries.*, (COUNT(likes.id)+like_admins.count) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
-				->leftJoin('likes', 'galleries.id', '=', 'likes.gallery_id')
-				->leftJoin('like_admins', 'galleries.id', '=', 'like_admins.gallery_id')
-				->where('date_show', '>=', $start_select)
-				->where('date_show', '<=', $end_select)
-				->where('status_main', '=', $status_main->id)
-				->groupBy('galleries.id')
-				->orderBy('date_show', 'desc')
-				->orderBy('like_count', 'desc')
-				->orderBy('comment_count', 'desc')
-				->paginate($this->limitMain);
+			if($limit > 0){
+				$galleries =$this
+					->select(DB::raw('galleries.*, (COUNT(likes.id)+like_admins.count) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
+					->leftJoin('likes', 'galleries.id', '=', 'likes.gallery_id')
+					->leftJoin('like_admins', 'galleries.id', '=', 'like_admins.gallery_id')
+					->where('date_show', '>=', $start_select)
+					->where('date_show', '<=', $end_select)
+					->where('status_main', '=', $status_main->id)
+					->groupBy('galleries.id')
+					->orderBy('like_count', 'desc')
+					->orderBy('comment_count', 'desc')
+					->take($limit)
+					->get();
+				
+			}else{
+				$galleries =$this
+					->select(DB::raw('galleries.*, (COUNT(likes.id)+like_admins.count) AS like_count,  (SELECT COUNT(comments.id) FROM comments WHERE comments.gallery_id = galleries.id) as comment_count'))
+					->leftJoin('likes', 'galleries.id', '=', 'likes.gallery_id')
+					->leftJoin('like_admins', 'galleries.id', '=', 'like_admins.gallery_id')
+					->where('date_show', '>=', $start_select)
+					->where('date_show', '<=', $end_select)
+					->where('status_main', '=', $status_main->id)
+					->groupBy('galleries.id')
+					->orderBy('date_show', 'desc')
+					->orderBy('like_count', 'desc')
+					->orderBy('comment_count', 'desc')
+					->paginate($this->limitMain);
+			}
+			
 				
 		}
 
