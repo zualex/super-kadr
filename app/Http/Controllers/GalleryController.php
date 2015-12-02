@@ -153,7 +153,7 @@ class GalleryController extends Controller {
 					/*
 					* Если загружать через IOS то изображение в зависимости от ориентации не правльно поворачивается
 					*/
-					$exif = exif_read_data($imgUrl);
+					$exif = @exif_read_data($imgUrl);
 					$dopAngle = 0;
 					if (isset($exif['Orientation'])){
 						switch ($exif['Orientation']){

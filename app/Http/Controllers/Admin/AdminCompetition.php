@@ -26,6 +26,7 @@ class AdminCompetition extends Controller {
 		$date_start = '';
 		$date_end = '';
 		$condition = '';
+		$condition_admin = '';
 		$start_select = '';
 		$end_select = '';
 		$edit = 1;
@@ -37,6 +38,7 @@ class AdminCompetition extends Controller {
 			if($competition->date_start){$date_start = Carbon::parse($competition->date_start)->format('Y-m-d');}
 			if($competition->date_end){$date_end = Carbon::parse($competition->date_end)->format('Y-m-d');}
 			$condition = $competition->condition;
+			$condition_admin = $competition->condition_admin;
 			if($competition->start_select){$start_select = Carbon::parse($competition->start_select)->format('Y-m-d');}
 			if($competition->end_select){$end_select = Carbon::parse($competition->end_select)->format('Y-m-d');}
 			if($competition->start_select == '0000-00-00 00:00:00'){$start_select = '';}
@@ -63,6 +65,7 @@ class AdminCompetition extends Controller {
 			"date_end" => $date_end,
 			"arrCondition" => $competitionModel->getCondition(),
 			"condition" => $condition,
+			"condition_admin" => $condition_admin,
 			"start_select" => $start_select,
 			"end_select" => $end_select,
 			"edit" => $edit,
@@ -138,6 +141,7 @@ class AdminCompetition extends Controller {
 		$error = '';
 		$start_select = Request::input('start_select');
 		$end_select = Request::input('end_select');
+		$condition_admin = Request::input('condition_admin');
 		
 		
 		//if($start_select == ''){$error .= 'Не заполнено поле "Начало выборки"<br>';}
@@ -147,6 +151,7 @@ class AdminCompetition extends Controller {
 		//if($error == ''){
 			$competition = Competition::first();
 			if(count($competition) == 0){$competition = new Competition;}
+			$competition->condition_admin = $condition_admin;
 			$competition->start_select = $start_select;
 			$competition->end_select = $end_select;
 			$competition->save();

@@ -202,6 +202,18 @@ $(function() {
 				<form id="form-admin2" role="form" method="POST" action="{{ route('admin.competition.save_extra') }}">
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
 									
+									
+					<div class="inline-block">
+						<div class="line-title">Клиент</div>
+						<div class="line-value">
+							<select  class="inputbox" name="condition_admin">
+								@foreach($data['arrCondition'] as $key=>$value)
+									<option @if($data['condition_admin'] == $key) selected @endif value="{{ $key }}">{{ $value }}</option>
+								@endforeach
+							</select>
+						</div>
+					</div>
+						
 					<div class="inline-block">
 						<div class="line-title"><span>Начало выборки:</span></div>
 						<div class="line-value">

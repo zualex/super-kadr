@@ -378,10 +378,12 @@ class Gallery extends Model {
 			if($competition->end_select == '0000-00-00 00:00:00'){$end_select = '9999-12-30 23:59:59';}
 			
 			$condition = $competition->condition;
+			$condition_admin = $competition->condition_admin;
 		}else{
 			$start_select = '0000-00-00 00:00:00';
 			$end_select = '9999-12-30 23:59:59';
 			$condition = 'like_all_foto';
+			$condition_admin = 'like_all_foto';
 		}
 		
 		
@@ -442,17 +444,17 @@ class Gallery extends Model {
 			}
 			
 			//Макс кол-во лайков по всем фото клиента
-			if($condition == 'like_all_foto' || $condition == ''){
+			if($condition_admin == 'like_all_foto' || $condition_admin == ''){
 				$res = $this->array_orderby($res, 'all_like', SORT_DESC, 'count', SORT_DESC);
 			}
 			
 			//Макс кол-во лайков на одну фото клиента
-			if($condition == 'like_one_foto'){
+			if($condition_admin == 'like_one_foto'){
 				$res = $this->array_orderby($res, 'max_like', SORT_DESC, 'all_like', SORT_DESC);
 			}
 			
 			//Макс кол-во фото у одного клиента
-			if($condition == 'foto_all_user'){
+			if($condition_admin == 'foto_all_user'){
 				$res = $this->array_orderby($res, 'count', SORT_DESC, 'all_like', SORT_DESC);
 			}
 			
