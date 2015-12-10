@@ -47,7 +47,7 @@ class Playlist extends Model {
 		$this->pathImages = base_path()."/public/images";
 		
 		
-		$this->countBlock = 3;
+		$this->countBlock = 6;
 		$this->timeBlock = 300;
 		$this->timePlaylist = $this->countBlock * $this->timeBlock;
 		$this->timeGallery = 5;
