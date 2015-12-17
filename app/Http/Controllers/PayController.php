@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Session;
 use Redirect;
 use Auth;
+use Mail;
+
 use App\Pay;
 use App\Gallery;
 use App\Status;
@@ -177,6 +179,29 @@ class PayController extends Controller {
 			$likeAdmin->count = 0;
 			$likeAdmin->save();
 		}
+		
+		
+		/*
+		* Отправка уведомления после оплаты
+		*/
+		$settingModel = new Setting;
+		$result = $settingModel->getGallerySendEmails();
+		if($result->value != ''){				
+			$key = Array(
+				"name" => Auth::user()->name,
+				"email" => Auth::user()->email,
+				"gallery_id" => $gallery->id,
+				"date_show" => $gallery->date_show,
+			);
+			$emails = explode(',', $result->value);
+			Mail::send('mail.newGallery', ['key' => $key], function($message) use ($emails) 
+			{
+				foreach($emails as $email){
+					$message->to(trim($email))->subject('Уведомление о новом заказе');
+				}
+			});
+		}
+		
 		
 		
 		

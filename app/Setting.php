@@ -35,6 +35,20 @@ class Setting extends Model {
 	}
 	
 	
+	
+	/*
+	* Получение email для уведомления о новом заказе
+	*/
+	public function getGallerySendEmails(){
+		$res = array();
+		if(Schema::hasTable('settings')){
+			$res = $this->where('name', '=', 'gallery_send_emails')->first();
+		}
+		return $res;
+	}
+	
+	
+	
 	/*Основные настройки */
 	public function getSettingMain(){
 		$setting = $this->where('type', '=', 'main')->get();
@@ -173,6 +187,12 @@ class Setting extends Model {
 		$this->createSetting(array(
 			'name' => 'send_emails',
 			'caption' => 'Уведомление о входе',
+			'value' => '',
+			'type' => 'main',
+		));
+		$this->createSetting(array(
+			'name' => 'gallery_send_emails',
+			'caption' => 'Уведомление о заказе',
 			'value' => '',
 			'type' => 'main',
 		));
