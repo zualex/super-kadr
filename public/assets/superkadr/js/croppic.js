@@ -360,7 +360,7 @@
 		initialScaleImg:function(){
 			var that = this;
 			that.zoom(-that.imgInitW);
-			that.zoom(40);
+			that.zoom(0);
 			
 			// Adding mousewheel zoom capabilities
 			if (that.options.enableMousescroll){
