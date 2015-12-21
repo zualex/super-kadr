@@ -16,6 +16,15 @@
 						<div class="author"><a href=""><span>{{ $value->user->name }}</span></a></div>
 						<div class="time"><span>{{ $value->created_at }}</span></div>
 					</div>
+					
+					@if (!Auth::guest() && (Auth::user()->level == 'admin' || Auth::user()->level == 'moderator'))
+						<a 
+							style="position:absolute;right:5px;top:5px;cursor:pointer" 
+							href="{{ route('comment.delete', $value->id) }}"
+						>Удалить</a>
+					@endif
+					
+					
 					<div class="message">
 						<span>
 						{!! $value->comment !!}

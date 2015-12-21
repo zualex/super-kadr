@@ -28,6 +28,7 @@ Route::post('/gallery_create', ['as' => 'gallery.create', 'uses' => 'GalleryCont
 Route::post('/gallery_like', ['as' => 'gallery.like', 'uses' => 'GalleryController@like']);					//Лайк
 Route::get('/comment/{gallery_id}', ['as' => 'comment.index', 'uses' => 'CommentController@index']);				//Вывод комментариев
 Route::post('/comment/save', ['as' => 'comment.save', 'uses' => 'CommentController@save']);					//Сохранение комментария
+Route::get('/comment/delete/{comment_id}', ['as' => 'comment.delete', 'middleware' => 'authAdmin', 'uses' => 'CommentController@delete']);					//Удаление комментария
 Route::get('/pay/conditions/{gallery_id}', ['as' => 'pay.conditions', 'uses' => 'PayController@conditions']);		//Принятие условий перед оплатой
 Route::get('/pay/index/{gallery_id}', ['as' => 'pay.index','uses' => 'PayController@index']);			//Отправка данных для оплаты
 Route::get('/pay/result', ['as' => 'pay.result', 'uses' => 'PayController@result']);			//Result Url
