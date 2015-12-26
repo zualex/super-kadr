@@ -186,10 +186,11 @@ class PayController extends Controller {
 		*/
 		$settingModel = new Setting;
 		$result = $settingModel->getGallerySendEmails();
+		$user = User::find($gallery->user_id);
 		if($result->value != ''){				
 			$key = Array(
-				"name" => Auth::user()->name,
-				"email" => Auth::user()->email,
+				"name" => iconv("UTF-8", "cp1251", $user->name),
+				"email" => $user->email,
 				"gallery_id" => $gallery->id,
 				"date_show" => $gallery->date_show,
 			);
