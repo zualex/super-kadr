@@ -662,7 +662,25 @@
 					cache: false,
 					contentType: false,
 					processData: false,
-					type: 'POST'				
+					type: 'POST',
+					xhr: function() {  // Custom XMLHttpRequest
+						var myXhr = $.ajaxSettings.xhr();
+						
+						myXhr.upload.onprogress = function(event) {
+							console.log( 'Загружено на сервер ' + event.loaded + ' байт из ' + event.total );
+						}
+						myXhr.onprogress = function(event) {
+							console.log( 'Получено с сервера ' + event.loaded + ' байт из ' + event.total );
+						}
+						//myXhr.onreadystatechange = function() {
+						//	console.log("state: " + myXhr.state); 
+						//	console.log("readyState: " + myXhr.readyState);
+						//}
+						myXhr.upload.onerror = function() {
+							alert( 'Произошла ошибка при загрузке данных на сервер!' );
+						}
+						return myXhr;
+					}					
 				}).always(function (data) {
 
 					that.afterCrop(data);
