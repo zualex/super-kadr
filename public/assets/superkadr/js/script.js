@@ -319,6 +319,8 @@ $(document).ready( function () {
 *	Оплата
 */
 function paySite(el){
+	checkDate();		//Проверка валидности даты
+
 	var selector = $('.tariffs');
 	var url = selector.attr('data-url');
 	var tarif = selector.attr('data-tariff');
@@ -504,4 +506,36 @@ function availabilityDate(dateDay, tarif_id, monitor_id){
 			alert('Произошла ошибка');
 		}
 	});
+}
+
+
+
+
+/*
+*	Проверка валидности даты
+*/
+function checkDate(){
+	var nowTemp = new Date();
+	var offest = nowTemp.getTimezoneOffset();
+	var now = new Date(nowTemp.getTime() + offest-180)	//Приводим время по Москве
+
+	var year = now.getFullYear();
+	var day = now.getDate();
+	var month = now.getMonth() + 1;
+	var hour = now.getHours();
+
+	var denyDate = hour+':00 '+day+'.'+month+'.'+year
+	
+	// Удалеям выбранную дату если она уже не доступна
+	var dateShow = $('.tariffs').attr('data-dateShow');
+	if(dateShow == denyDate){
+		$('.tariffs').attr('data-dateShow', '');
+	}
+	
+	$denyElem = $('.time-item[data-time="'+denyDate+'"]');
+	$denyElem.removeClass('select');
+	$denyElem.removeClass('active');
+	$denyElem.addClass('deny');
+	
+	return denyDate;
 }
