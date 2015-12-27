@@ -666,17 +666,30 @@
 					xhr: function() {  // Custom XMLHttpRequest
 						var myXhr = $.ajaxSettings.xhr();
 						
+						//первый этап Скачивание максимум от 50% до 90%
 						myXhr.upload.onprogress = function(event) {
-							console.log( 'Загружено на сервер ' + event.loaded + ' байт из ' + event.total );
+							var max = Math.floor(Math.random()*(90-50+1)+50); 
+							var percent = event.loaded/event.total * max;
+							$('.progress-bar').show(0);
+							$('.progress-bar').find('span').css('transition-duration', '.5s').css('width', percent+'%');
 						}
-						myXhr.onprogress = function(event) {
-							console.log( 'Получено с сервера ' + event.loaded + ' байт из ' + event.total );
+						
+						//второй этап Ожидание максимум 96%
+						myXhr.upload.onload = function() {
+							setTimeout(function() {
+								$('.progress-bar').find('span').css('transition-duration', '20s').css('width', '96%');
+							}, 500);
 						}
-						//myXhr.onreadystatechange = function() {
-						//	console.log("state: " + myXhr.state); 
-						//	console.log("readyState: " + myXhr.readyState);
-						//}
+						
+						//третий этап Завершение максимум 100%
+						myXhr.onprogress = function(event) {	
+							$('.progress-bar').find('span').css('transition-duration', '0s').css('width', '100%');
+							$('.progress-bar').delay(300).hide(0);
+						}
+						
 						myXhr.upload.onerror = function() {
+							$('.progress-bar').find('span').css('transition-duration', '0s').css('width', '0%');
+							$('.progress-bar').delay(300).hide(0);
 							alert( 'Произошла ошибка при загрузке данных на сервер!' );
 						}
 						return myXhr;

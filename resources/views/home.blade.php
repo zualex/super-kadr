@@ -71,6 +71,7 @@
 						<div class="upload"><i class="fa pull-left fa-camera"></i><span>Загрузи фото</span></div>
 						<div class="description"><span>Выберите картинку или фото на своем устройстве и оптимизируйте их размер для корректного отображения на экране.</span></div>
 					</div>
+					<div class="progress-bar"><span style="width:0%"></span></div>
 				</div>
 				<div class="stand"></div>
 				

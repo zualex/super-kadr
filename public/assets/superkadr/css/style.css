@@ -355,3 +355,30 @@ footer .sirene>a{color:#333;}
 }
 
 .pay-info{background-color:#DDD;padding: 10px 20px !important;}
+
+
+.progress-bar{
+	display:none;
+    position: absolute;
+	z-index:1;
+	width:370px;
+	height: 20px;
+    background: #fff;
+    border-radius: 25px;
+    padding: 5px;
+	bottom: 50px;
+    left: 50%;
+    margin-left: -185px;
+}
+
+.progress-bar span{
+	display: block;
+    height: 10px;
+	border-radius: 8px;
+    background-color: #364DCA;
+    position: relative;
+    overflow: hidden;
+	
+	transition-property:width;
+	transition-duration: .3s;
+}
