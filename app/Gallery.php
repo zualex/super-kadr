@@ -191,11 +191,14 @@ class Gallery extends Model {
 		if(count($this->error) == 0){
 			$gallery =$this
 				->where('id', '=', $id)
+				->where('status_main', '=', $status_main->id)
 				->with('likes')
 				->with('like_admins')
 				->with('comments')
 				->first();
-			$gallery->pathImages = $this->pathImages;
+			if(count($gallery) > 0){
+				$gallery->pathImages = $this->pathImages;
+			}
 		}
 		//dd($gallery);
 		return $gallery;

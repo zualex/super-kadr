@@ -64,8 +64,13 @@ class GalleryController extends Controller {
 			}
 		}
 		
+		$gallery = $galleryModel->getGallery($id);
+		if(count($gallery) == 0){
+			abort(404);
+		}
+		
 		return view('pages.gallery.show')
-			->with('gallery', $galleryModel->getGallery($id))
+			->with('gallery', $gallery)
 			->with('comments', $commentModel->showComment($id))
 			->with('defaultAvatar', $userModel->defaultAvatar)
 			->with('likes', $likes);
